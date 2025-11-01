@@ -15,7 +15,7 @@ const EpitaphsPage = () => {
     useEffect(() => {
         async function fetchEpitaphs() {
             try {
-                const data = await apiClient.get("/epitaphs");
+                const data = await apiClient.get("https://api.k-r.by/api/epitaphs");
                 if (data.success) {
                     setEpitaphs(data.data || []);
                 }

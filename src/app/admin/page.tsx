@@ -22,19 +22,19 @@ export default function AdminPage() {
 
   async function fetchStats() {
     try {
-      const epitaphsData = await apiClient.get("/epitaphs");
+      const epitaphsData = await apiClient.get("https://api.k-r.by/api/epitaphs");
       const epitaphsCount = epitaphsData.data?.length || 0;
 
-      const productsData = await apiClient.get("/monuments");
+      const productsData = await apiClient.get("https://api.k-r.by/api/monuments");
       const productsCount = productsData.data?.length || 0;
 
-      const campaignsData = await apiClient.get("/campaigns");
+      const campaignsData = await apiClient.get("https://api.k-r.by/api/campaigns");
       const campaignsCount = campaignsData.data?.length || 0;
 
-      const blogsData = await apiClient.get("/blogs");
+      const blogsData = await apiClient.get("https://api.k-r.by/api/blogs");
       const blogsCount = blogsData.data?.length || 0;
 
-      const worksData = await apiClient.get("/works");
+      const worksData = await apiClient.get("https://api.k-r.by/api/works");
       const worksCount = worksData.data?.length || 0;
 
       setStats({

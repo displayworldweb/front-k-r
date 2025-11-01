@@ -29,7 +29,7 @@ const BlogPage = () => {
     useEffect(() => {
         const fetchBlogs = async () => {
             try {
-                const data = await apiClient.get('/blogs');
+                const data = await apiClient.get('https://api.k-r.by/api/blogs');
                 
                 if (data.success) {
                     setBlogs(data.data || []);

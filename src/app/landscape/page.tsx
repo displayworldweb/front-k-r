@@ -94,7 +94,7 @@ const LandscapePage = () => {
     useEffect(() => {
         const fetchLandscapeData = async () => {
             try {
-                const data = await apiClient.get("/landscape");
+                const data = await apiClient.get("https://api.k-r.by/api/landscape");
                 
                 if (data.success && data.data) {
                     setLandscapeItems(data.data);

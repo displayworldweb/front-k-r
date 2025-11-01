@@ -70,7 +70,7 @@ const AccessoriesCategoryPage = () => {
   useEffect(() => {
     const loadProducts = async () => {
       try {
-        const data = await apiClient.get("/accessories");
+        const data = await apiClient.get("https://api.k-r.by/api/accessories");
         
         if (data.success && data.data) {
           const actualCategory = CATEGORY_MAP[categorySlug?.toLowerCase()] || categorySlug;

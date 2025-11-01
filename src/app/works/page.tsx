@@ -43,7 +43,7 @@ const OurWorksPage = () => {
 
     const loadWorks = async () => {
         try {
-            const data = await apiClient.get('/works');
+            const data = await apiClient.get('https://api.k-r.by/api/works');
             
             if (data.success) {
                 setWorks(data.data);

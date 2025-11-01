@@ -82,7 +82,7 @@ export default function CampaignPage({ params }: CampaignPageProps) {
     if (!productRefs || productRefs.length === 0) return [];
     
     try {
-      const allProductsData = await apiClient.get('/products/all');
+      const allProductsData = await apiClient.get('https://api.k-r.by/api/products/all');
       
       if (allProductsData.success) {
         const allProducts = allProductsData.data;

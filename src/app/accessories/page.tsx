@@ -65,7 +65,7 @@ const AccessoriesPage = () => {
         // Загружаем аксессуары из БД
         const fetchAccessories = async () => {
             try {
-                const data = await apiClient.get("/accessories");
+                const data = await apiClient.get("https://api.k-r.by/api/accessories");
                 if (data.success) {
                     // Преобразуем в формат с colors для совместимости с ProductCard
                     const transformed = (data.data || []).map((item: any) => ({
