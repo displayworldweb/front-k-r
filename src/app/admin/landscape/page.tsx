@@ -77,7 +77,7 @@ export default function LandscapeAdminPage() {
       formData.append("file", file);
       formData.append("folder", "landscape");
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/upload`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://api.k-r.by/api'}/upload`, {
         method: "POST",
         body: formData,
       });

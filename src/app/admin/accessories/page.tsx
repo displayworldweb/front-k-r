@@ -121,7 +121,7 @@ export default function AccessoriesAdminPage() {
       formData.append("file", file);
       formData.append("folder", "accessories");
 
-      const response = await fetch(process.env.NEXT_PUBLIC_API_URL + "/upload", {
+      const response = await fetch((process.env.NEXT_PUBLIC_API_URL || 'https://api.k-r.by/api') + "/upload", {
         method: "POST",
         body: formData,
       });

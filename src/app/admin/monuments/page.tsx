@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { apiClient } from "@/lib/api-client";
+import { generateSlug } from "@/lib/slug-generator";
 
 interface Product {
   id: number;
@@ -196,6 +197,7 @@ export default function ProductsAdminPage() {
           category: selectedCategory,
           data: {
             name: editForm.name,
+            slug: generateSlug(editForm.name),
             price: editForm.price ? parseFloat(editForm.price) : null,
             oldPrice: editForm.oldPrice ? parseFloat(editForm.oldPrice) : null,
             category: editForm.category || selectedCategory,
@@ -229,9 +231,9 @@ export default function ProductsAdminPage() {
     try {
       const formData = new FormData();
       formData.append("file", file);
-      formData.append("folder", "products");
+      formData.append("folder", "monuments");
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/upload`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://api.k-r.by/api'}/upload`, {
         method: "POST",
         body: formData,
       });
@@ -365,7 +367,7 @@ export default function ProductsAdminPage() {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-4">
                       <img 
-                        src={product.image} 
+                        src={product.image.startsWith('http') ? product.image : `https://api.k-r.by${product.image}`} 
                         alt={product.name}
                         className="w-16 h-16 object-cover rounded"
                       />
@@ -563,7 +565,7 @@ export default function ProductsAdminPage() {
                       <div className="mt-3">
                         <p className="text-sm text-gray-600 mb-2">Превью:</p>
                         <img 
-                          src={editForm.image} 
+                          src={editForm.image.startsWith('http') ? editForm.image : `https://api.k-r.by${editForm.image}`} 
                           alt="Превью" 
                           className="w-32 h-32 object-cover rounded border"
                           onError={(e) => {

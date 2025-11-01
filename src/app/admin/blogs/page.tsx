@@ -92,7 +92,7 @@ export default function BlogsAdminPage() {
       formData.append("file", file);
       formData.append("folder", "blog");
 
-      const response = await fetch(process.env.NEXT_PUBLIC_API_URL + "/upload", {
+      const response = await fetch((process.env.NEXT_PUBLIC_API_URL || 'https://api.k-r.by/api') + "/upload", {
         method: "POST",
         body: formData,
       });
@@ -277,7 +277,7 @@ export default function BlogsAdminPage() {
                     formData.append("file", file);
                     formData.append("folder", "blog");
 
-                    const response = await fetch(process.env.NEXT_PUBLIC_API_URL + "/upload", {
+                    const response = await fetch((process.env.NEXT_PUBLIC_API_URL || 'https://api.k-r.by/api') + "/upload", {
                       method: "POST",
                       body: formData,
                     });
@@ -383,7 +383,7 @@ export default function BlogsAdminPage() {
                       formData.append("file", file);
                       formData.append("folder", "blog");
 
-                      const response = await fetch(process.env.NEXT_PUBLIC_API_URL + "/upload", {
+                      const response = await fetch((process.env.NEXT_PUBLIC_API_URL || 'https://api.k-r.by/api') + "/upload", {
                         method: "POST",
                         body: formData,
                       });

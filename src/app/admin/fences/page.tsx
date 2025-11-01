@@ -97,7 +97,7 @@ export default function FencesAdminPage() {
       formData.append("file", file);
       formData.append("folder", "fences");
 
-      const response = await fetch(process.env.NEXT_PUBLIC_API_URL + "/upload", {
+      const response = await fetch((process.env.NEXT_PUBLIC_API_URL || 'https://api.k-r.by/api') + "/upload", {
         method: "POST",
         body: formData,
       });
