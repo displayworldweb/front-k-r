@@ -77,12 +77,23 @@ export default function CampaignPage({ params }: CampaignPageProps) {
     return () => window.removeEventListener('resize', checkViewport);
   }, []);
 
+  // Функция для конвертации путей изображений
+  const convertImageUrl = (imagePath: string) => {
+    if (!imagePath) return '';
+    if (imagePath.startsWith('http')) return imagePath; // уже полный URL
+    if (imagePath.startsWith('/')) {
+      // Конвертируем /folder/filename в https://api.k-r.by/api/static/folder/filename  
+      return `https://api.k-r.by/api/static${imagePath}`;
+    }
+    return imagePath;
+  };
+
   // Функция для получения полных данных товаров
   const fetchProductDetails = async (productRefs: Array<{id: number, type: string}>) => {
     if (!productRefs || productRefs.length === 0) return [];
     
     try {
-      const allProductsData = await apiClient.get('https://api.k-r.by/api/products/all');
+      const allProductsData = await apiClient.get('/products/all');
       
       if (allProductsData.success) {
         const allProducts = allProductsData.data;
@@ -90,6 +101,10 @@ export default function CampaignPage({ params }: CampaignPageProps) {
         // Находим полные данные для каждого товара из акции
         const fullProductData = productRefs.map(ref => {
           const product = allProducts.find((p: any) => p.id === ref.id && p.type === ref.type);
+          if (product) {
+            // Конвертируем URL изображения
+            product.image = convertImageUrl(product.image);
+          }
           return product || null;
         }).filter(Boolean);
         
@@ -106,11 +121,10 @@ export default function CampaignPage({ params }: CampaignPageProps) {
     const fetchCampaign = async () => {
       try {
         const resolvedParams = await params;
-        const response = await fetch(`/api/campaigns/${resolvedParams.slug}`);
-        const data = await response.json();
+        const data = await apiClient.get(`/campaigns?slug=${resolvedParams.slug}`);
         
-        if (data.success) {
-          const campaignData = data.data;
+        if (data.success && data.campaigns && data.campaigns.length > 0) {
+          const campaignData = data.campaigns[0];
           setCampaign(campaignData);
           
           // Если у акции есть товары, получаем их полные данные
@@ -119,8 +133,12 @@ export default function CampaignPage({ params }: CampaignPageProps) {
             const hasFullData = campaignData.products[0].name && campaignData.products[0].image;
             
             if (hasFullData) {
-              // Товары уже содержат полную информацию
-              setFullProducts(campaignData.products);
+              // Товары уже содержат полную информацию, но нужно конвертировать URL изображений
+              const productsWithFixedImages = campaignData.products.map((product: any) => ({
+                ...product,
+                image: convertImageUrl(product.image)
+              }));
+              setFullProducts(productsWithFixedImages);
             } else {
               // Товары содержат только ID и type, нужно получить полные данные
               const productDetails = await fetchProductDetails(campaignData.products);
@@ -153,10 +171,13 @@ export default function CampaignPage({ params }: CampaignPageProps) {
         );
       
       case 'image':
+        const imageSrc = block.content.src?.startsWith('http') 
+          ? block.content.src 
+          : `https://api.k-r.by/api/static${block.content.src}`;
         return (
           <div key={block.id || index} className="mb-8">
             <img
-              src={block.content.src}
+              src={imageSrc}
               alt={block.content.alt || ''}
               className="w-full h-auto rounded-lg object-cover"
             />
@@ -172,14 +193,19 @@ export default function CampaignPage({ params }: CampaignPageProps) {
         return (
           <div key={block.id || index} className="mb-8">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {block.content.images?.map((imageSrc: string, imgIndex: number) => (
-                <img
-                  key={imgIndex}
-                  src={imageSrc}
-                  alt={`Изображение ${imgIndex + 1}`}
-                  className="w-full h-64 object-cover rounded-lg"
-                />
-              ))}
+              {block.content.images?.map((imageSrc: string, imgIndex: number) => {
+                const fullImageSrc = imageSrc?.startsWith('http') 
+                  ? imageSrc 
+                  : `https://api.k-r.by/api/static${imageSrc}`;
+                return (
+                  <img
+                    key={imgIndex}
+                    src={fullImageSrc}
+                    alt={`Изображение ${imgIndex + 1}`}
+                    className="w-full h-64 object-cover rounded-lg"
+                  />
+                );
+              })}
             </div>
             {block.content.caption && (
               <p className="text-sm text-gray-600 mt-4 text-center italic">
@@ -336,11 +362,11 @@ export default function CampaignPage({ params }: CampaignPageProps) {
                       category: product.category || product.displayCategory,
                       price: product.price,
                       textPrice: product.textPrice || undefined,
-                      image: product.image,
+                      image: product.image?.startsWith('http') ? product.image : `https://api.k-r.by/api/static${product.image}`,
                       colors: product.image ? [{ 
                         name: "Стандартный",
                         color: "#000000",
-                        image: product.image, 
+                        image: product.image?.startsWith('http') ? product.image : `https://api.k-r.by/api/static${product.image}`, 
                         price: product.price
                       }] : [],
                     }}

@@ -28,7 +28,7 @@ interface CategoryData {
 
 const CATEGORY_MAP: Record<string, string> = {
   "granite": "Гранитные ограды",
-  "polymer": "Металлические с полимерным покрытием",
+  "polymer": "С полимерным покрытием",
   "metal": "Металлические ограды",
 };
 
