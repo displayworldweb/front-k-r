@@ -66,7 +66,7 @@ const FencesPage = () => {
         // Загружаем ограды из БД
         const fetchFences = async () => {
             try {
-                const data = await apiClient.get("https://api.k-r.by/api/fences?limit=200");
+                const data = await apiClient.get("/fences?limit=200");
                 if (data.success) {
                     // Преобразуем в формат с colors для совместимости с ProductCard
                     const transformed = (data.data || []).map((item: any) => ({

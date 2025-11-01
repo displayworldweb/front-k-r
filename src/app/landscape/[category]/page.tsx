@@ -72,7 +72,7 @@ const LandscapeCategoryPage = () => {
   useEffect(() => {
     const loadProducts = async () => {
       try {
-        const data = await apiClient.get("https://api.k-r.by/api/landscape");
+        const data = await apiClient.get("/landscape");
         
         if (data.success && data.data) {
           // Ищем точное совпадение по русскому названию категории

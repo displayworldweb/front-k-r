@@ -20,7 +20,7 @@ const Promo = () => {
   useEffect(() => {
     const fetchCampaigns = async () => {
       try {
-        const data = await apiClient.get("https://api.k-r.by/api/campaigns");
+        const data = await apiClient.get("/campaigns");
         
         if (data.success) {
           // Показываем все акции
