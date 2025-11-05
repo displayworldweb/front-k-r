@@ -68,6 +68,7 @@ const ExclusiveProductPage = () => {
   const [tooltipPosition, setTooltipPosition] = useState({ top: 0, left: 0 });
   const tooltipRef = useRef<HTMLDivElement>(null);
   const characteristicsContentRef = useRef<HTMLDivElement>(null);
+  const colorScrollRef = useRef<HTMLDivElement>(null);
   const [isGraniteModalOpen, setIsGraniteModalOpen] = useState(false);
   const [currentGraniteSlide, setCurrentGraniteSlide] = useState(0);
 
@@ -151,6 +152,24 @@ const ExclusiveProductPage = () => {
     document.addEventListener("mousedown", handleClick);
     return () => document.removeEventListener("mousedown", handleClick);
   }, [tooltipOpen]);
+
+  // Автоматическая прокрутка к выбранному цвету на мобильных устройствах
+  useEffect(() => {
+    if (isMobile && selectedColor && colorScrollRef.current && product?.colors) {
+      const selectedIndex = product.colors.findIndex(color => color.name === selectedColor.name);
+      if (selectedIndex !== -1) {
+        const colorContainer = colorScrollRef.current;
+        const buttonWidth = colorContainer.offsetWidth * 0.225; // 22.5vw
+        const gap = 8; // gap-2 = 8px
+        const scrollPosition = selectedIndex * (buttonWidth + gap);
+        
+        colorContainer.scrollTo({
+          left: scrollPosition,
+          behavior: 'smooth'
+        });
+      }
+    }
+  }, [selectedColor, isMobile, product?.colors]);
 
   if (loading) {
     return (
@@ -350,7 +369,7 @@ const ExclusiveProductPage = () => {
 
               {/* Звезда (избранное) */}
               <div
-                className={`absolute ${selectedColor?.discount && selectedColor.discount > 0 ? 'top-20' : product.hit ? 'top-12' : 'top-2'} right-2 z-10 w-11 h-11 text-center content-center flex-wrap text-2xl shadow-xs rounded-full hover:text-[#2c3a54] transition cursor-pointer ${
+                className={`absolute ${selectedColor?.discount && selectedColor.discount > 0 ? 'top-20' : product.hit ? 'top-12' : 'top-2'} left-2 z-10 w-11 h-11 text-center content-center flex-wrap text-2xl shadow-xs rounded-full hover:text-[#2c3a54] transition cursor-pointer ${
                   isFavorite ? "text-[#2c3a54]" : "text-gray-400"
                 }`}
                 onClick={toggleFavorite}
@@ -376,17 +395,20 @@ const ExclusiveProductPage = () => {
                       Выберите материал:
                     </h3>
                     <p className="text-[14px] text-[#969ead]">
-                      {selectedColor?.name || "Не выбран"} + Габбро Карелия
+                      {selectedColor?.name || getDefaultMaterialName()} + Габбро Карелия
                     </p>
 
-                    {!isMobile && (
-                      <div className="flex flex-wrap mt-3 gap-2">
+                    <div className={`mt-3 ${isMobile ? 'overflow-x-auto scrollbar-hide' : ''}`}>
+                      <div 
+                        ref={isMobile ? colorScrollRef : undefined}
+                        className={`${isMobile ? 'flex gap-2 pb-2' : 'grid grid-cols-4 gap-2'}`}
+                      >
                         {/* Все материалы из массива (первый - дефолт) */}
                         {product.colors.map((color, index) => (
                           <button
                             key={index}
                             onClick={() => setSelectedColor(color)}
-                            className={`w-[calc(25%-8px)] aspect-square rounded-lg border-2 transition bg-cover bg-center ${
+                            className={`${isMobile ? 'shrink-0 w-[calc(22.5vw-8px)] aspect-square' : 'aspect-square'} rounded-lg border-2 transition bg-cover bg-center ${
                               selectedColor?.name === color.name
                                 ? "border-[#2c3a54]"
                                 : "border-gray-300 hover:border-[#2c3a54]"
@@ -399,7 +421,7 @@ const ExclusiveProductPage = () => {
                           />
                         ))}
                       </div>
-                    )}
+                    </div>
                   </div>
                 )}
 

@@ -487,7 +487,7 @@ const ProductCard = ({
         <img
           src={displayImage}
           alt={product.name}
-          className="w-full h-full object-fill transition-transform duration-300 group-hover:scale-105"
+          className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105"
         />
         </Link>
         {/* Индикаторы цветов для десктопа */}
