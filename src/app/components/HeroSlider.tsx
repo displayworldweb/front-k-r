@@ -81,83 +81,58 @@ const HeroSlider = () => {
   const slides = [
     {
       id: 1,
-      image:
-        windowWidth >= 768
-          ? "/sliders/slider-monuments.webp"
-          : "/sliders/slider-monuments-m.webp",
-      title: "500+ уникальных и классических моделей памятников",
-      subtitle:
-        "Одиночные и двойные памятники из лучших пород гранита России, Финляндии, Норвегии, Индии и др.",
+      image: "/sliders/single.jpg",
+      title: "Одиночные памятники",
+      subtitle: "Классические и современные модели из высококачественного гранита",
       button: {
         text: "Смотреть каталог",
         href: "/",
       },
-      color: "#2c3a54",
     },
     {
       id: 2,
-      image:
-        windowWidth >= 768
-          ? "/sliders/slider-card.webp"
-          : "/sliders/slider-card-m.webp",
-      title: "Отсрочка платежа и рассрочка",
-      subtitle: "Без процентов - без походов банк - собственная рассрочка",
+      image: "/sliders/composite.jpg",
+      title: "Составные памятники",
+      subtitle: "Многоэлементные комплексы с богатым оформлением",
       button: {
-        text: "Подробнее о рассрочке",
+        text: "Посмотреть модели",
         href: "/",
       },
-      color: "#2c3a54",
     },
     {
       id: 3,
-      image:
-        windowWidth >= 768
-          ? "/sliders/slider-ig.webp"
-          : "/sliders/slider-ig-m.webp",
-      title: "Полезная информация - в Instagram!",
-      subtitle:
-        "Полезные обзоры, фото готовых работ и подборки памятников - в нашем инстаграм",
+      image: "/sliders/exclusive.jpg",
+      title: "Эксклюзивные памятники",
+      subtitle: "Уникальные авторские работы из редких пород гранита",
       button: {
-        text: "Перейти",
-        href: "https://www.instagram.com/pamyatniki_granit_vitebsk/",
+        text: "Изучить коллекцию",
+        href: "/",
       },
-      color: "white",
     },
     {
       id: 4,
-      image:
-        windowWidth >= 768
-          ? "/sliders/slider-pamyatniki.webp"
-          : "/sliders/slider-pamyatniki-m.webp",
-      title: "Готовые памятники с оформлением у нас в офисе",
-      subtitle:
-        "Десятки вариантов гранита, материалов для благоустройства, вариантов оформления и аксессуаров",
+      image: "/sliders/complex.jpg",
+      title: "Мемориальные комплексы",
+      subtitle: "Полное благоустройство места захоронения с оградой",
       button: {
-        text: "Подробнее",
+        text: "Узнать подробнее",
         href: "/",
       },
-      color: "white",
     },
     {
       id: 5,
-      image:
-        windowWidth >= 768
-          ? "/sliders/slider-3d.webp"
-          : "/sliders/slider-3d-m.webp",
-      title: "Профессиональное 3d-моделирование",
-      subtitle:
-        "Объёмный макет будущего участка с детальной проработкой размеров",
+      image: "/sliders/fences.jpg",
+      title: "Ограды для захоронений",
+      subtitle: "Ограды на кладбище любой сложности",
       button: {
-        text: "Подробнее",
+        text: "Выбрать ограду",
         href: "/",
       },
-      color: "#2c3a54",
     },
   ];
 
   const totalSlides = slides.length;
   const slide = slides[currentSlide]
-  const color = slide.color
 
   // Автоплей
   useEffect(() => {
@@ -212,7 +187,7 @@ const HeroSlider = () => {
             {windowWidth >= 768 ? (
               // Десктопная версия - текст слева, изображение справа
               <div
-                className=""
+                className="relative z-10"
                 style={{
                   paddingLeft: padding.x,
                   paddingRight: padding.x,
@@ -220,7 +195,7 @@ const HeroSlider = () => {
                   paddingBottom: padding.y,
                   minWidth: "45vw",
                   maxWidth: "54vw",
-                  color: color,
+                  color: "#2c3a54",
                 }}
               >
                 <h2
@@ -240,7 +215,7 @@ const HeroSlider = () => {
                 <Link
                   href={slide.button.href}
                   target="_blank"
-                  className="bg-transparent px-6 py-3 border-2 rounded-full font-medium hover:bg-[#2c3a54] hover:border-0 transition"
+                  className="inline-block bg-transparent text-[#2c3a54] border-2 border-[#2c3a54] rounded-full font-medium hover:bg-[#2c3a54]! hover:text-white! transition-all duration-300 relative z-20"
                   style={{
                     fontSize: fontSize.button,
                     padding: windowWidth > 1280 ? "11px 24px" : "10px 20px",
@@ -278,7 +253,7 @@ const HeroSlider = () => {
                   <Link
                     href={slide.button.href}
                     target="_blank"
-                    className="border-2 border-[#2c3a54] px-6 py-2.75 rounded-full font-medium transition block text-center w-max"
+                    className="bg-transparent text-[#2c3a54] border-2 border-[#2c3a54] px-6 py-2.75 rounded-full font-medium hover:bg-[#2c3a54]! hover:text-white! transition-all duration-300 block text-center w-max relative z-20"
                     style={{
                       fontSize: fontSize.button,
                     }}

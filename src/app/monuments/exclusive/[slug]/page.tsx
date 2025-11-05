@@ -335,7 +335,7 @@ const ExclusiveProductPage = () => {
               {/* Плашка скидки - только если у selectedColor есть скидка */}
               {selectedColor?.discount && selectedColor.discount > 0 && (
                 <div className="absolute top-2 left-2 z-10 bg-[#cd5554] text-white text-xs font-bold px-2.5 py-0.75 rounded">
-                  Сегодня -{selectedColor.discount}%
+                  Сегодня -{Math.round(Number(selectedColor.discount))}%
                 </div>
               )}
 
@@ -548,15 +548,6 @@ const ExclusiveProductPage = () => {
                     />
                   ))}
                   
-                  {/* Характеристика наличия из базы данных */}
-                  {product.availability && (
-                    <CharacteristicItem
-                      key="availability"
-                      label="Наличие"
-                      value={product.availability}
-                    />
-                  )}
-                  
                   {/* Статические характеристики */}
                   {Object.entries(STATIC_CHARACTERISTICS).map(([key, value]) => (
                     <CharacteristicItem
@@ -581,7 +572,9 @@ const ExclusiveProductPage = () => {
             {activeTab === "description" && (
               <div>
                 <p className="text-[#2D4266]">
-                  Представленный эксклюзивный памятник станет идеальным решением оформления захоронения ваших родных и близких. В качестве художественного оформления рекомендуем использовать накладные бронзовые буквы и цифры итальянского производителя Caggiati, либо покрыть надпись сусальным золотом, а фото усопшего оформить в медальон в бронзовой рамке.
+                  {product.description || 
+                    "Представленный эксклюзивный памятник станет идеальным решением оформления захоронения ваших родных и близких. В качестве художественного оформления рекомендуем использовать накладные бронзовые буквы и цифры итальянского производителя Caggiati, либо покрыть надпись сусальным золотом, а фото усопшего оформить в медальон в бронзовой рамке."
+                  }
                 </p>
               </div>
             )}

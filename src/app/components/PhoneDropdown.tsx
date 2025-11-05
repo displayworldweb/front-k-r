@@ -22,7 +22,7 @@ const PhoneDropdown = forwardRef<HTMLDivElement, PhoneDropdownProps> (({
       role="menu"
       aria-label="Контактная информация"
       className="
-        absolute top-[98px] right-0 left-0 
+        absolute top-[76px] right-0 left-0 
         z-50 
         bg-white 
         shadow-md 

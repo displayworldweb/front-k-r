@@ -439,18 +439,18 @@ const ProductCard = ({
           Сегодня -{(() => {
             // Пытаемся взять явную скидку
             if (hasColors && currentColor && currentColor.discount && Number(currentColor.discount) > 0) {
-              return currentColor.discount;
+              return Math.round(Number(currentColor.discount));
             }
             if (product.discount && Number(product.discount) > 0) {
-              return product.discount;
+              return Math.round(Number(product.discount));
             }
             // Если явной скидки нет, рассчитываем
             if (hasColors && currentColor) {
               const calculated = calculateDiscount(currentColor.price, currentColor.oldPrice);
-              if (calculated && calculated > 0) return calculated;
+              if (calculated && calculated > 0) return Math.round(calculated);
             }
             const calculated = calculateDiscount(currentPrice, currentOldPrice);
-            return calculated || 0;
+            return Math.round(calculated || 0);
           })()}%
         </div>
       )}
@@ -487,7 +487,7 @@ const ProductCard = ({
         <img
           src={displayImage}
           alt={product.name}
-          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+          className="w-full h-full object-fill transition-transform duration-300 group-hover:scale-105"
         />
         </Link>
         {/* Индикаторы цветов для десктопа */}
@@ -565,17 +565,17 @@ const ProductCard = ({
                 return hasCurrentDiscount ? (
                   <>
                     <span className="font-bold text-xl text-[#cd5554]">
-                      {product.category === 'Составные' ? 'от ' : ''}{currentPrice} руб.
+                      {product.category === 'Составные' ? 'от ' : ''}{currentPrice} руб.{(product.category === 'Металлические ограды' || product.category === 'С полимерным покрытием') ? ' м.п.' : ''}
                     </span>
                     {currentOldPrice && Number(currentOldPrice) > 0 && (
                       <span className="text-[12px] text-gray-500 line-through">
-                        {currentOldPrice} руб.
+                        {currentOldPrice} руб.{(product.category === 'Металлические ограды' || product.category === 'С полимерным покрытием') ? ' м.п.' : ''}
                       </span>
                     )}
                   </>
                 ) : (
                   <span className="text-xl font-bold text-[#2c3a54]">
-                    {product.category === 'Составные' ? 'от ' : ''}{currentPrice} руб.
+                    {product.category === 'Составные' ? 'от ' : ''}{currentPrice} руб.{(product.category === 'Металлические ограды' || product.category === 'С полимерным покрытием') ? ' м.п.' : ''}
                   </span>
                 );
               })()

@@ -70,7 +70,6 @@ const STATIC_CHARACTERISTICS: Record<string, Record<string, string>> = {
         cover: "Грунтовка и покраска",
         installation: "Не входит в стоимость",
         secondarySize: "Возможно",
-        graniteTypes: "Более 20",
         storage: "Бесплатно",
         warranty: "1 год",
     },
@@ -81,7 +80,6 @@ const STATIC_CHARACTERISTICS: Record<string, Record<string, string>> = {
         material: "Оцинкованный металл",
         secondarySize: "Возможно",
         warranty: "2 года",
-        kovanSection: "12х12 мм",
     },
 };
 
@@ -91,34 +89,8 @@ const STATIC_LABELS: Record<string, string> = {
     storage: "Хранение",
     warranty: "Гарантия",
     material: "Материал",
-    kovanSection: "Ковка, квадрат сеч.",
     plotSize: "Размер участка",
     installation: "Установка",
-};
-
-// Статичные описания для категорий
-const STATIC_DESCRIPTIONS: Record<string, string> = {
-    "Гранитные ограды": `Гранитная ограда из Карельского гранита (Габбро-Диабаз) в сочетании с памятником на благоустроенном участке позволяет могиле выглядеть завершенной.`,
-
-    "Металлические ограды": `Общая стоимость ограды вычисляется путем умножения цены 1 погонного метра на периметр могильного участка
-
-Варианты установки ограды:
-
-1) По уровню земли с благоустройством тротуарным бортом и щебнем или без благоустройства
-2) На монолитно-бетонный фундамент с благоустройством плиткой
-3) На фундамент из бессерных блоков с благоустройством плиткой
-
-В стоимость ограды входит калитка для входа и 5 ножек.`,
-
-    "С полимерным покрытием": `Расчет стоимости:
-
-1. Стоимость одного погонного метра умножается на периметр участка за вычетом ширины входа и общей ширины необходимого количества гранитных столбиков. Стандартная ширина одного столбика - 0,1 м.
-2. Стоимость ковки суммируется со стоимостью необходимого количества гранитных столбиков.
-
-Варианты установки ограды:
-
-1) На монолитно-бетонный фундамент с благоустройством плиткой
-2) На фундамент из бессерных блоков с благоустройством плиткой`
 };
 
 const FenceDetailPage = () => {
@@ -338,7 +310,7 @@ const FenceDetailPage = () => {
                                     <div className="flex items-center space-x-2 mt-2">
                                         {fence.price ? (
                                             <p className="text-3xl font-bold text-[#2c3a54]">
-                                                {fence.price} руб.
+                                                {fence.price} руб.{fence.category === 'Металлические ограды' || fence.category === 'С полимерным покрытием' ? ' м.п.' : ''}
                                             </p>
                                         ) : fence.textPrice ? (
                                             <p className="text-3xl font-bold text-[#2c3a54]">
@@ -436,7 +408,7 @@ const FenceDetailPage = () => {
                                 {activeTab === "description" && hasDescription && (
                                     <div>
                                         <p className="text-[#2D4266] whitespace-pre-wrap">
-                                            {STATIC_DESCRIPTIONS[fence.category] ||
+                                            {fence.description || 
                                                 `${fence.name} — это качественная ограда, изготовленная из натурального материала. Она отличается прочностью, долговечностью и эстетической привлекательностью. Ограда подойдет для обустройства захоронения и станет надежной защитой.`}
                                         </p>
                                     </div>
@@ -448,7 +420,7 @@ const FenceDetailPage = () => {
             </section>
 
             {/* Галерея готовых работ с этим товаром */}
-            <ProductWorksGallery 
+            <ProductWorksGallery
                 productId={fence.id.toString()}
                 productType="fences"
                 title="Готовые работы с этим товаром"

@@ -4,10 +4,10 @@ import Image from "next/image";
 
 // Предполагаем, что у вас уже есть массив slides
 const slides = [
-    { id: 1, src: "/shop-slider/1.webp", alt: "Слайд 1" },
-    { id: 2, src: "/shop-slider/2.webp", alt: "Слайд 2" },
-    { id: 3, src: "/shop-slider/4.webp", alt: "Слайд 3" },
-    { id: 4, src: "/shop-slider/5.webp", alt: "Слайд 4" },
+    { id: 1, src: "/shop-slider/1.jpg", alt: "Слайд 1" },
+    { id: 2, src: "/shop-slider/2.jpg", alt: "Слайд 2" },
+    { id: 3, src: "/shop-slider/4.jpg", alt: "Слайд 3" },
+    { id: 4, src: "/shop-slider/5.jpg", alt: "Слайд 4" },
 ];
 
 const Gallery = () => {
