@@ -210,6 +210,13 @@ const subcategoryData: Record<string, CategoryData> = {
     }
 };
 
+// Генерируем статические параметры для всех категорий
+export async function generateStaticParams() {
+    return Object.keys(subcategoryData).map((slug) => ({
+        category: slug,
+    }));
+}
+
 const MonumentsSubcategoryPage = () => {
     const params = useParams();
     const categorySlug = params?.category as string;
