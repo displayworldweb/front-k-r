@@ -212,7 +212,7 @@ const subcategoryData: Record<string, CategoryData> = {
 
 const MonumentsSubcategoryPageClient = () => {
     const params = useParams();
-    const categorySlug = params?.category as string;
+    const categorySlug = params?.category as string | undefined;
 
     const [isClient, setIsClient] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
@@ -224,8 +224,13 @@ const MonumentsSubcategoryPageClient = () => {
     const [dynamicPageDescription, setDynamicPageDescription] = useState<PageDescription | null>(null);
     const [loadingDescription, setLoadingDescription] = useState(false);
 
+    // Защита: если categorySlug undefined, вернём null
+    if (!categorySlug) {
+        return null;
+    }
+
     // Получаем данные для текущей подкатегории
-    const currentCategoryData = categorySlug ? categoryData[categorySlug.toLowerCase()] || null : null;
+    const currentCategoryData = categoryData[categorySlug.toLowerCase()] || null;
 
     // Обработчик сортировки (если есть опции)
     const [sortOption, setSortOption] = useState(currentCategoryData?.sortOptions ? currentCategoryData.sortOptions[0] : "");
