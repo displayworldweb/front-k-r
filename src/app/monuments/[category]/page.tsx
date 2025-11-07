@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 "use client";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
@@ -225,7 +227,7 @@ const MonumentsSubcategoryPage = () => {
     const [loadingDescription, setLoadingDescription] = useState(false);
 
     // Получаем данные для текущей подкатегории
-    const currentCategoryData = categoryData[categorySlug.toLowerCase()] || null;
+    const currentCategoryData = categorySlug ? (categoryData[categorySlug.toLowerCase()] || null) : null;
 
     // Обработчик сортировки (если есть опции)
     const [sortOption, setSortOption] = useState(currentCategoryData?.sortOptions ? currentCategoryData.sortOptions[0] : "");
@@ -408,7 +410,7 @@ const MonumentsSubcategoryPage = () => {
             
             case "Хит":
                 // Для эксклюзивных памятников проверяем хит в цветах
-                if (categorySlug.toLowerCase() === 'exclusive') {
+                if (categorySlug && categorySlug.toLowerCase() === 'exclusive') {
                     const aHasHit = a.colors && a.colors.some(color => color.hit === true);
                     const bHasHit = b.colors && b.colors.some(color => color.hit === true);
                     
