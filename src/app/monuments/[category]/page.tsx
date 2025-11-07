@@ -225,7 +225,7 @@ const MonumentsSubcategoryPage = () => {
     const [loadingDescription, setLoadingDescription] = useState(false);
 
     // Получаем данные для текущей подкатегории
-    const currentCategoryData = categoryData[categorySlug.toLowerCase()] || null;
+    const currentCategoryData = categorySlug ? categoryData[categorySlug.toLowerCase()] || null : null;
 
     // Обработчик сортировки (если есть опции)
     const [sortOption, setSortOption] = useState(currentCategoryData?.sortOptions ? currentCategoryData.sortOptions[0] : "");
