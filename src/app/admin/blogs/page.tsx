@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import { generateSlug } from "@/lib/slug-generator";
 import { apiClient } from "@/lib/api-client";
+import { SeoFieldsForm, SeoFieldsData } from "@/components/admin/SeoFieldsForm";
+import { useSeoSave } from "@/lib/hooks/use-seo-save";
 
 interface BlogBlock {
   id: string;
@@ -24,6 +26,10 @@ interface Blog {
   tags: string[];
   createdAt: string;
   updatedAt: string;
+  seo_title?: string;
+  seo_description?: string;
+  seo_keywords?: string;
+  og_image?: string;
 }
 
 export default function BlogsAdminPage() {
@@ -38,6 +44,9 @@ export default function BlogsAdminPage() {
   const [tags, setTags] = useState<string[]>([]);
   const [newTag, setNewTag] = useState("");
   const [blocks, setBlocks] = useState<BlogBlock[]>([]);
+  
+  // SEO хук
+  const { saveSeoFields, isLoading: seoLoading, error: seoError } = useSeoSave('blogs');
   
   const [availableImages, setAvailableImages] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);

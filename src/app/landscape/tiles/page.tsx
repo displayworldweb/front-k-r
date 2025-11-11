@@ -3,10 +3,9 @@ import PathPage from "@/app/components/PathPage";
 import SidebarCatalogMenu from "@/app/components/Sidebar/SidebarCatalogMenu";
 import SidebarStickyHelp from "@/app/components/Sidebar/SidebarStickyHelp";
 import Promo from "@/app/components/Promo";
-import Link from "next/link";
 import { PageDescriptionBlock } from "@/app/components/PageDescriptionBlock";
 
-const GraveyardLandscapingPage = () => {
+const TilesPage = () => {
 
     return (
         <>
@@ -19,12 +18,12 @@ const GraveyardLandscapingPage = () => {
 
                     <div className="pl-5 lg:pl-0">
                         <PathPage />
-                        <h1 className="text-black text-[28px] mt-2.5 leading-8 lg:text-[40px] lg:leading-12 font-[600]">Благоустройство могил</h1>
+                        <h1 className="text-black text-[28px] mt-2.5 leading-8 lg:text-[40px] lg:leading-12 font-[600]">Укладка плитки</h1>
                     </div>
 
                     {/* Основной контент */}
                     <div className="mt-7.5 font-[600] shadow-xs p-5 lg:p-7.5 rounded-lg">
-                        <PageDescriptionBlock pageSlug="landscape-graves" />
+                        <PageDescriptionBlock pageSlug="landscape-tiles" />
                     </div>
                 </div>
             </section>
@@ -37,4 +36,4 @@ const GraveyardLandscapingPage = () => {
     );
 };
 
-export default GraveyardLandscapingPage;
+export default TilesPage;

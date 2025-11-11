@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import { generateSlug } from "@/lib/slug-generator";
 import { apiClient } from "@/lib/api-client";
+import { SeoFieldsForm, SeoFieldsData } from "@/components/admin/SeoFieldsForm";
+import { useSeoSave } from "@/lib/hooks/use-seo-save";
 
 interface Accessory {
   id: number;
@@ -14,6 +16,10 @@ interface Accessory {
   image: string;
   specifications?: any;
   createdAt: string;
+  seo_title?: string;
+  seo_description?: string;
+  seo_keywords?: string;
+  og_image?: string;
 }
 
 const ACCESSORY_CATEGORIES = ["Вазы", "Лампады", "Скульптуры", "Рамки", "Изделия из бронзы", "Надгробные плиты", "Гранитные таблички"];
@@ -33,6 +39,17 @@ export default function AccessoriesAdminPage() {
   const [category, setCategory] = useState("");
   const [image, setImage] = useState("");
   const [loading, setLoading] = useState(false);
+  
+  // SEO хук
+  const { saveSeoFields, isLoading: seoLoading, error: seoError } = useSeoSave('accessories');
+  
+  // SEO state для create режима
+  const [createSeoFields, setCreateSeoFields] = useState({
+    seo_title: '',
+    seo_description: '',
+    seo_keywords: '',
+    og_image: ''
+  });
   
   // Для характеристик
   const [specifications, setSpecifications] = useState({
@@ -181,6 +198,13 @@ export default function AccessoriesAdminPage() {
 
       const data = await apiClient.post("/admin/accessories", body);
       if (data.success) {
+        const newAccessoryId = data.accessory.id;
+        
+        // Если есть SEO поля, сохраняем их
+        if (createSeoFields.seo_title || createSeoFields.seo_description || createSeoFields.seo_keywords || createSeoFields.og_image) {
+          await saveSeoFields(newAccessoryId, createSeoFields);
+        }
+        
         setSuccess("✓ Аксессуар добавлен");
         setName("");
         setSlug("");
@@ -195,6 +219,12 @@ export default function AccessoriesAdminPage() {
         });
         setDescription("");
         setFrameType("metal");
+        setCreateSeoFields({
+          seo_title: '',
+          seo_description: '',
+          seo_keywords: '',
+          og_image: ''
+        });
         await fetchAccessories();
         setTimeout(() => setSuccess(""), 3000);
       } else {
@@ -224,6 +254,18 @@ export default function AccessoriesAdminPage() {
     } catch (err: any) {
       setError("Ошибка: " + err.message);
       console.error("Delete exception:", err);
+    }
+  };
+
+  const handleSaveSeo = async (data: SeoFieldsData) => {
+    if (!editingId) return;
+    try {
+      await saveSeoFields(editingId, data);
+      setSuccess('✓ SEO успешно сохранено');
+      await fetchAccessories();
+      setTimeout(() => setSuccess(""), 3000);
+    } catch (err) {
+      setError('Ошибка при сохранении SEO');
     }
   };
 
@@ -454,6 +496,55 @@ export default function AccessoriesAdminPage() {
             )}
           </div>
 
+          {/* SEO Поля */}
+          <div className="border-t pt-4">
+            <h3 className="text-lg font-semibold mb-3">SEO (опционально)</h3>
+            <div className="bg-white p-4 rounded border border-gray-200">
+              <div className="space-y-3">
+                <div>
+                  <label className="block text-sm font-medium mb-1">SEO Заголовок</label>
+                  <input
+                    type="text"
+                    placeholder="Заголовок для SEO"
+                    value={createSeoFields.seo_title}
+                    onChange={(e) => setCreateSeoFields({...createSeoFields, seo_title: e.target.value})}
+                    className="w-full px-4 py-2 border rounded"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">SEO Описание</label>
+                  <input
+                    type="text"
+                    placeholder="Описание для SEO"
+                    value={createSeoFields.seo_description}
+                    onChange={(e) => setCreateSeoFields({...createSeoFields, seo_description: e.target.value})}
+                    className="w-full px-4 py-2 border rounded"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">SEO Ключевые слова</label>
+                  <input
+                    type="text"
+                    placeholder="Ключевые слова для SEO"
+                    value={createSeoFields.seo_keywords}
+                    onChange={(e) => setCreateSeoFields({...createSeoFields, seo_keywords: e.target.value})}
+                    className="w-full px-4 py-2 border rounded"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">OG Изображение (URL)</label>
+                  <input
+                    type="text"
+                    placeholder="URL изображения для социальных сетей"
+                    value={createSeoFields.og_image}
+                    onChange={(e) => setCreateSeoFields({...createSeoFields, og_image: e.target.value})}
+                    className="w-full px-4 py-2 border rounded"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
           <button
             type="submit"
             disabled={loading}
@@ -483,7 +574,24 @@ export default function AccessoriesAdminPage() {
                     onChange={(e) => setEditData({ ...editData, category: e.target.value })}
                     className="w-full px-3 py-2 border rounded"
                   />
-                  <div className="flex gap-2">
+                  {/* SEO Fields */}
+                  <div className="border-t pt-4 mt-4">
+                    <h4 className="font-semibold mb-3 text-gray-800">SEO Данные</h4>
+                    <SeoFieldsForm
+                      entityType="accessories"
+                      categoryName="Аксессуары"
+                      initialData={{
+                        seo_title: item.seo_title || "",
+                        seo_description: item.seo_description || "",
+                        seo_keywords: item.seo_keywords || "",
+                        og_image: item.og_image || "",
+                      }}
+                      onSave={handleSaveSeo}
+                      isLoading={seoLoading}
+                      error={seoError || undefined}
+                    />
+                  </div>
+                  <div className="flex gap-2 mt-4">
                     <button
                       onClick={() => handleSaveEdit(item.id)}
                       className="flex-1 bg-green-600 text-white py-2 rounded hover:bg-green-700"

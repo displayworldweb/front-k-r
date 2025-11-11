@@ -8,6 +8,7 @@ import SidebarCatalogMenu from "../components/Sidebar/SidebarCatalogMenu";
 import SidebarStickyHelp from "../components/Sidebar/SidebarStickyHelp";
 import ProductCard from "../components/ProductCard";
 import Pagination from "../components/Pagination";
+import { PageDescriptionBlock } from "../components/PageDescriptionBlock";
 import { Product } from "../types/types";
 
 // Функция для получения товара по slug из всех категорий
@@ -200,6 +201,8 @@ const FavoritesPage = () => {
                         onPageChange={setCurrentPage}
                         initialPage={1}
                     />v
+                    
+                    <PageDescriptionBlock pageSlug="favorites" />
                 </div>
             </section>
 

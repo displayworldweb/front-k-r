@@ -4,6 +4,7 @@ import PathPage from "@/app/components/PathPage";
 import SidebarCatalogMenu from "@/app/components/Sidebar/SidebarCatalogMenu";
 import SidebarStickyHelp from "@/app/components/Sidebar/SidebarStickyHelp";
 import Promo from "@/app/components/Promo";
+import { PageDescriptionBlock } from "@/app/components/PageDescriptionBlock";
 import Link from "next/link";
 
 const MonumentDismantlePage = () => {
@@ -38,40 +39,7 @@ const MonumentDismantlePage = () => {
 
                     {/* Основной контент */}
                     <div className="mt-7.5 font-[600] shadow-xs p-5 lg:p-7.5 rounded-lg">
-                        {/* Введение */}
-                        <p className="text-[#2c3a54] mb-5">
-                            Для подготовки могильного участка к установке памятника нередко требуется демонтаж старых конструкций: старого памятника, ограды, разборка фундамента. В некоторых случаях демонтажные работы занимают больше времени, чем сама установка, требуется специальная техника, кран-манипулятор. Так как старые памятники часто весят более 200 килограмм.
-                        </p>
-
-                        {/* Стандартный демонтаж */}
-                        <h2 className="text-[#2c3a54] mb-3.75">Стандартный демонтаж включает замену:</h2>
-                        <ul className="list-disc pl-10 text-[#2c3a54] space-y-1 mb-5">
-                            <li>Старой стелы, подставки</li>
-                            <li>Цветочницы</li>
-                            <li>Удаление старой плитки</li>
-                            <li>Металлической или гранитной ограды</li>
-                            <li>Разборка старого фундамента</li>
-                            <li>Удаление лишних камней после разборки</li>
-                            <li>Выравнивание грунта, обсыпка песком (если требуется)</li>
-                            <li>Удаление лишней растительности (поросшая трава, сорняки, деревья, кусты)</li>
-                            <li>Столиков, лавочек, скамеек</li>
-                            <li>Вывоз строительного мусора.</li>
-                        </ul>
-
-                        {/* Оценка монумента */}
-                        <p className="text-[#2c3a54] mb-5">
-                            Оценка монумента на пригодность к реставрации проводится при личном осмотре менеджера либо по фотографии заказчика.
-                        </p>
-
-                        {/* Контактная информация */}
-                        <h3 className="text-[#2c3a54] mb-2.5">Заказать услугу можно по телефонам:</h3>
-                        <ul className="list-disc pl-10 text-[#2c3a54] space-y-1 mb-5">
-                            <li>+375 33 677-01-66 МТС</li>
-                            <li>+375 29 182-01-66 Велком.</li>
-                        </ul>
-                        <p className="text-[#2c3a54] mb-5">
-                            Для более подробной консультации обращайтесь <strong>по адресу: пр-т Любимова 26 к3.</strong>
-                        </p>
+                        <PageDescriptionBlock pageSlug="services-monument-dismantle" />
                     </div>
 
                     {/* Блок "Другие категории" */}
@@ -79,6 +47,19 @@ const MonumentDismantlePage = () => {
                         <h2 className="text-[28px] font-bold text-[#2c3a54] ml-2.5 mb-3.5 lg:mb-5">Другие категории</h2>
                         {/* Общий блок с flex */}
                         <div className={`flex flex-wrap ${isNarrowMobile ? 'flex-col space-y-2.5' : ''}`}>
+                            {/* Карточка "Установка оград" */}
+                            <div className={`px-1.25 md:px-2.5 max-w-1/2 flex-1/2 min-h-[60px] lg:min-h-[140px] ${isNarrowMobile ? 'max-w-full' : ''}`}>
+                                <a href="/fences-installation" className="block overflow-hidden rounded-lg hover:border-2 border-[#2c3a54] bg-[#f5f6fa] relative h-full items-center pr-40 p-7.5">
+                                    {/* Текст */}
+                                    <h2 className="text-[16px] font-bold text-[#222222] self-start">Установка оград</h2>
+                                    {/* Изображение с абсолютным позиционированием */}
+                                    <img
+                                        src="/services/fence-installation.webp"
+                                        alt="Установка оград"
+                                        className="w-[75px] lg:w-[130px] h-auto object-cover rounded-lg absolute top-1/2 right-2.5 transform -translate-y-1/2"
+                                    />
+                                </a>
+                            </div>
                             {/* Карточка "Изготовление памятников" */}
                             <div className={`px-1.25 md:px-2.5 max-w-1/2 flex-1/2 min-h-[60px] lg:min-h-[140px] ${isNarrowMobile ? 'max-w-full' : ''}`}>
                                 <a href="/monument-manufacturing" className="block overflow-hidden rounded-lg hover:border-2 border-[#2c3a54] bg-[#f5f6fa] relative h-full items-center pr-40 p-7.5">

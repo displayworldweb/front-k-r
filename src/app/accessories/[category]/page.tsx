@@ -8,6 +8,7 @@ import SidebarStickyHelp from "@/app/components/Sidebar/SidebarStickyHelp";
 import ProductCard from "@/app/components/ProductCard";
 import Pagination from "@/app/components/Pagination";
 import Promo from "@/app/components/Promo";
+import { PageDescriptionBlock } from "@/app/components/PageDescriptionBlock";
 
 interface Accessory {
   id: number;
@@ -208,6 +209,8 @@ const AccessoriesCategoryPage = () => {
             )}
           </div>
         </div>
+        {/* Описание страницы */}
+        <PageDescriptionBlock pageSlug={`accessories-${categorySlug}`} />
       </section>
 
       {/* внизу страницы */}

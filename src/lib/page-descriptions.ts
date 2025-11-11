@@ -1,5 +1,5 @@
 import { apiClient, API_ENDPOINTS } from "./api-client";
-import { PageBlock } from "@/components/PageBlocksRenderer";
+import { PageBlock } from "@/app/components/PageBlocksRenderer";
 
 export interface PageDescription {
   id: number;

@@ -7,6 +7,7 @@ import ProductCard from "../components/ProductCard";
 import Pagination from "../components/Pagination";
 import { categoriesAccessories } from "../mock/categories";
 import Promo from "../components/Promo";
+import { PageDescriptionBlock } from "../components/PageDescriptionBlock";
 import { apiClient } from "@/lib/api-client";
 
 interface Accessory {
@@ -193,6 +194,8 @@ const AccessoriesPage = () => {
                         onPageChange={setCurrentPage}
                         initialPage={1}
                     />
+
+                    <PageDescriptionBlock pageSlug="accessories" />
                 </div>
             </section>
 

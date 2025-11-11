@@ -49,8 +49,6 @@ const pageTitles: Record<string, string> = {
   '/accessories/bronze': 'Изделия из бронзы',
   '/accessories/plates': 'Надгробные плиты',
   '/accessories/tables': 'Гранитные таблички',
-  '/landscape/shheben': 'Щебень',
-  '/landscape/stoly-i-skamejki': 'Столы и скамейки',
   '/landscape/graves': 'Благоустройство могил',
   '/landscape/foundation': 'Фундамент для памятников',
   '/landscape/tiles': 'Укладка плитки',

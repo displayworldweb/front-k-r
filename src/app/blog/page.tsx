@@ -1,5 +1,4 @@
 "use client"
-import { Metadata } from "next"
 import { apiClient } from "@/lib/api-client"
 import OurWorksSlider from "../components/OurWorksSlider"
 import PathPage from "../components/PathPage"
@@ -8,6 +7,7 @@ import SidebarStickyHelp from "../components/Sidebar/SidebarStickyHelp"
 import Pagination from "../components/Pagination"
 import { useState, useEffect } from "react"
 import Link from 'next/link'
+import { PageDescriptionBlock } from "../components/PageDescriptionBlock"
 
 interface BlogPreview {
   id: number;
@@ -160,6 +160,9 @@ const BlogPage = () => {
                             initialPage={1}
                         />
                     )}
+
+                    {/* Описание страницы */}
+                    <PageDescriptionBlock pageSlug="blogs" />
                 </div>
             </section>
 

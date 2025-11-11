@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { generateSlug } from "@/lib/slug-generator";
 import { apiClient } from "@/lib/api-client";
+import { SeoFieldsForm, SeoFieldsData } from "@/components/admin/SeoFieldsForm";
 
 interface MonumentColor {
   name: string;
@@ -33,6 +34,10 @@ interface Monument {
   description?: string;
   availability?: string;
   createdAt: string;
+  seoTitle?: string;
+  seoDescription?: string;
+  seoKeywords?: string;
+  ogImage?: string;
 }
 
 interface MonumentCategory {
@@ -44,6 +49,8 @@ interface MonumentCategory {
 }
 
 export default function ProductsAdminPage() {
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.k-r.by/api';
+  
   const [monuments, setMonuments] = useState<Monument[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -55,12 +62,60 @@ export default function ProductsAdminPage() {
   const [uploadError, setUploadError] = useState("");
   const [availableImages, setAvailableImages] = useState<string[]>([]);
   const [nameCheckResult, setNameCheckResult] = useState<{isUnique: boolean, checked: boolean}>({isUnique: true, checked: false});
+  
+  const [seoLoading, setSeoLoading] = useState(false);
+  const [seoError, setSeoError] = useState("");
+
+  // Функция для сохранения SEO данных
+  // SEO сохраняется через обновление памятника (PUT /monuments/id/{id})
+  const saveSeoFields = async (entityId: number, data: SeoFieldsData, categoryKey?: string): Promise<boolean> => {
+    try {
+      setSeoLoading(true);
+      setSeoError("");
+
+      let category = categoryKey || selectedCategory;
+      
+      // Преобразуем русские названия категорий в английские для API
+      if (category === "Эксклюзивные") {
+        category = "exclusive";
+      }
+      
+      // Отправляем SEO данные как часть обновления памятника
+      // Обязательно включаем category чтобы backend знал в какой таблице искать
+      const response = await fetch(`${API_URL}/monuments/id/${entityId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          category: category, // Указываем категорию чтобы backend нашел правильную таблицу
+          seoTitle: data.seoTitle || "",
+          seoDescription: data.seoDescription || "",
+          seoKeywords: data.seoKeywords || "",
+          ogImage: data.ogImage || "",
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.message || errorData.error || 'Ошибка при сохранении SEO');
+      }
+
+      return true;
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Unknown error';
+      setSeoError(message);
+      return false;
+    } finally {
+      setSeoLoading(false);
+    }
+  };
   const [editForm, setEditForm] = useState({
     name: "",
     price: "",
     oldPrice: "",
     discount: "",
-    textPrice: "",
+    priceByRequest: false,
     category: "",
     image: "",
     options: "",
@@ -74,6 +129,11 @@ export default function ProductsAdminPage() {
     customOptions: [] as Array<{key: string, value: string}>,
     // Цвета для эксклюзивных памятников
     colors: [] as MonumentColor[],
+    // SEO поля
+    seo_title: "",
+    seo_description: "",
+    seo_keywords: "",
+    og_image: "",
   });
 
   // Вспомогательная функция для проверки хитов в цветах эксклюзивных памятников
@@ -345,12 +405,37 @@ export default function ProductsAdminPage() {
       }
     }
     
+    // Определяем, используется ли "Цена по запросу" или обычная цена
+    // Если price = 0/null - это значит "Цена по запросу"
+    let price = "";
+    let oldPrice = "";
+    let discount = "";
+    let priceByRequest = false;
+    
+    const monumentPrice = monument.price ? parseFloat(monument.price as any) : 0;
+    const monumentOldPrice = monument.oldPrice ? parseFloat(monument.oldPrice as any) : 0;
+    const monumentDiscount = monument.discount ? parseFloat(monument.discount as any) : 0;
+    
+    if (monumentPrice <= 0) {
+      // Если цена 0 или null - это "Цена по запросу"
+      priceByRequest = true;
+      price = "";
+      oldPrice = "";
+      discount = "";
+    } else {
+      // Иначе используем обычные цены
+      priceByRequest = false;
+      price = monumentPrice.toString();
+      oldPrice = monumentOldPrice > 0 ? monumentOldPrice.toString() : "";
+      discount = monumentDiscount > 0 ? monumentDiscount.toString() : "";
+    }
+    
     setEditForm({
       name: monument.name,
-      price: monument.price?.toString() || "",
-      oldPrice: monument.oldPrice?.toString() || "",
-      discount: monument.discount?.toString() || "",
-      textPrice: monument.textPrice || "",
+      price: price,
+      oldPrice: oldPrice,
+      discount: discount,
+      priceByRequest: priceByRequest,
       category: monument.category,
       image: monument.image,
       options: monument.options || "",
@@ -362,6 +447,10 @@ export default function ProductsAdminPage() {
       realOptions: realOptions,
       customOptions: customOptions,
       colors: colors,
+      seo_title: monument.seoTitle || "",
+      seo_description: monument.seoDescription || "",
+      seo_keywords: monument.seoKeywords || "",
+      og_image: monument.ogImage || "",
     });
   };
 
@@ -373,7 +462,7 @@ export default function ProductsAdminPage() {
       price: "",
       oldPrice: "",
       discount: "",
-      textPrice: "",
+      priceByRequest: false,
       category: "",
       image: "",
       options: "",
@@ -385,6 +474,10 @@ export default function ProductsAdminPage() {
       realOptions: {},
       customOptions: [],
       colors: [],
+      seo_title: "",
+      seo_description: "",
+      seo_keywords: "",
+      og_image: "",
     });
   };
 
@@ -396,7 +489,7 @@ export default function ProductsAdminPage() {
       price: "",
       oldPrice: "",
       discount: "",
-      textPrice: "",
+      priceByRequest: false,
       category: selectedCategory,
       image: "",
       options: "",
@@ -408,6 +501,10 @@ export default function ProductsAdminPage() {
       realOptions: {},
       customOptions: [],
       colors: [],
+      seo_title: "",
+      seo_description: "",
+      seo_keywords: "",
+      og_image: "",
     });
   };
 
@@ -417,7 +514,7 @@ export default function ProductsAdminPage() {
     const oldPrice = parseFloat(editForm.oldPrice) || 0;
     
     setEditForm(prev => {
-      const updatedForm = { ...prev, price, textPrice: "" }; // Очищаем textPrice
+      const updatedForm = { ...prev, price, priceByRequest: false }; // Очищаем priceByRequest при вводе числовой цены
       
       // Если есть старая цена, рассчитываем скидку
       if (oldPrice > 0 && newPrice > 0 && oldPrice > newPrice) {
@@ -435,7 +532,7 @@ export default function ProductsAdminPage() {
     const currentPrice = parseFloat(editForm.price) || 0;
     
     setEditForm(prev => {
-      const updatedForm = { ...prev, oldPrice, textPrice: "" }; // Очищаем textPrice
+      const updatedForm = { ...prev, oldPrice, priceByRequest: false }; // Очищаем priceByRequest при вводе числовой цены
       
       // Если есть текущая цена, рассчитываем скидку
       if (currentPrice > 0 && newOldPrice > 0 && newOldPrice > currentPrice) {
@@ -453,7 +550,7 @@ export default function ProductsAdminPage() {
     const currentPrice = parseFloat(editForm.price) || 0;
     
     setEditForm(prev => {
-      const updatedForm = { ...prev, discount, textPrice: "" }; // Очищаем textPrice
+      const updatedForm = { ...prev, discount, priceByRequest: false }; // Очищаем priceByRequest при вводе числовой цены
       
       // Если есть текущая цена и скидка, рассчитываем старую цену
       if (currentPrice > 0 && newDiscount > 0 && newDiscount < 100) {
@@ -567,21 +664,50 @@ export default function ProductsAdminPage() {
 
       if (editingMonument) {
         // Обновление существующего памятника
-        const currentPrice = editForm.price ? parseFloat(editForm.price) : null;
-        const oldPrice = editForm.oldPrice ? parseFloat(editForm.oldPrice) : null;
-        const discount = editForm.discount ? parseFloat(editForm.discount) : null;
+        // Если прижата "Цена по запросу", то price/oldPrice/discount = 0/null
+        let currentPrice: number | null = null;
+        let oldPrice: number | null = null;
+        let discount: number | null = null;
+        
+        if (editForm.priceByRequest) {
+          // Если "Цена по запросу" включена - отправляем 0 для price
+          currentPrice = 0;
+          oldPrice = null;
+          discount = null;
+        } else {
+          // Иначе используем обычные цены
+          currentPrice = editForm.price ? parseFloat(editForm.price) : null;
+          oldPrice = editForm.oldPrice ? parseFloat(editForm.oldPrice) : null;
+          discount = editForm.discount ? parseFloat(editForm.discount) : null;
+        }
+
+        // Загружаем шаблонное SEO для категории, если не заполнены SEO поля при редактировании
+        let seoTitle = editForm.seo_title;
+        let seoDescription = editForm.seo_description;
+        let seoKeywords = editForm.seo_keywords;
+        let ogImage = editForm.og_image;
+
+        // При редактировании НЕ загружаем шаблон - используем только то что в форме
+        // Шаблон загружается только при создании нового памятника
+        console.log('Edit SEO data:', { seo_title: seoTitle, seo_description: seoDescription, seo_keywords: seoKeywords, og_image: ogImage });
+
+        // Определяем правильную категорию для отправки (преобразуем русские названия в английские)
+        let updateCategory = editForm.category || selectedCategory;
+        if (updateCategory === "Эксклюзивные") {
+          updateCategory = "exclusive";
+        }
 
         const updateData: any = {
           name: editForm.name,
           price: currentPrice,
           oldPrice: oldPrice,
           discount: discount,
-          textPrice: editForm.textPrice || null,
-          category: editForm.category || selectedCategory,
+          category: updateCategory,
           image: editForm.image || "",
           options: optionsJson,
           height: editForm.height || "",
           description: editForm.description || "",
+          // NOTE: SEO поля сохраняются отдельным запросом после обновления памятника
         };
 
         // Добавляем colors только для эксклюзивных памятников
@@ -598,9 +724,27 @@ export default function ProductsAdminPage() {
         console.log('Update endpoint:', updateEndpoint);
         console.log('Update data:', updateData);
         console.log('Selected category:', selectedCategory);
+        console.log('SEO data:', { seo_title: seoTitle, seo_description: seoDescription, seo_keywords: seoKeywords });
         
         const data = await apiClient.put(updateEndpoint, updateData);
         if (data.success) {
+          // Если есть SEO данные - сохраняем их отдельным запросом
+          if (seoTitle || seoDescription || seoKeywords || ogImage) {
+            try {
+              console.log('Saving SEO data for monument ID:', editingMonument.id);
+              await saveSeoFields(editingMonument.id, {
+                seoTitle: seoTitle,
+                seoDescription: seoDescription,
+                seoKeywords: seoKeywords,
+                ogImage: ogImage,
+              }, selectedCategory);
+              console.log('✓ SEO данные сохранены');
+            } catch (seoErr) {
+              console.warn('Failed to save SEO data:', seoErr);
+              // Продолжаем даже если SEO не сохранилось
+            }
+          }
+          
           setSuccess("✓ Памятник успешно обновлен");
           await fetchMonuments(selectedCategory);
           cancelEditing();
@@ -610,17 +754,81 @@ export default function ProductsAdminPage() {
         }
       } else {
         // Добавление нового памятника
-        const currentPrice = editForm.price ? parseFloat(editForm.price) : null;
-        const oldPrice = editForm.oldPrice ? parseFloat(editForm.oldPrice) : null;
-        const discount = editForm.discount ? parseFloat(editForm.discount) : null;
+        // Если прижата "Цена по запросу", то price/oldPrice/discount = 0/null
+        let currentPrice: number | null = null;
+        let oldPrice: number | null = null;
+        let discount: number | null = null;
+        
+        if (editForm.priceByRequest) {
+          // Если "Цена по запросу" включена - отправляем 0 для price
+          currentPrice = 0;
+          oldPrice = null;
+          discount = null;
+        } else {
+          // Иначе используем обычные цены
+          currentPrice = editForm.price ? parseFloat(editForm.price) : null;
+          oldPrice = editForm.oldPrice ? parseFloat(editForm.oldPrice) : null;
+          discount = editForm.discount ? parseFloat(editForm.discount) : null;
+        }
 
         // Определяем правильную категорию и эндпоинт
         let category = editForm.category || selectedCategory;
         let createEndpoint = "/monuments";
         
         if (selectedCategory === "exclusive") {
-          category = "Эксклюзивные";
+          category = "exclusive"; // Используем английское название как в других категориях
           createEndpoint = "/monuments"; // Теперь используем /monuments для всех
+        }
+
+        // Загружаем шаблонное SEO для категории, если не заполнены SEO поля
+        let seoTitle = editForm.seo_title;
+        let seoDescription = editForm.seo_description;
+        let seoKeywords = editForm.seo_keywords;
+        let ogImage = editForm.og_image;
+
+        console.log('Initial SEO values:', { seoTitle, seoDescription, seoKeywords, ogImage });
+
+        // Если юзер вписал хоть что-то в SEO - используем его значения
+        // Загружаем шаблон ТОЛЬКО если все SEO поля пусты
+        const hasUserProvidedSeo = seoTitle || seoDescription || seoKeywords || ogImage;
+        
+        if (!hasUserProvidedSeo) {
+          // Только загружаем шаблон если все поля пусты
+          try {
+            const { fetchSeoTemplate } = await import('@/lib/hooks/use-seo-hierarchy');
+            // Для всех типов памятников используем entityType "monuments"
+            console.log('Fetching SEO template for monuments category:', selectedCategory);
+            const template = await fetchSeoTemplate("monuments", selectedCategory);
+            console.log('Template received:', template);
+            
+            if (template) {
+              seoTitle = template.seoTitle || editForm.name;
+              seoDescription = template.seoDescription || `Памятник ${editForm.name}`;
+              seoKeywords = template.seoKeywords || editForm.name;
+              ogImage = template.ogImage || "";
+              console.log('Applied template SEO:', { seoTitle, seoDescription, seoKeywords, ogImage });
+            } else {
+              // Если шаблона нет - используем данные памятника как fallback
+              seoTitle = editForm.name;
+              seoDescription = `Памятник ${editForm.name}`;
+              seoKeywords = editForm.name;
+              console.log('No template found, using fallback:', { seoTitle, seoDescription, seoKeywords });
+            }
+          } catch (err) {
+            console.warn('Failed to load SEO template, using defaults:', err);
+            // Используем данные памятника как fallback
+            seoTitle = editForm.name;
+            seoDescription = `Памятник ${editForm.name}`;
+            seoKeywords = editForm.name;
+            console.log('Template load error, using fallback:', { seoTitle, seoDescription, seoKeywords });
+          }
+        } else {
+          // Юзер вписал что-то - используем его значения, заполняя пропуски fallback'ом
+          console.log('User provided SEO, using user values:', { seoTitle, seoDescription, seoKeywords, ogImage });
+          seoTitle = seoTitle || editForm.name;
+          seoDescription = seoDescription || `Памятник ${editForm.name}`;
+          seoKeywords = seoKeywords || editForm.name;
+          ogImage = ogImage || "";
         }
 
         // Используем правильный endpoint /monuments с данными напрямую
@@ -630,7 +838,6 @@ export default function ProductsAdminPage() {
           price: currentPrice,
           oldPrice: oldPrice,
           discount: discount,
-          textPrice: editForm.textPrice || null,
           category: category,
           image: editForm.image || "",
           options: optionsJson,
@@ -638,6 +845,11 @@ export default function ProductsAdminPage() {
           description: editForm.description || "",
           hit: false,
           popular: false,
+          // Включаем SEO поля в основной запрос создания
+          seoTitle: seoTitle,
+          seoDescription: seoDescription,
+          seoKeywords: seoKeywords,
+          ogImage: ogImage,
         };
 
         // Добавляем colors только для эксклюзивных памятников
@@ -649,8 +861,14 @@ export default function ProductsAdminPage() {
         console.log('Selected category:', selectedCategory);
         console.log('Final category sent to backend:', createData.category);
         console.log('Create endpoint:', createEndpoint);
+        console.log('SEO data being sent:', { seoTitle: createData.seoTitle, seoDescription: createData.seoDescription, seoKeywords: createData.seoKeywords, ogImage: createData.ogImage });
+        console.log('=============== BEFORE POST REQUEST ===============');
+        console.log('Full createData object:', JSON.stringify(createData, null, 2));
         
         const data = await apiClient.post(createEndpoint, createData);
+        
+        console.log('=============== AFTER POST RESPONSE ===============');
+        console.log('Response from server:', data);
         
         console.log('Create response:', data);
         
@@ -658,18 +876,35 @@ export default function ProductsAdminPage() {
           setSuccess("✓ Памятник успешно добавлен");
           console.log('Created monument with ID:', data.data?.id, 'category:', selectedCategory);
           
-          // Сразу добавляем созданный памятник в локальный список
+          // Оставляем форму открытой для редактирования SEO
           if (data.data) {
+            // Обновляем editingMonument чтобы был ID для сохранения SEO
+            setEditingMonument(data.data);
+            
+            // Обновляем editForm с полными данными памятника
+            setEditForm(prev => ({
+              ...prev,
+              seo_title: data.data?.seoTitle || "",
+              seo_description: data.data?.seoDescription || "",
+              seo_keywords: data.data?.seoKeywords || "",
+              og_image: data.data?.ogImage || "",
+            }));
+            
+            // Сразу добавляем созданный памятник в локальный список
             setMonuments(prev => [...prev, data.data]);
+            
+            // Скрываем форму добавления
+            setAddingMonument(false);
           }
           
           // Также делаем перезагрузку для синхронизации
           setTimeout(async () => {
             console.log('Reloading monuments for category:', selectedCategory);
             await fetchMonuments(selectedCategory);
+            // После перезагрузки закрываем форму редактирования
+            cancelEditing();
           }, 1000);
           
-          cancelEditing();
           setTimeout(() => setSuccess(""), 3000);
         } else {
           setError(data.error || "Ошибка при добавлении памятника");
@@ -679,6 +914,27 @@ export default function ProductsAdminPage() {
       setError("Ошибка при сохранении памятника");
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Функция для сохранения SEO данных
+  const handleSaveSeo = async (data: SeoFieldsData) => {
+    if (!editingMonument) return;
+    
+    try {
+      await saveSeoFields(editingMonument.id, data, selectedCategory);
+      setSuccess('✓ SEO успешно сохранено');
+      // Обновляем форму с новыми данными
+      setEditForm(prev => ({ 
+        ...prev, 
+        seo_title: data.seoTitle,
+        seo_description: data.seoDescription,
+        seo_keywords: data.seoKeywords,
+        og_image: data.ogImage,
+      }));
+      setTimeout(() => setSuccess(""), 3000);
+    } catch (err) {
+      setError('Ошибка при сохранении SEO');
     }
   };
 
@@ -699,7 +955,7 @@ export default function ProductsAdminPage() {
       
       if (selectedCategory === "exclusive") {
         // Для эксклюзивных памятников тоже используем /monuments/id/:id
-        deleteUrl = `/monuments/id/${monument.id}?category=Эксклюзивные&slug=${encodeURIComponent(monument.slug)}`;
+        deleteUrl = `/monuments/id/${monument.id}?category=exclusive&slug=${encodeURIComponent(monument.slug)}`;
       } else {
         // Для остальных используем /monuments/id/:id с категорией
         deleteUrl = `/monuments/id/${monument.id}?category=${selectedCategory}&slug=${encodeURIComponent(monument.slug)}`;
@@ -914,23 +1170,27 @@ export default function ProductsAdminPage() {
                         <h4 className="font-semibold text-lg">{monument.name}</h4>
                         <p className="text-sm text-gray-600">Slug: {monument.slug}</p>
                         <p className="text-sm text-gray-600">Категория: {selectedCategory}</p>
-                        {monument.price && (
+                        {monument.price && parseFloat(monument.price as any) > 0 ? (
                           <div className="flex items-center space-x-2">
                             <p className="text-sm font-medium text-green-600">Цена: {monument.price}₽</p>
-                            {monument.oldPrice && parseFloat(monument.oldPrice) > parseFloat(monument.price) && (
+                            {monument.oldPrice && parseFloat(monument.oldPrice as any) > parseFloat(monument.price as any) && (
                               <>
                                 <span className="text-sm text-gray-500 line-through">{monument.oldPrice}₽</span>
                                 <span className="text-xs bg-red-100 text-red-800 px-2 py-1 rounded font-medium">
-                                  -{Math.round(((parseFloat(monument.oldPrice) - parseFloat(monument.price)) / parseFloat(monument.oldPrice)) * 100)}%
+                                  -{Math.round(((parseFloat(monument.oldPrice as any) - parseFloat(monument.price as any)) / parseFloat(monument.oldPrice as any)) * 100)}%
                                 </span>
                               </>
                             )}
+                          </div>
+                        ) : (
+                          <div className="text-sm text-gray-600">
+                            Текстовая цена: <span className="font-medium">{monument.textPrice || "Цена по запросу"}</span>
                           </div>
                         )}
                         {monument.height && (
                           <p className="text-sm text-gray-600">Высота: {monument.height}</p>
                         )}
-                        {monument.discount && parseFloat(monument.discount) > 0 && (
+                        {monument.discount && parseFloat(monument.discount as any) > 0 && (
                           <p className="text-sm text-green-600">Скидка: {monument.discount}%</p>
                         )}
                         {monument.description && (
@@ -1104,34 +1364,33 @@ export default function ProductsAdminPage() {
 
                   {/* Цена */}
                   <div className="space-y-4">
-                    {/* Текстовая цена - показывается всегда */}
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Текстовая цена
-                      </label>
+                    {/* Галочка "Цена по запросу" */}
+                    <div className="flex items-center gap-3 p-3 bg-blue-50 rounded-lg border border-blue-200">
                       <input
-                        type="text"
-                        value={editForm.textPrice}
+                        type="checkbox"
+                        id="priceByRequest"
+                        checked={editForm.priceByRequest}
                         onChange={(e) => {
-                          const value = e.target.value;
-                          setEditForm(prev => ({ 
-                            ...prev, 
-                            textPrice: value,
-                            // Если заполняется textPrice, очищаем числовые поля
-                            ...(value ? {
+                          setEditForm(prev => ({
+                            ...prev,
+                            priceByRequest: e.target.checked,
+                            // При включении "Цена по запросу" очищаем обычные цены
+                            ...(e.target.checked && {
                               price: "",
                               oldPrice: "",
                               discount: ""
-                            } : {})
+                            })
                           }));
                         }}
-                        className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                        placeholder="Например: 'От 5000 руб.', 'По запросу', 'Договорная' (если заполнить, скроет числовые поля)"
+                        className="w-4 h-4 cursor-pointer"
                       />
+                      <label htmlFor="priceByRequest" className="cursor-pointer text-sm font-medium text-gray-700">
+                        ℹ️ Цена по запросу (вместо обычной цены)
+                      </label>
                     </div>
 
-                    {/* Числовые поля цены - скрываются если заполнен textPrice */}
-                    {!editForm.textPrice && (
+                    {/* Показываем числовые поля цены если НЕ включена "Цена по запросу" */}
+                    {!editForm.priceByRequest && (
                       <>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           <div>
@@ -1648,6 +1907,36 @@ export default function ProductsAdminPage() {
                     </div>
                   </div>
                 </div>
+
+                {/* SEOFields Form */}
+                {(editingMonument || addingMonument) && (
+                  <div className="mt-8 pt-8 border-t">
+                    <h3 className="text-lg font-semibold mb-4 text-gray-800">SEO Данные</h3>
+                    <SeoFieldsForm
+                      entityType="monuments"
+                      categoryName={monumentCategories.find(c => c.key === selectedCategory)?.title || "Памятники"}
+                      initialData={{
+                        seoTitle: editForm.seo_title,
+                        seoDescription: editForm.seo_description,
+                        seoKeywords: editForm.seo_keywords,
+                        ogImage: editForm.og_image,
+                      }}
+                      onChange={(data) => {
+                        // Синхронизируем SEO значения в editForm при создании/редактировании
+                        setEditForm(prev => ({
+                          ...prev,
+                          seo_title: data.seoTitle,
+                          seo_description: data.seoDescription,
+                          seo_keywords: data.seoKeywords,
+                          og_image: data.ogImage,
+                        }));
+                      }}
+                      onSave={handleSaveSeo}
+                      isLoading={seoLoading}
+                      error={seoError || undefined}
+                    />
+                  </div>
+                )}
 
                 {/* Кнопки */}
                 <div className="flex justify-end space-x-3 mt-6 pt-4 border-t">

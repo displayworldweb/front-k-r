@@ -81,6 +81,7 @@ export const API_ENDPOINTS = {
     blogs: '/admin/blogs',
     works: '/admin/works',
     pageDescriptions: '/admin/page-descriptions',
+    pageSeo: '/admin/page-seo',
   }
 };
 

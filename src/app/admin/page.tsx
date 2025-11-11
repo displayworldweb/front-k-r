@@ -58,6 +58,14 @@ export default function AdminPage() {
 
   const modules = [
     {
+      href: "/admin/pages",
+      title: "Описания страниц",
+      description: "Управление описаниями и контентом страниц",
+      icon: "📄",
+      color: "bg-cyan-50 border-cyan-200",
+      count: 0,
+    },
+    {
       href: "/admin/epitaphs",
       title: "Эпитафии",
       description: "Управление текстами эпитафий для памятников",
@@ -224,7 +232,7 @@ export default function AdminPage() {
       {/* Quick Actions */}
       <div className="mt-12 bg-white rounded-lg shadow p-6">
         <h2 className="text-2xl font-bold text-gray-900 mb-4">Быстрые действия</h2>
-        <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-8 gap-4">
           <Link
             href="/admin/epitaphs"
             className="bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-lg p-4 hover:shadow-lg transition-shadow font-semibold text-center"
@@ -259,13 +267,33 @@ export default function AdminPage() {
             href="/admin/monuments"
             className="bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg p-4 hover:shadow-lg transition-shadow font-semibold text-center"
           >
-            🏛️ Управление памятниками
+            🏛️ Памятники
           </Link>
           <Link
             href="/admin/works"
             className="bg-gradient-to-r from-teal-500 to-teal-600 text-white rounded-lg p-4 hover:shadow-lg transition-shadow font-semibold text-center"
           >
-            📸 Готовые работы
+            📸 Работы
+          </Link>
+        </div>
+      </div>
+
+      {/* SEO Management */}
+      <div className="mt-8 bg-linear-to-r from-cyan-50 to-blue-50 rounded-lg shadow p-6 border-2 border-cyan-200">
+        <h2 className="text-2xl font-bold text-gray-900 mb-4">SEO Управление</h2>
+        <p className="text-gray-600 mb-6">Управляйте SEO данными для всех сущностей в системе</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <Link
+            href="/admin/seo/templates"
+            className="bg-linear-to-r from-cyan-500 to-cyan-600 text-white rounded-lg p-4 hover:shadow-lg transition-shadow font-semibold text-center"
+          >
+            🔍 SEO Шаблоны категорий
+          </Link>
+          <Link
+            href="/admin/seo"
+            className="bg-linear-to-r from-blue-500 to-blue-600 text-white rounded-lg p-4 hover:shadow-lg transition-shadow font-semibold text-center"
+          >
+            📋 Управление SEO страниц
           </Link>
         </div>
       </div>

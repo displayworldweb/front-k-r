@@ -5,6 +5,7 @@ import PathPage from "../components/PathPage";
 import SidebarCatalogMenu from "../components/Sidebar/SidebarCatalogMenu";
 import SidebarStickyHelp from "../components/Sidebar/SidebarStickyHelp";
 import { graniteTypes } from "../mock/graniteTypes";
+import { PageDescriptionBlock } from "../components/PageDescriptionBlock";
 
 const GraniteTypesPage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -134,6 +135,8 @@ const GraniteTypesPage = () => {
                     </div>
                 </div>
             )}
+
+            <PageDescriptionBlock pageSlug="granite" />
         </>
     );
 };

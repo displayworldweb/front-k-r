@@ -14,7 +14,7 @@ import SubcategoryDescription from "@/app/components/SubcategoryDescription";
 import Promo from "@/app/components/Promo";
 import { Product, ColorOption } from "@/app/types/types";
 import { apiClient } from "@/lib/api-client";
-import { PageBlocksRenderer } from "@/components/PageBlocksRenderer";
+import { PageBlocksRenderer } from "@/app/components/PageBlocksRenderer";
 import { getPageDescription, getPageSlugForCategory, PageDescription } from "@/lib/page-descriptions";
 
 export const categorySlugToName: Record<string, string> = {

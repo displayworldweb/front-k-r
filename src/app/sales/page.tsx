@@ -1,14 +1,9 @@
 import OurWorksSlider from "../components/OurWorksSlider";
 import PathPage from "../components/PathPage";
-import type { Metadata } from "next";
 import Promo from "./Promo";
 import SidebarCatalogMenu from "../components/Sidebar/SidebarCatalogMenu";
 import SidebarStickyHelp from "../components/Sidebar/SidebarStickyHelp";
-
-// export const metadata: Metadata = {
-//     title: "Акции",
-//     description: "Акции",
-// };
+import { PageDescriptionBlock } from "../components/PageDescriptionBlock";
 
 const SalesPage = () => {
     return (
@@ -23,6 +18,7 @@ const SalesPage = () => {
 
                     <h1 className="text-black text-[28px] mb-5 lg:mb-7.5 leading-8 lg:text-[40px] lg:leading-12 font-[600]">Акции</h1>
                     <Promo />
+                    <PageDescriptionBlock pageSlug="sales" />
                 </div>
             </section>
                 <OurWorksSlider />

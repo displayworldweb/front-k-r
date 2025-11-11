@@ -5,7 +5,6 @@ import Footer from '@/app/components/Footer';
 import PathPage from '@/app/components/PathPage';
 import SidebarCatalogMenu from '@/app/components/Sidebar/SidebarCatalogMenu';
 import SidebarStickyHelp from '@/app/components/Sidebar/SidebarStickyHelp';
-import type { Metadata } from "next";
 
 interface BlogBlock {
   id: string;

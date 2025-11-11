@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import { generateSlug } from "@/lib/slug-generator";
 import { apiClient } from "@/lib/api-client";
+import { SeoFieldsForm, SeoFieldsData } from "@/components/admin/SeoFieldsForm";
+import { useSeoSave } from "@/lib/hooks/use-seo-save";
 
 interface Fence {
   id: number;
@@ -32,6 +34,10 @@ interface Fence {
   };
   description?: string;
   createdAt: string;
+  seo_title?: string;
+  seo_description?: string;
+  seo_keywords?: string;
+  og_image?: string;
 }
 
 interface FenceCategory {
@@ -52,6 +58,10 @@ export default function FencesAdminPage() {
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState("");
   const [availableImages, setAvailableImages] = useState<string[]>([]);
+  
+  // SEO хук для сохранения SEO данных
+  const { saveSeoFields, isLoading: seoLoading, error: seoError } = useSeoSave('fences');
+  
   const [editForm, setEditForm] = useState({
     name: "",
     price: "",
@@ -64,6 +74,10 @@ export default function FencesAdminPage() {
     popular: false,
     specifications: {} as {[key: string]: string},
     customSpecs: [] as Array<{key: string; value: string}>,
+    seo_title: "",
+    seo_description: "",
+    seo_keywords: "",
+    og_image: "",
   });
 
   // Категории оград
@@ -195,6 +209,10 @@ export default function FencesAdminPage() {
       popular: fence.popular || false,
       specifications: dynamicSpecs,
       customSpecs: customSpecs,
+      seo_title: fence.seo_title || "",
+      seo_description: fence.seo_description || "",
+      seo_keywords: fence.seo_keywords || "",
+      og_image: fence.og_image || "",
     });
   };
 
@@ -213,6 +231,10 @@ export default function FencesAdminPage() {
       popular: false,
       specifications: {},
       customSpecs: [],
+      seo_title: "",
+      seo_description: "",
+      seo_keywords: "",
+      og_image: "",
     });
   };
 
@@ -239,6 +261,10 @@ export default function FencesAdminPage() {
       popular: false,
       specifications: {},
       customSpecs: [],
+      seo_title: "",
+      seo_description: "",
+      seo_keywords: "",
+      og_image: "",
     });
   };
 
@@ -449,6 +475,27 @@ export default function FencesAdminPage() {
       setError("Ошибка при сохранении ограды");
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Функция для сохранения SEO данных
+  const handleSaveSeo = async (data: SeoFieldsData) => {
+    if (!editingFence) return;
+    
+    try {
+      await saveSeoFields(editingFence.id, data);
+      setSuccess('✓ SEO успешно сохранено');
+      // Обновляем форму с новыми данными
+      setEditForm(prev => ({ 
+        ...prev, 
+        seo_title: data.seo_title,
+        seo_description: data.seo_description,
+        seo_keywords: data.seo_keywords,
+        og_image: data.og_image,
+      }));
+      setTimeout(() => setSuccess(""), 3000);
+    } catch (err) {
+      setError('Ошибка при сохранении SEO');
     }
   };
 
@@ -951,6 +998,26 @@ export default function FencesAdminPage() {
                     </div>
                   </div>
                 </div>
+
+                {/* SEO Fields Form */}
+                {(editingFence || addingFence) && (
+                  <div className="mt-8 pt-8 border-t">
+                    <h3 className="text-lg font-semibold mb-4 text-gray-800">SEO Данные</h3>
+                    <SeoFieldsForm
+                      entityType="fences"
+                      categoryName="Ограды"
+                      initialData={{
+                        seo_title: editForm.seo_title,
+                        seo_description: editForm.seo_description,
+                        seo_keywords: editForm.seo_keywords,
+                        og_image: editForm.og_image,
+                      }}
+                      onSave={handleSaveSeo}
+                      isLoading={seoLoading}
+                      error={seoError || undefined}
+                    />
+                  </div>
+                )}
 
                 {/* Кнопки */}
                 <div className="flex justify-end space-x-3 mt-6 pt-4 border-t">

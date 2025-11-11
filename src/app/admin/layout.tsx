@@ -18,6 +18,9 @@ export default function AdminLayout({
     { href: "/admin/accessories", label: "Аксессуары", icon: "💎" },
     { href: "/admin/fences", label: "Ограды", icon: "🚧" },
     { href: "/admin/landscape", label: "Landscape", icon: "🌳" },
+    { href: "/admin/blogs", label: "Блоги", icon: "📝" },
+    { href: "/admin/monuments", label: "Памятники", icon: "🏛️" },
+    { href: "/admin/works", label: "Готовые работы", icon: "📸" },
   ];
 
   const isActive = (href: string) => {

@@ -5,6 +5,7 @@ import SidebarCatalogMenu from "../components/Sidebar/SidebarCatalogMenu";
 import SidebarStickyHelp from "../components/Sidebar/SidebarStickyHelp";
 import ProductCard from "../components/ProductCard";
 import Promo from "../components/Promo";
+import { PageDescriptionBlock } from "../components/PageDescriptionBlock";
 import { apiClient } from "@/lib/api-client";
 
 interface LandscapeItem {
@@ -171,7 +172,6 @@ const LandscapePage = () => {
                                 </a>
                             ))}
                         </div>
-                    </div>
 
                     {/* Выбор количества товаров на страницу */}
                     <div hidden={isTablet} className="flex justify-end mb-5">
@@ -230,6 +230,9 @@ const LandscapePage = () => {
                                 <div key={product.slug || `product-${product.id}`} className="invisible h-0" />
                             ))
                         )}
+                    </div>
+                    {/* Описание страницы */}
+                    <PageDescriptionBlock pageSlug="landscape" />
                     </div>
                 </div>
             </section>

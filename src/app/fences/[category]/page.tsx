@@ -8,6 +8,7 @@ import ProductCard from "@/app/components/ProductCard";
 import Pagination from "@/app/components/Pagination";
 import Promo from "@/app/components/Promo";
 import { apiClient } from "@/lib/api-client";
+import { PageDescriptionBlock } from "@/app/components/PageDescriptionBlock";
 
 interface Fence {
   id: number;
@@ -30,6 +31,12 @@ const CATEGORY_MAP: Record<string, string> = {
   "granite": "Гранитные ограды",
   "polymer": "С полимерным покрытием",
   "metal": "Металлические ограды",
+};
+
+const CATEGORY_DESCRIPTION_SLUGS: Record<string, string> = {
+  "granite": "fences-granite",
+  "polymer": "fences-polymer",
+  "metal": "fences-metal",
 };
 
 const FencesCategoryPage = () => {
@@ -208,6 +215,11 @@ const FencesCategoryPage = () => {
                 onPageChange={setCurrentPage}
                 initialPage={1}
               />
+            )}
+
+            {/* Описание категории */}
+            {categorySlug && CATEGORY_DESCRIPTION_SLUGS[categorySlug] && (
+              <PageDescriptionBlock pageSlug={CATEGORY_DESCRIPTION_SLUGS[categorySlug]} />
             )}
           </div>
         </div>

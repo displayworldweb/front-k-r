@@ -8,7 +8,6 @@ import ProductCard from '@/app/components/ProductCard';
 import PathPage from '../../components/PathPage';
 import SidebarCatalogMenu from '../../components/Sidebar/SidebarCatalogMenu';
 import SidebarStickyHelp from '../../components/Sidebar/SidebarStickyHelp';
-import type { Metadata } from "next";
 
 interface Product {
   id: number;

@@ -22,7 +22,6 @@ const BurgerDropdown: React.FC<BurgerDropdownProps> = ({
       id="burger-dropdown"
       role="menu"
       aria-label="Основное меню"
-      onClick={onLinkClick}
       className="
         absolute top-[76px] left-0 right-0
         z-50
@@ -67,6 +66,7 @@ const BurgerDropdown: React.FC<BurgerDropdownProps> = ({
                         <Link
                           href={sub.href}
                           role="menuitem"
+                          onClick={onLinkClick}
                           className="block hover:underline text-[#2c3a54]"
                         >
                           {sub.name}
@@ -79,6 +79,7 @@ const BurgerDropdown: React.FC<BurgerDropdownProps> = ({
                 <Link
                   href={category.href!}
                   role="menuitem"
+                  onClick={onLinkClick}
                   className="px-6 py-3 font-bold text-[#cd5554] hover:underline gap-4 flex"
                 >
                   <Image
@@ -122,6 +123,7 @@ const BurgerDropdown: React.FC<BurgerDropdownProps> = ({
                         <Link
                           href={sub.href}
                           role="menuitem"
+                          onClick={onLinkClick}
                           className="block hover:underline text-[#2c3a54]"
                         >
                           {sub.name}
@@ -134,6 +136,7 @@ const BurgerDropdown: React.FC<BurgerDropdownProps> = ({
                 <Link
                   href={item.href!}
                   role="menuitem"
+                  onClick={onLinkClick}
                   className="flex items-center space-x-6 px-5 py-4 font-bold text-[#2c3a54] hover:text-[#2c3a5499]"
                 >
                   <Image

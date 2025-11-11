@@ -20,6 +20,8 @@ interface PageDescription {
 
 // Доступные страницы для редактирования описаний
 const AVAILABLE_PAGES = [
+  // Памятники
+  { slug: 'monuments-catalog', title: 'Главный каталог памятников' },
   { slug: 'monuments-single', title: 'Одиночные памятники' },
   { slug: 'monuments-double', title: 'Двойные памятники' },
   { slug: 'monuments-exclusive', title: 'Эксклюзивные памятники' },
@@ -31,6 +33,39 @@ const AVAILABLE_PAGES = [
   { slug: 'monuments-artistic', title: 'Художественная резка' },
   { slug: 'monuments-tree', title: 'В виде деревьев' },
   { slug: 'monuments-complex', title: 'Мемориальные комплексы' },
+  // Ограды
+  { slug: 'fences-catalog', title: 'Главный каталог оград' },
+  { slug: 'fences-granite', title: 'Гранитные ограды' },
+  { slug: 'fences-polymer', title: 'Ограды с полимерным покрытием' },
+  { slug: 'fences-metal', title: 'Металлические ограды' },
+  // Прочие страницы
+  { slug: 'sales', title: 'Акции' },
+  { slug: 'blogs', title: 'Блоги' },
+  { slug: 'granite', title: 'Гранит' },
+  { slug: 'favorites', title: 'Избранное' },
+  { slug: 'payment', title: 'Оплата' },
+  { slug: 'design', title: 'Дизайн' },
+  { slug: 'design-portrait', title: 'Дизайн - Портреты' },
+  { slug: 'design-medallions', title: 'Дизайн - Медальоны' },
+  { slug: 'design-text-engraving', title: 'Дизайн - Текстовая гравировка' },
+  { slug: 'services', title: 'Услуги' },
+  { slug: 'services-monument-installation', title: 'Услуги - Установка памятников' },
+  { slug: 'services-fence-installation', title: 'Услуги - Установка оград' },
+  { slug: 'services-monument-production', title: 'Услуги - Производство памятников' },
+  { slug: 'services-monument-dismantle', title: 'Услуги - Демонтаж памятников' },
+  { slug: 'services-3d', title: 'Услуги - 3D визуализация' },
+  { slug: 'landscape', title: 'Благоустройство' },
+  { slug: 'landscape-foundation', title: 'Благоустройство - Основание' },
+  { slug: 'landscape-graves', title: 'Благоустройство - Захоронения' },
+  { slug: 'landscape-tiles', title: 'Благоустройство - Укладка плитки' },
+  { slug: 'accessories', title: 'Аксессуары' },
+  { slug: 'accessories-vases', title: 'Аксессуары - Вазы' },
+  { slug: 'accessories-lamps', title: 'Аксессуары - Лампады' },
+  { slug: 'accessories-sculptures', title: 'Аксессуары - Скульптуры' },
+  { slug: 'accessories-frames', title: 'Аксессуары - Рамки' },
+  { slug: 'accessories-bronze', title: 'Аксессуары - Бронза' },
+  { slug: 'accessories-plates', title: 'Аксессуары - Плиты' },
+  { slug: 'accessories-tables', title: 'Аксессуары - Столики' },
 ];
 
 export default function PagesAdminPage() {
@@ -397,7 +432,7 @@ export default function PagesAdminPage() {
           {/* Выбор страницы */}
           <div className="lg:col-span-1">
             <div className="bg-white p-6 rounded-lg border">
-              <h2 className="text-xl font-semibold mb-4">Выберите страницу</h2>
+              <h2 className="text-xl font-semibold mb-4 text-black">Выберите страницу</h2>
               
               <select
                 value={selectedPageSlug}

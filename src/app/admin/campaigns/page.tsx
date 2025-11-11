@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { apiClient } from "@/lib/api-client";
+import { SeoFieldsForm, SeoFieldsData } from "@/components/admin/SeoFieldsForm";
+import { useSeoSave } from "@/lib/hooks/use-seo-save";
 
 interface CampaignBlock {
   id: string;
@@ -24,6 +26,10 @@ interface Campaign {
   products: any[];
   createdAt: string;
   updatedAt: string;
+  seo_title?: string;
+  seo_description?: string;
+  seo_keywords?: string;
+  og_image?: string;
 }
 
 export default function AdminCampaignsNewPage() {
@@ -31,6 +37,9 @@ export default function AdminCampaignsNewPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+
+  // SEO хук
+  const { saveSeoFields, isLoading: seoLoading, error: seoError } = useSeoSave('campaigns');
 
   // Форма создания кампании
   const [title, setTitle] = useState('');

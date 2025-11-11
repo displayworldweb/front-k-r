@@ -8,6 +8,7 @@ import SidebarStickyHelp from "@/app/components/Sidebar/SidebarStickyHelp";
 import ProductCard from "@/app/components/ProductCard";
 import Pagination from "@/app/components/Pagination";
 import Promo from "@/app/components/Promo";
+import { PageDescriptionBlock } from "@/app/components/PageDescriptionBlock";
 
 interface LandscapeItem {
   id: number;
@@ -27,15 +28,9 @@ interface CategoryData {
 }
 
 const CATEGORY_MAP: Record<string, string> = {
-  "shheben": "Щебень",
-  "stoly-i-skamejki": "Столы и скамейки",
-  // Оставляем старые для совместимости
-  "graves": "Graves",
-  "foundation": "Foundation",
-  "tiles": "Укладка плитки",
-  "tables": "Tables",
-  "gravel": "Gravel",
-  "lawn": "Lawn",
+  "tables": "Столы и скамейки",
+  "gravel": "Щебень декоративный",
+  "lawn": "Искусственный газон",
 };
 
 const LandscapeCategoryPage = () => {
@@ -133,6 +128,11 @@ const LandscapeCategoryPage = () => {
             <h1 className="text-black text-[28px] mt-2.5 mb-5 leading-8 lg:text-[40px] lg:leading-12 font-[600]">
               {categoryTitle}
             </h1>
+
+            {/* Описание страницы */}
+            <div className="mt-7.5 font-[600] shadow-xs p-5 lg:p-7.5 rounded-lg mb-7.5">
+              <PageDescriptionBlock pageSlug={`landscape-${categorySlug}`} />
+            </div>
 
             {/* Выбор количества товаров на страницу */}
             <div hidden={isTablet} className="flex justify-end mb-5">

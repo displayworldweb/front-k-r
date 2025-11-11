@@ -1,15 +1,9 @@
 import OurWorksSlider from "../components/OurWorksSlider";
 import PathPage from "../components/PathPage";
-import type { Metadata } from "next";
 import SidebarInfoDropdown from "../components/Sidebar/SidebarInfoDropdown";
 import SidebarInfoMenu from "../components/Sidebar/SidebarInfoMenu";
 import SidebarCatalogMenu from "../components/Sidebar/SidebarCatalogMenu";
 import SidebarStickyHelp from "../components/Sidebar/SidebarStickyHelp";
-
-export const metadata: Metadata = {
-  title: "Политика конфиденциальности",
-  description: "Политика конфиденциальности",
-};
 
 const PolicyPage = () => {
   return (
