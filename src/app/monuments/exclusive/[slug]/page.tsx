@@ -97,6 +97,12 @@ const ExclusiveProductPage = () => {
         }
         
         setProduct(product);
+        console.log('Product loaded:', {
+          id: product.id,
+          name: product.name,
+          image: product.image,
+          colors: product.colors?.slice(0, 2)
+        });
       } catch (error) {
         console.error("Error fetching product:", error);
         notFound();
@@ -406,7 +412,7 @@ const ExclusiveProductPage = () => {
 
               {/* View360 компонент - интерактивный просмотр с разных ракурсов */}
               <View360 
-                baseImagePath={(selectedColor ? selectedColor.image : product.image).replace(/\/frame_\d+\.jpg$/, '')} 
+                baseImagePath={(selectedColor ? selectedColor.image : product.image).replace(/\/frame_\d+\.(jpg|webp)$|\/800x800$/, '')} 
                 totalFrames={11}
                 frameDelay={500}
                 hasDiscount={!!(selectedColor?.discount && selectedColor.discount > 0)}

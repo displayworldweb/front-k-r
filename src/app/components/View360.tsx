@@ -29,7 +29,9 @@ export default function View360({ baseImagePath, totalFrames = 11, frameDelay = 
    * Получает отформатированное имя фрейма (frame_0001, frame_0002 и т.д.)
    */
   const getFrameName = (frameNumber: number): string => {
-    return `frame_${String(frameNumber).padStart(4, '0')}.jpg`;
+    // Определяем расширение из baseImagePath (может быть .jpg или .webp)
+    const ext = baseImagePath.toLowerCase().includes('.webp') ? '.webp' : '.jpg';
+    return `frame_${String(frameNumber).padStart(4, '0')}${ext}`;
   };
 
   /**
@@ -46,8 +48,10 @@ export default function View360({ baseImagePath, totalFrames = 11, frameDelay = 
   useEffect(() => {
     if (imageRef.current) {
       const frameName = getFrameName(currentFrame);
-      imageRef.current.src = `${baseImagePath}/${frameName}`;
+      const fullUrl = `${baseImagePath}/${frameName}`;
+      imageRef.current.src = fullUrl;
       currentFrameRef.current = currentFrame;
+      console.log('View360 loading frame:', { baseImagePath, frameName, fullUrl });
     }
   }, [currentFrame, baseImagePath]);
 
