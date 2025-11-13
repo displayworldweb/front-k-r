@@ -412,7 +412,8 @@ const ExclusiveProductPage = () => {
 
               {/* View360 компонент - интерактивный просмотр с разных ракурсов */}
               <View360 
-                baseImagePath={(selectedColor ? selectedColor.image : product.image).replace(/\/frame_\d+\.(jpg|webp)$|\/800x800$/, '')} 
+                baseImagePath={(selectedColor ? selectedColor.image : product.image).replace(/\/800x800\/frame_\d+\.(jpg|webp)$/, '/800x800')}
+                sourceImagePath={selectedColor ? selectedColor.image : product.image}
                 totalFrames={11}
                 frameDelay={500}
                 hasDiscount={!!(selectedColor?.discount && selectedColor.discount > 0)}

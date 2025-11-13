@@ -4,13 +4,14 @@ import { useState, useEffect, useRef } from 'react';
 
 interface View360Props {
   baseImagePath: string;
+  sourceImagePath?: string; // For detecting file extension
   totalFrames?: number;
   frameDelay?: number;
   hasDiscount?: boolean;
   hasHit?: boolean;
 }
 
-export default function View360({ baseImagePath, totalFrames = 11, frameDelay = 500, hasDiscount = false, hasHit = false }: View360Props) {
+export default function View360({ baseImagePath, sourceImagePath = '', totalFrames = 11, frameDelay = 500, hasDiscount = false, hasHit = false }: View360Props) {
   const [currentFrame, setCurrentFrame] = useState(1);
   const [isAnimating, setIsAnimating] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
@@ -29,8 +30,16 @@ export default function View360({ baseImagePath, totalFrames = 11, frameDelay = 
    * Получает отформатированное имя фрейма (frame_0001, frame_0002 и т.д.)
    */
   const getFrameName = (frameNumber: number): string => {
-    // Определяем расширение из baseImagePath (может быть .jpg или .webp)
-    const ext = baseImagePath.toLowerCase().includes('.webp') ? '.webp' : '.jpg';
+    // Определяем расширение из оригинального пути (sourceImagePath или baseImagePath)
+    let ext = '.webp'; // Default to webp
+    const pathToCheck = sourceImagePath || baseImagePath;
+    
+    if (pathToCheck.toLowerCase().includes('.jpg')) {
+      ext = '.jpg';
+    } else if (pathToCheck.toLowerCase().includes('.webp')) {
+      ext = '.webp';
+    }
+    
     return `frame_${String(frameNumber).padStart(4, '0')}${ext}`;
   };
 
