@@ -6,11 +6,13 @@
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "validate-sitemap": "node scripts/validate-sitemap.js"
   },
   "dependencies": {
     "@types/pg": "^8.15.6",
-    "axios": "^1.13.1",
+    "axios": "^1.13.2",
+    "cheerio": "^1.1.2",
     "drizzle-kit": "^0.31.6",
     "drizzle-orm": "^0.44.7",
     "next": "15.5.3",
@@ -29,6 +31,7 @@
     "eslint": "^9",
     "eslint-config-next": "15.5.3",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "xml2js": "^0.6.2"
   }
 }

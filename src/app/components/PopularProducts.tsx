@@ -11,6 +11,7 @@ const PopularProducts = () => {
   const [isNarrowMobile, setIsNarrowMobile] = useState(false);
   const [allProducts, setAllProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showAll, setShowAll] = useState(false);
 
   // Функция для загрузки популярных товаров из всех API
   const fetchPopularProducts = async () => {
@@ -71,6 +72,21 @@ const PopularProducts = () => {
     ? allProducts
     : allProducts.filter((product) => product.category === activeCategory);
 
+  // Сброс showAll при смене категории
+  useEffect(() => {
+    setShowAll(false);
+  }, [activeCategory]);
+
+  // Вычисляем количество товаров в 2 рядах в зависимости от размера экрана
+  const itemsPerRow = isMobile ? 2 : 4;
+  const maxItemsToShow = itemsPerRow * 2; // 2 ряда
+  
+  // Определяем, нужно ли показывать кнопку "Показать все"
+  const shouldShowButton = filteredProducts.length > maxItemsToShow;
+  
+  // Товары для отображения
+  const displayedProducts = showAll ? filteredProducts : filteredProducts.slice(0, maxItemsToShow);
+
   return (
     <section className="max-w-[1300px] mt-17 lg:mt-30 container-centered">
       <h2 className="text-4xl font-bold text-[#2c3a54] mb-3.5 md:mb-7.5">
@@ -98,7 +114,7 @@ const PopularProducts = () => {
         </div>
       ) : filteredProducts.length > 0 ? (
         <div className="grid grid-cols-2 md:grid-cols-4">
-          {filteredProducts.map((product) => (
+          {displayedProducts.map((product) => (
             <ProductCard key={product.slug || `product-${product.id}`} product={product} isTablet={isTablet} isMobile={isMobile} isNarrowMobile={isNarrowMobile}/>
           ))}
         </div>
@@ -109,9 +125,14 @@ const PopularProducts = () => {
       )}
       {/* Кнопки внизу */}
       <div className="mt-10 flex flex-col sm:flex-row gap-4 font-bold">
-        <button className="md:min-w-[330px] px-7.5 py-3 bg-white border border-[#2c3a54] text-[#2c3a54] rounded-full hover:bg-[#2c3a54] hover:text-white transition">
-          <Link href="/">Показать все</Link>
-        </button>
+        {shouldShowButton && (
+          <button 
+            onClick={() => setShowAll(!showAll)}
+            className="md:min-w-[330px] px-7.5 py-3 bg-white border border-[#2c3a54] text-[#2c3a54] rounded-full hover:bg-[#2c3a54] hover:text-white transition"
+          >
+            {showAll ? 'Скрыть' : 'Показать все'}
+          </button>
+        )}
         <button className="md:min-w-[330px] px-7.5 py-3 bg-[#2c3a54] text-white rounded-full hover:bg-white hover:border hover:border-[#2c3a54] hover:text-[#2c3a54] transition">
           <Link href="/">Перейти в каталог</Link>
         </button>

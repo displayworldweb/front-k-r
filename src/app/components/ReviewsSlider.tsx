@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
+import { apiClient } from "@/lib/api-client";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -23,88 +24,71 @@ const ReviewsSlider = () => {
     return () => window.removeEventListener("resize", checkScreenSize);
   }, []);
 
-  // Данные отзывов
-  const reviews = [
-    {
-      id: 1,
-      name: "Дмитрий Васильевич",
-      date: "02.09.2024",
-      rating: 5,
-      text: "Заказывал памятник для дедушки с бабушкой сдвоенный с цельной плитой. С выбором материалов менеджеры помогали на все 100, что бы и достойно получилось и по деньгам нормально. Заказ выполнили в оговоренные сроки и даже немного раньше. На все просьбы и пожелания реагируют мгновенно и стараются сделать как можно лучше. Работой остался доволен. И уже даже люди которые на кладбище видели их работу спрашивали контакты компании.",
-      source: "Отзыв из Google",
-    },
-    {
-      id: 2,
-      name: "Наталья Мартинкевич",
-      date: "01.08.2024",
-      rating: 5,
-      text: "Очень довольны, что заказали памятник именно в «Каменная роза». Работа выполнена в срок, даже раньше, качественно, профессионально. Все сотрудники, с которыми приходилось общаться, вежливые, общительные, интеллигентные. С пониманием относятся к любым нашим вопросам. Огромное спасибо!",
-      source: "Отзыв из Google",
-    },
-    {
-      id: 3,
-      name: "Мария Авхимович",
-      date: "01.07.2024",
-      rating: 5,
-      text: 'Самые лучшие слова хочу сказать в адрес фирмы «Каменная роза». Все ее сотрудники - Илья, Михаил и Евгений - работают четко, профессионально, уважительно и вообще достойны всяческих похвал. Но особая моя благодарность Михаилу, автору памятника моей дочери, за креативность, нестандартное мышление, внимание к каждой детали и прекрасное исполнение. Памятник получился необычный и очень красивый! Считаю, что мне очень повезло, а фирму всем рекомендую.',
-      source: "Отзыв из Google",
-    },
-    {
-      id: 4,
-      name: "Кононович Сергей",
-      date: "10.09.2024",
-      rating: 5,
-      text: "Очень остались довольны качеством проделанной работой по установке памятника в k-r.by Все пожелания мною были услышаны , учтены и реализованы!!!! Говорим вам всему коллективу Большое Спасибо🙏🙏 Обязательно будем рекомендовать вас",
-      source: "Отзыв из Google",
-    },
-    {
-      id: 5,
-      name: "Анна Петровна",
-      date: "15.08.2024",
-      rating: 5,
-      text: "Заказывала памятник для мужа. Очень приятно удивлена качеством работы и отношением персонала. Все сделали точно в срок, даже чуть раньше. Менеджер всегда был на связи, отвечал на все вопросы. Памятник выглядит шикарно, как и обещали. Спасибо огромное!",
-      source: "Отзыв из Google",
-    },
-    {
-      id: 6,
-      name: "Владимир Александрович",
-      date: "20.07.2024",
-      rating: 5,
-      text: "Работа выполнена на высшем уровне. Менеджер помог подобрать идеальный вариант, который соответствовал нашему бюджету и вкусу. Установка прошла быстро и аккуратно. Очень благодарны за вашу работу!",
-      source: "Отзыв из Google",
-    },
-    {
-      id: 7,
-      name: "Анна Петровна",
-      date: "15.08.2024",
-      rating: 4,
-      text: "Заказывала памятник для мужа. Очень приятно удивлена качеством работы и отношением персонала. Все сделали точно в срок, даже чуть раньше. Менеджер всегда был на связи, отвечал на все вопросы. Памятник выглядит шикарно, как и обещали. Спасибо огромное!",
-      source: "Отзыв из Google",
-    },
-    {
-      id: 8,
-      name: "Владимир Александрович",
-      date: "20.07.2024",
-      rating: 3,
-      text: "Работа выполнена на высшем уровне. Менеджер помог подобрать идеальный вариант, который соответствовал нашему бюджету и вкусу. Установка прошла быстро и аккуратно. Очень благодарны за вашу работу!",
-      source: "Отзыв из Google",
-    },
-  ];
+  interface ReviewItem {
+    id: number | string;
+    name: string;
+    date: string; // already formatted or relative
+    rating: number;
+    text: string;
+    source: string; // Google / Yandex
+  }
+
+  const [reviews, setReviews] = useState<ReviewItem[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [filter, setFilter] = useState<'all' | 'google' | 'yandex'>('all');
+
+  // Форматирование даты в человеческий формат
+  const formatDate = (dateString: string): string => {
+    const date = new Date(dateString);
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}.${month}.${year}`;
+  };
+
+  // Сброс слайда при изменении фильтра
+  useEffect(() => {
+    setCurrentSlide(0);
+  }, [filter]);
+
+  useEffect(() => {
+    const loadReviews = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const data = await apiClient.get('/reviews');
+        const items: ReviewItem[] = Array.isArray(data) ? data : data?.data || [];
+        // Ensure stable id and format date
+        const withIds = items.map((r, idx) => ({ 
+          ...r, 
+          id: r.id || idx,
+          date: formatDate(r.date)
+        }));
+        setReviews(withIds);
+      } catch (e: any) {
+        setError(e.message || 'Ошибка загрузки отзывов');
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadReviews();
+  }, []);
 
   // Функции навигации
   const nextSlide = () => {
     if (isMobile) {
-      setCurrentSlide((prev) => (prev + 1) % reviews.length);
+      setCurrentSlide((prev) => (prev + 1) % filteredReviews.length);
     } else if (isTablet) {
-      setCurrentSlide((prev) => Math.min(prev + 1, reviews.length - 2));
+      setCurrentSlide((prev) => Math.min(prev + 1, filteredReviews.length - 2));
     } else {
-      setCurrentSlide((prev) => Math.min(prev + 1, reviews.length - 4));
+      setCurrentSlide((prev) => Math.min(prev + 1, filteredReviews.length - 4));
     }
   };
 
   const prevSlide = () => {
     if (isMobile) {
-      setCurrentSlide((prev) => (prev - 1 + reviews.length) % reviews.length);
+      setCurrentSlide((prev) => (prev - 1 + filteredReviews.length) % filteredReviews.length);
     } else if (isTablet) {
       setCurrentSlide((prev) => Math.max(prev - 1, 0));
     } else {
@@ -116,9 +100,9 @@ const ReviewsSlider = () => {
     if (isMobile) {
       setCurrentSlide(index);
     } else if (isTablet) {
-      setCurrentSlide(Math.min(index, reviews.length - 2));
+      setCurrentSlide(Math.min(index, filteredReviews.length - 2));
     } else {
-      setCurrentSlide(Math.min(index, reviews.length - 4));
+      setCurrentSlide(Math.min(index, filteredReviews.length - 4));
     }
   };
 
@@ -195,12 +179,38 @@ const ReviewsSlider = () => {
     ));
   };
 
+  // Фильтрация отзывов
+  const filteredReviews = reviews.filter(review => {
+    if (filter === 'all') return true;
+    if (filter === 'google') return review.source.toLowerCase().includes('google');
+    if (filter === 'yandex') return review.source.toLowerCase().includes('яндекс');
+    return true;
+  });
+
+  // Вычисление средней оценки для каждой платформы
+  const calculateAverageRating = (platform: 'google' | 'yandex'): string => {
+    const platformReviews = reviews.filter(review => {
+      if (platform === 'google') return review.source.toLowerCase().includes('google');
+      if (platform === 'yandex') return review.source.toLowerCase().includes('яндекс');
+      return false;
+    });
+    
+    if (platformReviews.length === 0) return '5.0';
+    
+    const sum = platformReviews.reduce((acc, review) => acc + review.rating, 0);
+    const average = sum / platformReviews.length;
+    return average.toFixed(1);
+  };
+
+  const googleRating = calculateAverageRating('google');
+  const yandexRating = calculateAverageRating('yandex');
+
   // Ширина одного слайда
   const slideWidth = isMobile ? 100 : isTablet ? 50 : 25;
 
   // Для мобильного режима: если showAllReviews === true — показываем все отзывы как статичный список
   const renderMobileReviews = () => {
-    return reviews.map((review) => (
+    return filteredReviews.map((review) => (
       <div
         key={review.id}
         className="w-full p-6 bg-[#f5f6fa]"
@@ -255,14 +265,21 @@ const ReviewsSlider = () => {
             // Мобильная версия: 3 кнопки + отдельная кнопка "Оставить отзыв"
             <div className="flex flex-col space-y-4">
               <div className="flex items-center space-x-2">
-                <Link
-                  href={"/"}
-                  className="px-4.5 py-2.5 bg-[#2c3a54] text-white rounded-full border-1 border-[#2c3a54] hover:bg-white hover:text-[#2c3a54]"
+                <button
+                  onClick={() => setFilter('all')}
+                  className={`px-4.5 py-2.5 rounded-full border border-[#2c3a54] transition ${
+                    filter === 'all' ? 'bg-[#2c3a54] text-white' : 'bg-white text-[#2c3a54] hover:bg-[#2c3a54] hover:text-white'
+                  }`}
                 >
                   Все отзывы
-                </Link>
+                </button>
                 <div className="flex items-center space-x-2">
-                  <Link href={'/'} className="px-4.5 py-2.5 bg-white border border-[#2c3a54] hover:bg-[#2c3a54] hover:text-white rounded-full flex items-center justify-center">
+                  <button 
+                    onClick={() => setFilter('google')} 
+                    className={`px-4.5 py-2.5 rounded-full flex items-center justify-center border border-[#2c3a54] transition ${
+                      filter === 'google' ? 'bg-[#2c3a54]' : 'bg-white hover:bg-[#2c3a54]'
+                    } group`}
+                  >
                     <Image
                       src="/review/1.webp"
                       alt="Google"
@@ -270,13 +287,20 @@ const ReviewsSlider = () => {
                       height={21}
                       className="mr-2.5"
                     />
-                    <span className="text-md leading-5.5 text-[#2c3a54]">
-                      5.0
+                    <span className={`text-md leading-5.5 ${
+                      filter === 'google' ? 'text-white' : 'text-[#2c3a54] group-hover:text-white'
+                    }`}>
+                      {googleRating}
                     </span>
-                  </Link>
+                  </button>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <Link href={'/'} className="px-4.5 py-2.5 bg-white border border-[#2c3a54] hover:bg-[#2c3a54] hover:text-white rounded-full flex items-center justify-center">
+                  <button 
+                    onClick={() => setFilter('yandex')} 
+                    className={`px-4.5 py-2.5 rounded-full flex items-center justify-center border border-[#2c3a54] transition ${
+                      filter === 'yandex' ? 'bg-[#2c3a54]' : 'bg-white hover:bg-[#2c3a54]'
+                    } group`}
+                  >
                     <Image
                       src="/review/2.webp"
                       alt="Yandex"
@@ -284,27 +308,36 @@ const ReviewsSlider = () => {
                       height={21}
                       className="mr-2.5"
                     />
-                    <span className="text-md leading-5.5 text-[#2c3a54]">
-                      4.9
+                    <span className={`text-md leading-5.5 ${
+                      filter === 'yandex' ? 'text-white' : 'text-[#2c3a54] group-hover:text-white'
+                    }`}>
+                      {yandexRating}
                     </span>
-                  </Link>
+                  </button>
                 </div>
               </div>
-              <Link href={'/'} className="w-full text-center px-3.75 py-2.25 border border-[#2c3a54] text-[#2c3a54] rounded-full font-bold hover:bg-[#2c3a54] hover:text-white transition">
+              <Link href={'https://maps.app.goo.gl/E2EA3z9Y5ChgMqfa6'} target="_blank" className="w-full text-center px-3.75 py-2.25 border border-[#2c3a54] text-[#2c3a54] rounded-full font-bold hover:bg-[#2c3a54] hover:text-white transition">
                 Оставить свой отзыв
               </Link>
             </div>
           ) : (
             // Десктоп/планшет: 3 кнопки + кнопка "Оставить отзыв" в одной строке с разделителем
             <div className="flex items-center space-x-4">
-              <Link
-                href={"/"}
-                className="px-4.5 py-2.5 bg-[#2c3a54] text-white rounded-full border-1 border-[#2c3a54] hover:bg-white hover:text-[#2c3a54]"
+              <button
+                onClick={() => setFilter('all')}
+                className={`px-4.5 py-2.5 rounded-full border border-[#2c3a54] transition ${
+                  filter === 'all' ? 'bg-[#2c3a54] text-white' : 'bg-white text-[#2c3a54] hover:bg-[#2c3a54] hover:text-white'
+                }`}
               >
                 Все отзывы
-              </Link>
+              </button>
               <div className="flex items-center space-x-2">
-                <Link href={'/'} className="px-4.5 py-2.5 bg-white border border-[#2c3a54] hover:bg-[#2c3a54] hover:text-white rounded-full flex items-center justify-center">
+                <button 
+                  onClick={() => setFilter('google')} 
+                  className={`px-4.5 py-2.5 rounded-full flex items-center justify-center border border-[#2c3a54] transition ${
+                    filter === 'google' ? 'bg-[#2c3a54]' : 'bg-white hover:bg-[#2c3a54]'
+                  } group`}
+                >
                   <Image
                     src="/review/1.webp"
                     alt="Google"
@@ -312,13 +345,20 @@ const ReviewsSlider = () => {
                     height={21}
                     className="mr-2.5"
                   />
-                  <span className="text-md leading-5.5 text-[#2c3a54]">
-                    5.0
+                  <span className={`text-md leading-5.5 ${
+                    filter === 'google' ? 'text-white' : 'text-[#2c3a54] group-hover:text-white'
+                  }`}>
+                    {googleRating}
                   </span>
-                </Link>
+                </button>
               </div>
               <div className="flex items-center space-x-2">
-                <Link href={'/'} className="px-4.5 py-2.5 bg-white border border-[#2c3a54] hover:bg-[#2c3a54] hover:text-white rounded-full flex items-center justify-center">
+                <button 
+                  onClick={() => setFilter('yandex')} 
+                  className={`px-4.5 py-2.5 rounded-full flex items-center justify-center border border-[#2c3a54] transition ${
+                    filter === 'yandex' ? 'bg-[#2c3a54]' : 'bg-white hover:bg-[#2c3a54]'
+                  } group`}
+                >
                   <Image
                     src="/review/2.webp"
                     alt="Yandex"
@@ -326,13 +366,15 @@ const ReviewsSlider = () => {
                     height={21}
                     className="mr-2.5"
                   />
-                  <span className="text-md leading-5.5 text-[#2c3a54]">
-                    4.9
+                  <span className={`text-md leading-5.5 ${
+                    filter === 'yandex' ? 'text-white' : 'text-[#2c3a54] group-hover:text-white'
+                  }`}>
+                    {yandexRating}
                   </span>
-                </Link>
+                </button>
               </div>
               <div className="border-l border-gray-300 mx-4 h-8"></div>
-              <Link href={'/'} className="px-3.75 py-2.25 border border-[#2c3a54] text-[#2c3a54] rounded-full font-bold hover:bg-[#2c3a54] hover:text-white transition">
+              <Link href={'https://maps.app.goo.gl/E2EA3z9Y5ChgMqfa6'} target="_blank" className="px-3.75 py-2.25 border border-[#2c3a54] text-[#2c3a54] rounded-full font-bold hover:bg-[#2c3a54] hover:text-white transition">
                 Оставить свой отзыв
               </Link>
             </div>
@@ -352,10 +394,10 @@ const ReviewsSlider = () => {
                 transform: `translateX(-${currentSlide * slideWidth}%)`,
               }}
             >
-              {reviews.map((review) => (
+              {filteredReviews.map((review) => (
                 <div
                   key={review.id}
-                  className={`flex-shrink-0 ${isMobile ? "w-full bg-[#f5f6fa]" : isTablet ? "w-1/2 shadow-sm" : "w-1/4 shadow-sm"
+                  className={`shrink-0 ${isMobile ? "w-full bg-[#f5f6fa]" : isTablet ? "w-1/2 shadow-sm" : "w-1/4 shadow-sm"
                     } p-6 bg-white relative`}
                   style={
                     isMobile
@@ -420,23 +462,15 @@ const ReviewsSlider = () => {
         {/* Индикаторы — только если НЕ мобильный ИЛИ если мобильный, но НЕ показаны все отзывы */}
         {!isMobile && !showAllReviews && (
           <div className="flex justify-center mt-6 space-x-2">
-            {Array.from(
-              {
-                length: isMobile
-                  ? reviews.length
-                  : isTablet
-                    ? reviews.length - 1
-                    : reviews.length - 3,
-              },
-              (_, index) => (
-                <button
-                  key={index}
-                  onClick={() => goToSlide(index)}
-                  className={`w-2.5 h-2.5 rounded-full ${index === currentSlide ? "bg-[#2c3a54]" : "bg-gray-300"
-                    }`}
-                ></button>
-              )
-            )}
+            {Array.from({
+              length: filteredReviews.length === 0 ? 0 : (isMobile ? filteredReviews.length : isTablet ? Math.max(filteredReviews.length - 1, 1) : Math.max(filteredReviews.length - 3, 1))
+            }, (_, index) => (
+              <button
+                key={index}
+                onClick={() => goToSlide(index)}
+                className={`w-2.5 h-2.5 rounded-full ${index === currentSlide ? 'bg-[#2c3a54]' : 'bg-gray-300'}`}
+              />
+            ))}
           </div>
         )}
 
@@ -455,6 +489,11 @@ const ReviewsSlider = () => {
         {/* Если мобильный и показаны все отзывы — рендерим весь список статично */}
         {isMobile && showAllReviews && (
           <div className="mt-6">{renderMobileReviews()}</div>
+        )}
+        {loading && <div className="mt-6 text-[#6B809E]">Загрузка отзывов...</div>}
+        {error && <div className="mt-6 text-red-600">{error}</div>}
+        {!loading && !error && reviews.length === 0 && (
+          <div className="mt-6 text-[#6B809E]">Отзывы отсутствуют</div>
         )}
       </div>
     </section>

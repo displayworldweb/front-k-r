@@ -108,7 +108,7 @@ const subcategoryData: Record<string, CategoryData> = {
             { title: "Памятники", image: "/section/single.webp", link: "/monuments" },
             { title: "Двойные", image: "/section/double.webp", link: "/monuments/double" },
         ],
-        sortOptions: ["Со скидкой", "По цене", "По высоте", "Новинки", "Популярные", "Хит"],
+        sortOptions: ["Сначала популярные", "Сначала дешевые", "Сначала дорогие"],
     },
     "double": {
         title: "Двойные памятники",
@@ -118,7 +118,7 @@ const subcategoryData: Record<string, CategoryData> = {
             { title: "Памятники", image: "/section/single.webp", link: "/monuments" },
             { title: "Одиночные", image: "/section/single.webp", link: "/monuments/single" },
         ],
-        sortOptions: ["Со скидкой", "По цене", "По высоте", "Новинки", "Популярные", "Хит"],
+        sortOptions: ["Сначала популярные", "Сначала дешевые", "Сначала дорогие"],
     },
     "exclusive": {
         title: "Эксклюзивные памятники",
@@ -128,7 +128,7 @@ const subcategoryData: Record<string, CategoryData> = {
             { title: "Двойные", image: "/section/double.webp", link: "/monuments/double" },
             { title: "Недорогие", image: "/section/cheap.webp", link: "/monuments/cheap" },
         ],
-        sortOptions: ["Со скидкой", "По цене", "По высоте", "Новинки", "Популярные", "Хит"],
+        sortOptions: ["Сначала популярные", "Сначала дешевые", "Сначала дорогие"],
     },
 
     "cheap": {
@@ -139,7 +139,7 @@ const subcategoryData: Record<string, CategoryData> = {
             { title: "Двойные", image: "/section/double.webp", link: "/monuments/double" },
             { title: "Памятники", image: "/section/single.webp", link: "/monuments" },
         ],
-        sortOptions: ["Со скидкой", "По цене", "По высоте", "Новинки"],
+        sortOptions: ["Сначала популярные", "Сначала дешевые", "Сначала дорогие"],
     },
     "composite": {
         title: "Составные памятники",
@@ -149,7 +149,7 @@ const subcategoryData: Record<string, CategoryData> = {
             { title: "Двойные", image: "/section/double.webp", link: "/monuments/double" },
             { title: "Недорогие", image: "/section/cheap.webp", link: "/monuments/cheap" },
         ],
-        sortOptions: ["Со скидкой", "По цене", "По высоте", "Новинки", "Популярные", "Хит"],
+        sortOptions: ["Сначала популярные", "Сначала дешевые", "Сначала дорогие"],
     },
     "cross": {
         title: "В виде креста",
@@ -159,7 +159,7 @@ const subcategoryData: Record<string, CategoryData> = {
             { title: "Двойные", image: "/section/double.webp", link: "/monuments/double" },
             { title: "В виде сердца", image: "/section/single.webp", link: "/monuments/heart" },
         ],
-        sortOptions: ["Со скидкой", "По цене", "По высоте", "Новинки", "Популярные", "Хит"],
+        sortOptions: ["Сначала популярные", "Сначала дешевые", "Сначала дорогие"],
     },
     "heart": {
         title: "В виде сердца",
@@ -169,7 +169,7 @@ const subcategoryData: Record<string, CategoryData> = {
             { title: "В виде креста", image: "/section/single.webp", link: "/monuments/cross" },
             { title: "Эксклюзивные", image: "/section/single.webp", link: "/monuments/exclusive" },
         ],
-        sortOptions: ["Со скидкой", "По цене", "По высоте", "Новинки", "Популярные", "Хит"],
+        sortOptions: ["Сначала популярные", "Сначала дешевые", "Сначала дорогие"],
     },
     "europe": {
         title: "Европейские",
@@ -179,7 +179,7 @@ const subcategoryData: Record<string, CategoryData> = {
             { title: "Двойные", image: "/section/double.webp", link: "/monuments/double" },
             { title: "Эксклюзивные", image: "/section/single.webp", link: "/monuments/exclusive" },
         ],
-        sortOptions: ["Со скидкой", "По цене", "По высоте", "Новинки", "Популярные", "Хит"],
+        sortOptions: ["Сначала популярные", "Сначала дешевые", "Сначала дорогие"],
     },
     "artistic": {
         title: "Художественная резка",
@@ -189,7 +189,7 @@ const subcategoryData: Record<string, CategoryData> = {
             { title: "Одиночные", image: "/section/single.webp", link: "/monuments/single" },
             { title: "Двойные", image: "/section/double.webp", link: "/monuments/double" },
         ],
-        sortOptions: ["Со скидкой", "По цене", "По высоте", "Новинки", "Популярные", "Хит"],
+        sortOptions: ["Сначала популярные", "Сначала дешевые", "Сначала дорогие"],
     },
     "tree": {
         title: "В виде деревьев",
@@ -199,7 +199,7 @@ const subcategoryData: Record<string, CategoryData> = {
             { title: "В виде креста", image: "/section/single.webp", link: "/monuments/cross" },
             { title: "В виде сердца", image: "/section/single.webp", link: "/monuments/heart" },
         ],
-        sortOptions: ["Со скидкой", "По цене", "По высоте", "Новинки", "Популярные", "Хит"],
+        sortOptions: ["Сначала популярные", "Сначала дешевые", "Сначала дорогие"],
     },
     "complex": {
         title: "Мемориальные комплексы",
@@ -209,7 +209,7 @@ const subcategoryData: Record<string, CategoryData> = {
             { title: "Эксклюзивные", image: "/section/single.webp", link: "/monuments/exclusive" },
             { title: "Двойные", image: "/section/double.webp", link: "/monuments/double" },
         ],
-        sortOptions: ["Со скидкой", "По цене", "По высоте", "Новинки", "Популярные", "Хит"],
+        sortOptions: ["Сначала популярные", "Сначала дешевые", "Сначала дорогие"],
     }
 };
 
@@ -226,6 +226,7 @@ const MonumentsSubcategoryPage = () => {
     const [categoryData, setCategoryData] = useState<Record<string, CategoryData>>(subcategoryData);
     const [dynamicPageDescription, setDynamicPageDescription] = useState<PageDescription | null>(null);
     const [loadingDescription, setLoadingDescription] = useState(false);
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
     // Получаем данные для текущей подкатегории
     const currentCategoryData = categorySlug ? (categoryData[categorySlug.toLowerCase()] || null) : null;
@@ -383,47 +384,19 @@ const MonumentsSubcategoryPage = () => {
     // Функция для сортировки
     const sortedProducts = [...products].sort((a, b) => {
         switch (sortOption) {
-            case "Со скидкой":
-                return (b.discount || 0) - (a.discount || 0);
-            
-            case "По цене":
-                // Сортировка от меньшей цены к большей
-                return (a.price || 0) - (b.price || 0);
-            
-            case "По высоте":
-                // Извлекаем числовое значение из строки высоты (например, "123 см" -> 123)
-                const heightA = parseInt(String(a.height || '0').match(/\d+/)?.[0] || '0', 10);
-                const heightB = parseInt(String(b.height || '0').match(/\d+/)?.[0] || '0', 10);
-                // Сортировка от большей высоты к меньшей
-                return heightB - heightA;
-            
-            case "Новинки":
-                // Сначала новые (new: true), потом остальные
-                if (a.new && !b.new) return -1;
-                if (!a.new && b.new) return 1;
-                return 0;
-            
-            case "Популярные":
+            case "Сначала популярные":
                 // Сначала популярные (popular: true), потом остальные
                 if (a.popular && !b.popular) return -1;
                 if (!a.popular && b.popular) return 1;
                 return 0;
             
-            case "Хит":
-                // Для эксклюзивных памятников проверяем хит в цветах
-                if (categorySlug && categorySlug.toLowerCase() === 'exclusive') {
-                    const aHasHit = a.colors && a.colors.some(color => color.hit === true);
-                    const bHasHit = b.colors && b.colors.some(color => color.hit === true);
-                    
-                    if (aHasHit && !bHasHit) return -1;
-                    if (!aHasHit && bHasHit) return 1;
-                    return 0;
-                } else {
-                    // Для остальных памятников проверяем хит на уровне продукта
-                    if (a.hit && !b.hit) return -1;
-                    if (!a.hit && b.hit) return 1;
-                    return 0;
-                }
+            case "Сначала дешевые":
+                // Сортировка от меньшей цены к большей
+                return (a.price || 0) - (b.price || 0);
+            
+            case "Сначала дорогие":
+                // Сортировка от большей цены к меньшей
+                return (b.price || 0) - (a.price || 0);
             
             default:
                 return 0;
@@ -454,6 +427,7 @@ const MonumentsSubcategoryPage = () => {
                         <h1 className="text-black text-[28px] mt-2.5 mb-5 leading-8 lg:text-[40px] lg:leading-12 font-[600]">{currentCategoryData.title}</h1>
 
                         {/* Блок сортировки (если есть) */}
+                        {/* Старая реализация с кнопками
                         {currentCategoryData.sortOptions && (
                             <div className="flex flex-wrap gap-2 mb-5">
                                 {currentCategoryData.sortOptions.map((option) => (
@@ -470,31 +444,67 @@ const MonumentsSubcategoryPage = () => {
                                 ))}
                             </div>
                         )}
+                        */}
 
-                        {/* Выбор количества товаров на страницу */}
-                        <div hidden={isTablet} className="flex justify-end mb-5">
-                            <span className="text-[14px] text-[#6B809E] mr-2 self-center">Выводить по:</span>
-                            {[60, 120].map((count) => (
+                        {/* Блок сортировки и выбора количества товаров */}
+                        <div hidden={isTablet} className="flex justify-between items-center mb-5">
+                            {/* Сортировка слева */}
+                            {currentCategoryData.sortOptions && (
+                                <div className="flex items-center gap-2 relative">
+                                    <span className="text-[14px] text-[#6B809E]">Показывать:</span>
+                                    <div className="relative">
+                                        <button
+                                            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                                            onBlur={() => setTimeout(() => setIsDropdownOpen(false), 200)}
+                                            className="text-[14px] text-[#2c3a54] bg-transparent cursor-pointer focus:outline-none underline decoration-dashed underline-offset-3 hover:no-underline"
+                                        >
+                                            {sortOption}
+                                        </button>
+                                        {isDropdownOpen && (
+                                            <div className="absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded shadow-lg z-50 min-w-[200px]">
+                                                {currentCategoryData.sortOptions.map((option) => (
+                                                    <button
+                                                        key={option}
+                                                        onClick={() => {
+                                                            setSortOption(option);
+                                                            setIsDropdownOpen(false);
+                                                        }}
+                                                        className="w-full text-left px-4 py-2 text-[14px] text-[#2c3a54] hover:bg-[#f5f6fa] transition-colors"
+                                                    >
+                                                        {option}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            )}
+                            
+                            {/* Выбор количества товаров справа */}
+                            <div className="flex items-center">
+                                <span className="text-[14px] text-[#6B809E] mr-2">Выводить по:</span>
+                                {[60, 120].map((count) => (
+                                    <button
+                                        key={count}
+                                        onClick={() => handleProductsPerPageChange(count)}
+                                        className={`px-2 py-1 mx-1 text-[14px] font-medium rounded text-[#2c3a54] ${productsPerPage === count
+                                            ? ""
+                                            : "cursor-pointer underline underline-offset-3 hover:no-underline"
+                                            }`}
+                                    >
+                                        {count}
+                                    </button>
+                                ))}
                                 <button
-                                    key={count}
-                                    onClick={() => handleProductsPerPageChange(count)}
-                                    className={`px-2 py-1 mx-1 text-[14px] font-medium rounded text-[#2c3a54] ${productsPerPage === count
+                                    onClick={() => handleProductsPerPageChange(currentCategoryData.products.length)}
+                                    className={`px-2 py-1 mx-1 text-[14px] font-medium rounded text-[#2c3a54] ${productsPerPage === currentCategoryData.products.length
                                         ? ""
                                         : "cursor-pointer underline underline-offset-3 hover:no-underline"
                                         }`}
                                 >
-                                    {count}
+                                    Все
                                 </button>
-                            ))}
-                            <button
-                                onClick={() => handleProductsPerPageChange(currentCategoryData.products.length)}
-                                className={`px-2 py-1 mx-1 text-[14px] font-medium rounded text-[#2c3a54] ${productsPerPage === currentCategoryData.products.length
-                                    ? ""
-                                    : "cursor-pointer underline underline-offset-3 hover:no-underline"
-                                    }`}
-                            >
-                                Все
-                            </button>
+                            </div>
                         </div>
 
                         {/* Сетка продуктов */}

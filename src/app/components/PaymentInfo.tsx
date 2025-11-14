@@ -30,7 +30,7 @@ const PaymentInfo = () => {
               Покупайте памятники, ограды и другие изделия в рассрочку
             </p>
             <Link
-              className="font-bold w-full text-center py-3 px-4.5 border border-white rounded-full inline-block"
+              className="font-bold w-full text-center py-3 px-4.5 border border-white rounded-full inline-block hover:bg-white hover:text-[#2c3a54] transition"
               href={"/"}
             >
               Подробнее о рассрочке
@@ -38,7 +38,7 @@ const PaymentInfo = () => {
           </div>
 
           {/* Правая колонка — три блока */}
-          <div className={`gap-6 ${isMobile ? 'w-full' : 'md:w-2/3'} ${isMobile ? 'flex flex-col' : 'md:flex md:flex-row'}`}>
+          <div className={`gap-8 ${isMobile ? 'w-full' : 'md:w-2/3'} ${isMobile ? 'flex flex-col' : 'md:flex md:flex-row'}`}>
             {/* Блок 1: Полная оплата */}
             <div className={`${isMobile ? 'flex items-start gap-4' : 'flex flex-col items-center text-center'}`}>
               <div className={`h-[70px] ${isMobile ? 'flex-shrink-0' : 'mb-4 flex justify-center'}`}>

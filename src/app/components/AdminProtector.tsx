@@ -26,7 +26,7 @@ export function AdminProtector({ children }: { children: React.ReactNode }) {
 
         // Проверяем валидность токена на сервере
         const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://api.k-r.by';
-        const response = await fetch(`${apiUrl}/api/auth/me`, {
+        const response = await fetch(`${apiUrl}/auth/me`, {
           headers: {
             'Authorization': `Bearer ${token}`,
           },

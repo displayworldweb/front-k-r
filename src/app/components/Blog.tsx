@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import { apiClient, API_ENDPOINTS } from "@/lib/api-client";
 
 const Blog = () => {
   const [isMobile, setIsMobile] = useState(false);
@@ -16,40 +17,40 @@ const Blog = () => {
     return () => window.removeEventListener("resize", checkScreenSize);
   }, []);
 
-  // Данные акций
-  const campaigns = [
-    {
-      id: 1,
-      title: "Выбор памятника для мужчины и женщины: на что обратить внимание?",
-      description: "Без переплат и без процентов!",
-      image: "/blog/1.webp",
-      date: "30.10.2023",
-      link: "/",
-    },
-    {
-      id: 2,
-      title: "Выбор памятника для мужчины: строгость и надежность в камне",
-      image: "/blog/2.webp",
-      date: "30.10.2023",
-      link: "/",
-    },
-    {
-      id: 3,
-      title: "Выбор памятника для ребенка: любовь и скорбь в камне",
-      description:
-        "При заказе памятника и благоустройства до 25 декабря 2023 года",
-      image: "/blog/3.webp",
-      date: "30.10.2023",
-      link: "/",
-    },
-    {
-      id: 4,
-      title: "Гравировка или медальон на памятник: что лучше?",
-      image: "/blog/4.webp",
-      date: "30.10.2023",
-      link: "/",
-    },
-  ];
+  interface BlogItem {
+    id: number | string;
+    title: string;
+    description?: string;
+    content?: string;
+    image?: string; // иногда приходит как image
+    featuredImage?: string; // фактическое поле из API
+    images?: string[]; // массив изображений
+    date?: string;
+    publishedAt?: string;
+    slug?: string;
+    link?: string;
+  }
+
+  const [blogs, setBlogs] = useState<BlogItem[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const loadBlogs = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const data = await apiClient.get(API_ENDPOINTS.blogs);
+        const items: BlogItem[] = Array.isArray(data) ? data : data?.data || [];
+        setBlogs(items);
+      } catch (e: any) {
+        setError(e.message || "Ошибка загрузки блога");
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadBlogs();
+  }, []);
 
   return (
     <section className="mt-17 lg:mt-30 gradient">
@@ -59,34 +60,48 @@ const Blog = () => {
         </h2>
 
         {/* Используем flex + gap, чтобы отступы не ломали ширину */}
+        {loading && <div className="ml-2.5 text-[#6B809E] mb-4">Загрузка...</div>}
+        {error && <div className="ml-2.5 text-red-600 mb-4">{error}</div>}
         <div className="flex flex-col md:flex-row space-x-2.5 space-y-5 md:space-y-0">
-          {campaigns.map((campaign) => (
+          {blogs.map((blog) => (
             <div
-              key={campaign.id}
+              key={blog.id}
               className="w-full md:w-1/4 md:mx-2.5 bg-white rounded-lg md:shadow-sm overflow-hidden"
             >
-              <a href={campaign.link} className="flex md:block">
+              <a href={blog.link || (blog.slug ? `/blog/${blog.slug}` : '#')} className="flex md:block">
                 <div className="w-[52%] px-2 md:px-0 bg-[#f5f6fa] md:w-full  ">
-                  <img
-                    src={campaign.image}
-                    alt={campaign.title}
-                    className="max-w-full align-middle rounded-lg md:rounded-b-none h-auto"
-                  />
+                  {(() => {
+                    const imgSrc = blog.featuredImage || blog.image || blog.images?.[0];
+                    if (!imgSrc) return null;
+                    return (
+                      <img
+                        src={imgSrc}
+                        alt={blog.title}
+                        className="max-w-full align-middle rounded-lg md:rounded-b-none h-auto"
+                        loading="lazy"
+                      />
+                    );
+                  })()}
                 </div>
                 <div className="w-[48%] justify-between flex flex-col md:block bg-[#f5f6fa] md:bg-white md:w-full px-2 py-0 md:px-6 md:py-5 md:p-6">
                   <h3 className="font-bold text-sm md:text-[16px] text-[#2c3a54] md:mb-1.25">
-                    {campaign.title}
+                    {blog.title}
                   </h3>
-                  <p className="hidden md:block text-[16px] text-[#2c3a54cc] leading-relaxed">
-                    {campaign.description}
-                  </p>
+                  {blog.description && (
+                    <p className="hidden md:block text-[16px] text-[#2c3a54cc] leading-relaxed">
+                      {blog.description}
+                    </p>
+                  )}
                   <span className="text-sm md:hidden text-[#2c3a54cc] leading-relaxed">
-                    {campaign.date}
+                    {blog.date || blog.publishedAt}
                   </span>
                 </div>
               </a>
             </div>
           ))}
+          {!loading && blogs.length === 0 && !error && (
+            <div className="text-[#6B809E] ml-2.5">Нет доступных записей</div>
+          )}
         </div>
 
         <div className="ml-2.5 mt-6 md:mt-8 flex text-center">
