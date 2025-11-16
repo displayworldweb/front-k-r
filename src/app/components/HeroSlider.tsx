@@ -86,7 +86,7 @@ const HeroSlider = () => {
       subtitle: "Классические и современные модели из высококачественного гранита",
       button: {
         text: "Смотреть каталог",
-        href: "/",
+        href: "/monuments/single",
       },
     },
     {
@@ -96,7 +96,7 @@ const HeroSlider = () => {
       subtitle: "Многоэлементные комплексы с богатым оформлением",
       button: {
         text: "Посмотреть модели",
-        href: "/",
+        href: "/monuments/composite",
       },
     },
     {
@@ -106,7 +106,7 @@ const HeroSlider = () => {
       subtitle: "Уникальные авторские работы из редких пород гранита",
       button: {
         text: "Изучить коллекцию",
-        href: "/",
+        href: "/monuments/exclusive",
       },
     },
     {
@@ -116,7 +116,7 @@ const HeroSlider = () => {
       subtitle: "Полное благоустройство места захоронения с оградой",
       button: {
         text: "Узнать подробнее",
-        href: "/",
+        href: "/monuments/complex",
       },
     },
     {
@@ -126,7 +126,7 @@ const HeroSlider = () => {
       subtitle: "Ограды на кладбище любой сложности",
       button: {
         text: "Выбрать ограду",
-        href: "/",
+        href: "/monuments/fences",
       },
     },
   ];

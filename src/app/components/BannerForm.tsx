@@ -40,7 +40,7 @@ const BannerForm = () => {
             </div>
             <div className="flex space-x-2 mt-8.75">
                 <Link
-                    href="#"
+                    href="viber://chat?number=%2B375333226652"
                     className="rounded-full flex items-center justify-center text-white "
                 >
                     <Image
@@ -51,7 +51,7 @@ const BannerForm = () => {
                     />
                 </Link>
                 <Link
-                    href="#"
+                    href="https://t.me/+375333226652"
                     className="rounded-full flex items-center justify-center text-white"
                 >
                     <Image
@@ -62,7 +62,7 @@ const BannerForm = () => {
                     />
                 </Link>
                 <Link
-                    href="#"
+                    href="https://wa.me/375333226652"
                     className="rounded-full flex items-center justify-center text-white"
                 >
                     <Image

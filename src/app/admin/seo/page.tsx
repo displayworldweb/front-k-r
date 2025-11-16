@@ -1,7 +1,15 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { apiClient } from "@/lib/api-client";
+
+interface AdminUser {
+  id: string;
+  username: string;
+  email: string;
+  role: string;
+}
 
 interface PageSEO {
   id?: number;
@@ -68,6 +76,9 @@ const AVAILABLE_PAGES = [
 ];
 
 export default function SEOAdminPage() {
+  const router = useRouter();
+  const [user, setUser] = useState<AdminUser | null>(null);
+  const [checkingAuth, setCheckingAuth] = useState(true);
   const [pageSeoData, setPageSeoData] = useState<PageSEO[]>([]);
   const [selectedPageSlug, setSelectedPageSlug] = useState<string>("");
   const [seoData, setSeoData] = useState<PageSEO | null>(null);
@@ -79,9 +90,53 @@ export default function SEOAdminPage() {
   const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
-    fetchPageSeoData();
-    fetchAvailableImages();
-  }, []);
+    const userStr = localStorage.getItem('adminUser');
+    if (!userStr) {
+      router.push('/login');
+      return;
+    }
+
+    try {
+      const userData = JSON.parse(userStr);
+      setUser(userData);
+
+      // Проверяем доступ
+      if (userData.role !== 'superadmin') {
+        setCheckingAuth(false);
+        setError('У вас нет доступа к SEO разделу. Только superadmin может управлять SEO.');
+        setTimeout(() => router.push('/admin'), 2000);
+        return;
+      }
+
+      setCheckingAuth(false);
+      fetchPageSeoData();
+      fetchAvailableImages();
+    } catch (e) {
+      router.push('/login');
+    }
+  }, [router]);
+
+  if (checkingAuth) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <p className="text-gray-600">Проверка доступа...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error && user?.role !== 'superadmin') {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center p-8 bg-red-50 rounded-lg border border-red-200">
+          <p className="text-red-700 font-semibold mb-2">⛔ Доступ запрещён</p>
+          <p className="text-red-600 text-sm">{error}</p>
+          <p className="text-gray-600 text-sm mt-4">Перенаправление на главную панель...</p>
+        </div>
+      </div>
+    );
+  }
 
   const fetchPageSeoData = async () => {
     try {
@@ -117,7 +172,7 @@ export default function SEOAdminPage() {
       formData.append("folder", "pages");
 
       const response = await fetch(
-        (process.env.NEXT_PUBLIC_API_URL || "https://api.k-r.by/api") + "/upload",
+        (process.env.NEXT_PUBLIC_API_URL || "https://k-r.by/api") + "/upload",
         {
           method: "POST",
           body: formData,

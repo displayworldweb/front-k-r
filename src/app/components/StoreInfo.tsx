@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRef } from "react";
+import Link from "next/link";
 
 const StoreInfo = () => {
   const now = new Date();
@@ -9,12 +10,50 @@ const StoreInfo = () => {
   const hour = now.getHours();
   const minute = now.getMinutes();
   const currentTime = hour * 60 + minute;
-  const isOpen =
-    (day >= 1 && day <= 5 && currentTime >= 600 && currentTime < 1140) ||
-    (day === 6 && currentTime >= 600 && currentTime < 900);
 
-  const storeStatus = isOpen ? "Открыто до 19:00" : "Закрыто до 10:00";
-  const statusColor = isOpen ? "bg-green-500" : "bg-red-500";
+  // Рабочие часы:
+  // Пн-Пт: 09:00-18:00, обед 12:00-13:00
+  // Сб: 10:00-16:00 (без обеда)
+  // Вс: выходной
+  const isWeekday = day >= 1 && day <= 5;
+  const isSaturday = day === 6;
+  const isSunday = day === 0;
+
+  const openWeekStart = 9 * 60; // 09:00
+  const openWeekEnd = 18 * 60; // 18:00
+  const lunchStart = 12 * 60; // 12:00
+  const lunchEnd = 13 * 60; // 13:00
+
+  const openSatStart = 10 * 60; // 10:00
+  const openSatEnd = 16 * 60; // 16:00
+
+  const isDuringLunch = isWeekday && currentTime >= lunchStart && currentTime < lunchEnd;
+  const isOpen = (isWeekday && currentTime >= openWeekStart && currentTime < openWeekEnd && !isDuringLunch) || (isSaturday && currentTime >= openSatStart && currentTime < openSatEnd);
+
+  // Цвет статуса: green - открыт, red - закрыт, yellow - обед
+  const statusColor = isDuringLunch ? "bg-yellow-400" : isOpen ? "bg-green-500" : "bg-red-500";
+
+  // Текст статуса
+  let storeStatus = "";
+  if (isDuringLunch) {
+    storeStatus = "Обед";
+  } else if (isOpen) {
+    // Показываем до какого времени открыт в зависимости от дня
+    if (isWeekday) storeStatus = "Открыто до 18:00";
+    else if (isSaturday) storeStatus = "Открыто до 16:00";
+  } else {
+    // Закрыто — показываем время открытия следующего рабочего дня
+    if (isSunday) storeStatus = "Закрыто до 09:00 (пн)";
+    else if (isWeekday) {
+      // закрыто в будний день (раньше 9 или после 18 или в обед)
+      if (currentTime < openWeekStart) storeStatus = "Закрыто до 09:00";
+      else if (isDuringLunch) storeStatus = "Обед"; // на всякий случай
+      else storeStatus = "Закрыто до 09:00";
+    } else if (isSaturday) {
+      if (currentTime < openSatStart) storeStatus = "Закрыто до 10:00 (сб)";
+      else storeStatus = "Закрыто";
+    }
+  }
 
   const slides = [
     { id: 1, src: "/shop-slider/1.jpg", alt: "Слайд 1" },
@@ -323,28 +362,22 @@ const StoreInfo = () => {
                       d="M19 9l-7 7-7-7"
                     />
                   </svg>
-                  <div className="absolute left-0 transform -translate-x-0 top-full mt-0 w-max bg-[#f5f6fa] border border-gray-200 rounded-md shadow-lg z-50 hidden group-hover:block focus-within:block">
-                    <div className="py-1 text-sm">
-                      <div className="flex justify-between items-center px-4 py-2 text-gray-700">
+                  <div className="absolute left-0 translate-x-0 top-full mt-0 bg-[#f5f6fa] border border-gray-200 rounded-md shadow-lg z-50 hidden group-hover:block focus-within:block">
+                    <div className="py-1 text-sm whitespace-nowrap">
+                      <div className="flex items-center px-4 py-2 text-gray-700">
                         <span>Пн—Пт</span>
-                        <span className="flex-1 text-center text-gray-400 mx-2">
-                          …………
-                        </span>
-                        <span>с 10:00 до 19:00</span>
+                        <span className="flex-1 text-center text-gray-400 mx-2">…………………</span>
+                        <span>с 09:00 до 18:00</span>
                       </div>
-                      <div className="flex justify-between items-center px-4 py-2 text-gray-700">
+                      <div className="flex items-center px-4 py-2 text-gray-700">
                         <span>Суббота</span>
-                        <span className="flex-1 text-center text-gray-400 mx-2">
-                          …………
-                        </span>
-                        <span>с 10:00 до 15:00</span>
+                        <span className="flex-1 text-center text-gray-400 mx-2">…………………</span>
+                        <span>с 10:00 до 16:00</span>
                       </div>
-                      <div className="flex justify-between items-center px-4 py-2 text-gray-700">
+                      <div className="flex items-center px-4 py-2 text-gray-700">
                         <span>Воскресенье</span>
-                        <span className="flex-1 text-center text-gray-400 mx-2">
-                          …………
-                        </span>
-                        <span>выходной</span>
+                        <span className="flex-1 text-center text-gray-400 mx-2">…………………</span>
+                        <span className="text-gray-600">выходной</span>
                       </div>
                     </div>
                   </div>
@@ -374,9 +407,9 @@ const StoreInfo = () => {
               </div>
             </div>
 
-            <button className="w-max px-6 py-2 font-bold border-1 border-[#2c3a54] rounded-full text-[#2c3a54] hover:bg-[#2c3a54] hover:text-white transition-colors">
+            <Link href="/contacts" className="w-max px-6 py-2 font-bold border-1 border-[#2c3a54] rounded-full text-[#2c3a54] hover:bg-[#2c3a54] hover:text-white transition-colors">
               Подробнее
-            </button>
+            </Link>
           </div>
         </div>
 
@@ -419,28 +452,22 @@ const StoreInfo = () => {
                   </svg>
                 </button>
 
-                <div className="absolute left-0 transform -translate-x-0 top-full mt-0 w-max bg-[#f5f6fa] border border-gray-200 rounded-md shadow-lg z-50 hidden group-hover:block focus-within:block">
-                  <div className="py-1 text-sm">
-                    <div className="flex justify-between items-center px-4 py-2 text-gray-700">
-                      <span>Пн—Пт</span>
-                      <span className="flex-1 text-center text-gray-400 mx-2">
-                        …………
-                      </span>
-                      <span>с 10:00 до 19:00</span>
+                <div className="absolute left-0 translate-x-0 top-full mt-0 bg-[#f5f6fa] border border-gray-200 rounded-md shadow-lg z-50 hidden group-hover:block focus-within:block">
+                  <div className="py-1 text-sm whitespace-nowrap">
+                    <div className="flex items-center px-4 py-2 text-gray-700">
+                      <span className="text-blue-600">Пн—Пт</span>
+                      <span className="flex-1 text-center text-gray-400 mx-2">…………………</span>
+                      <span>с 09:00 до 18:00</span>
                     </div>
-                    <div className="flex justify-between items-center px-4 py-2 text-gray-700">
+                    <div className="flex items-center px-4 py-2 text-gray-700">
                       <span>Суббота</span>
-                      <span className="flex-1 text-center text-gray-400 mx-2">
-                        …………
-                      </span>
-                      <span>с 10:00 до 15:00</span>
+                      <span className="flex-1 text-center text-gray-400 mx-2">…………………</span>
+                      <span>с 10:00 до 16:00</span>
                     </div>
-                    <div className="flex justify-between items-center px-4 py-2 text-gray-700">
+                    <div className="flex items-center px-4 py-2 text-gray-700">
                       <span>Воскресенье</span>
-                      <span className="flex-1 text-center text-gray-400 mx-2">
-                        …………
-                      </span>
-                      <span>выходной</span>
+                      <span className="flex-1 text-center text-gray-400 mx-2">…………………</span>
+                      <span className="text-gray-600">выходной</span>
                     </div>
                   </div>
                 </div>
@@ -510,28 +537,22 @@ const StoreInfo = () => {
                 </svg>
               </button>
 
-              <div className="absolute left-0 transform -translate-x-0 top-full mt-0 w-max bg-[#f5f6fa] border border-gray-200 rounded-md shadow-lg z-50 hidden group-hover:block focus-within:block">
-                <div className="py-1 text-sm">
-                  <div className="flex justify-between items-center px-4 py-2 text-gray-700">
-                    <span>Пн—Пт</span>
-                    <span className="flex-1 text-center text-gray-400 mx-2">
-                      …………
-                    </span>
-                    <span>с 10:00 до 19:00</span>
+              <div className="absolute left-0 translate-x-0 top-full mt-0 bg-[#f5f6fa] border border-gray-200 rounded-md shadow-lg z-50 hidden group-hover:block focus-within:block">
+                <div className="py-1 text-sm whitespace-nowrap">
+                  <div className="flex items-center px-4 py-2 text-gray-700">
+                    <span className="text-blue-600">Пн—Пт</span>
+                    <span className="flex-1 text-center text-gray-400 mx-2">…………………</span>
+                    <span>с 09:00 до 18:00</span>
                   </div>
-                  <div className="flex justify-between items-center px-4 py-2 text-gray-700">
+                  <div className="flex items-center px-4 py-2 text-gray-700">
                     <span>Суббота</span>
-                    <span className="flex-1 text-center text-gray-400 mx-2">
-                      …………
-                    </span>
-                    <span>с 10:00 до 15:00</span>
+                    <span className="flex-1 text-center text-gray-400 mx-2">…………………</span>
+                    <span>с 10:00 до 16:00</span>
                   </div>
-                  <div className="flex justify-between items-center px-4 py-2 text-gray-700">
+                  <div className="flex items-center px-4 py-2 text-gray-700">
                     <span>Воскресенье</span>
-                    <span className="flex-1 text-center text-gray-400 mx-2">
-                      …………
-                    </span>
-                    <span>выходной</span>
+                    <span className="flex-1 text-center text-gray-400 mx-2">…………………</span>
+                    <span className="text-gray-600">выходной</span>
                   </div>
                 </div>
               </div>
@@ -604,31 +625,25 @@ const StoreInfo = () => {
                 </svg>
               </button>
 
-              <div className="absolute left-0 transform -translate-x-0 top-full mt-0 w-max bg-[#f5f6fa] border border-gray-200 rounded-md shadow-lg z-50 hidden group-hover:block focus-within:block">
-                <div className="py-1 text-sm">
-                  <div className="flex justify-between items-center px-4 py-2 text-gray-700">
-                    <span>Пн—Пт</span>
-                    <span className="flex-1 text-center text-gray-400 mx-2">
-                      …………
-                    </span>
-                    <span>с 10:00 до 19:00</span>
-                  </div>
-                  <div className="flex justify-between items-center px-4 py-2 text-gray-700">
-                    <span>Суббота</span>
-                    <span className="flex-1 text-center text-gray-400 mx-2">
-                      …………
-                    </span>
-                    <span>с 10:00 до 15:00</span>
-                  </div>
-                  <div className="flex justify-between items-center px-4 py-2 text-gray-700">
-                    <span>Воскресенье</span>
-                    <span className="flex-1 text-center text-gray-400 mx-2">
-                      …………
-                    </span>
-                    <span>выходной</span>
+                <div className="absolute left-0 transform translate-x-0 top-full mt-0 bg-[#f5f6fa] border border-gray-200 rounded-md shadow-lg z-50 hidden group-hover:block focus-within:block">
+                  <div className="py-1 text-sm whitespace-nowrap">
+                    <div className="flex items-center px-4 py-2 text-gray-700">
+                      <span className="text-blue-600">Пн—Пт</span>
+                      <span className="flex-1 text-center text-gray-400 mx-2">…………………</span>
+                      <span>с 09:00 до 18:00</span>
+                    </div>
+                    <div className="flex items-center px-4 py-2 text-gray-700">
+                      <span>Суббота</span>
+                      <span className="flex-1 text-center text-gray-400 mx-2">…………………</span>
+                      <span>с 10:00 до 16:00</span>
+                    </div>
+                    <div className="flex items-center px-4 py-2 text-gray-700">
+                      <span>Воскресенье</span>
+                      <span className="flex-1 text-center text-gray-400 mx-2">…………………</span>
+                      <span className="text-gray-600">выходной</span>
+                    </div>
                   </div>
                 </div>
-              </div>
             </div>
 
             <div className="flex items-start mb-3 translate-x-[-2px]">

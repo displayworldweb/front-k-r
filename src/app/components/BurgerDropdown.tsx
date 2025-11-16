@@ -184,7 +184,7 @@ const BurgerDropdown: React.FC<BurgerDropdownProps> = ({
             Заказать звонок
           </button>
           <a
-            href="viber://chat?number=%2B375336770166"
+            href="viber://chat?number=%2B375333226652"
             aria-label="Viber"
             target="_blank"
             rel="noopener noreferrer"
@@ -192,7 +192,7 @@ const BurgerDropdown: React.FC<BurgerDropdownProps> = ({
             <Image src="/viber.svg" alt="Viber" width={28} height={28} />
           </a>
           <a
-            href="tg://resolve?domain=krby"
+            href="https://t.me/+375333226652"
             aria-label="Telegram"
             target="_blank"
             rel="noopener noreferrer"
@@ -200,7 +200,7 @@ const BurgerDropdown: React.FC<BurgerDropdownProps> = ({
             <Image src="/tm.svg" alt="Telegram" width={28} height={28} />
           </a>
           <a
-            href="whatsapp://send?phone=+375333226652"
+            href="https://wa.me/375333226652"
             aria-label="WhatsApp"
             target="_blank"
             rel="noopener noreferrer"

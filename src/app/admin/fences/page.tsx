@@ -1,9 +1,17 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { generateSlug } from "@/lib/slug-generator";
 import { apiClient } from "@/lib/api-client";
 import { SeoFieldsForm, SeoFieldsData } from "@/components/admin/SeoFieldsForm";
+
+interface AdminUser {
+  id: string;
+  username: string;
+  email: string;
+  role: string;
+}
 import { useSeoSave } from "@/lib/hooks/use-seo-save";
 
 interface Fence {
@@ -48,6 +56,9 @@ interface FenceCategory {
 }
 
 export default function FencesAdminPage() {
+  const router = useRouter();
+  const [user, setUser] = useState<AdminUser | null>(null);
+  const [checkingAuth, setCheckingAuth] = useState(true);
   const [fences, setFences] = useState<Fence[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -111,9 +122,9 @@ export default function FencesAdminPage() {
       } else {
         // Fallback к предустановленному списку
         const fallbackImages = [
-          'https://api.k-r.by/api/static/fences/fence-1.webp',
-          'https://api.k-r.by/api/static/fences/fence-2.webp',
-          'https://api.k-r.by/api/static/fences/fence-3.webp'
+          'https://k-r.by/api/static/fences/fence-1.webp',
+          'https://k-r.by/api/static/fences/fence-2.webp',
+          'https://k-r.by/api/static/fences/fence-3.webp'
         ];
         setAvailableImages(fallbackImages);
       }
@@ -345,7 +356,7 @@ export default function FencesAdminPage() {
       formData.append("file", file);
       formData.append("folder", "fences");
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://api.k-r.by/api'}/upload`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://k-r.by/api'}/upload`, {
         method: "POST",
         body: formData,
       });
@@ -366,6 +377,23 @@ export default function FencesAdminPage() {
       e.target.value = ""; // Очищаем input
     }
   };
+
+  // Проверка доступа
+  useEffect(() => {
+    const userStr = localStorage.getItem('adminUser');
+    if (!userStr) {
+      router.push('/login');
+      return;
+    }
+
+    try {
+      const userData = JSON.parse(userStr);
+      setUser(userData);
+      setCheckingAuth(false);
+    } catch (e) {
+      router.push('/login');
+    }
+  }, [router]);
 
   useEffect(() => {
     // Автоматически выбираем первую категорию при загрузке
@@ -632,8 +660,16 @@ export default function FencesAdminPage() {
   };
 
   return (
-    <div className="space-y-8">
-      <div className="text-black">
+    <>
+      {checkingAuth && (
+        <div className="flex items-center justify-center min-h-screen">
+          <p className="text-gray-600">Проверка доступа...</p>
+        </div>
+      )}
+      
+      {!checkingAuth && (
+        <div className="space-y-8">
+          <div className="text-black">
         <h2 className="text-2xl font-bold mb-4">Управление оградами</h2>
         
         {/* Выбор категории */}
@@ -737,7 +773,7 @@ export default function FencesAdminPage() {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-4">
                       <img 
-                        src={fence.image.startsWith('http') ? fence.image : `https://api.k-r.by${fence.image}`} 
+                        src={fence.image.startsWith('http') ? fence.image : `https://k-r.by${fence.image}`} 
                         alt={fence.name}
                         className="w-16 h-16 object-cover rounded"
                       />
@@ -1099,7 +1135,7 @@ export default function FencesAdminPage() {
                 </div>
 
                 {/* SEO Fields Form */}
-                {(editingFence || addingFence) && (
+                {user?.role === 'superadmin' && (editingFence || addingFence) && (
                   <div className="mt-8 pt-8 border-t">
                     <h3 className="text-lg font-semibold mb-4 text-gray-800">SEO Данные</h3>
                     <SeoFieldsForm
@@ -1152,6 +1188,8 @@ export default function FencesAdminPage() {
           </div>
         )}
       </div>
-    </div>
+      </div>
+      )}
+    </>
   );
 }

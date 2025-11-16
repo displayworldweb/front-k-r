@@ -23,13 +23,13 @@ const Cards = () => {
                             </div>
                         </div>
                         <a className="mt-0.75  hover:underline"
-                            href="mailto:stonerose@gmail.com"
+                            href="mailto:k-r2007@mail.ru"
                         >
-                            stonerose@gmail.com
+                            k-r2007@mail.ru
                         </a>
                         <div className="flex space-x-1.25 mt-2.5">
                             <Link
-                                href="#"
+                                href="viber://chat?number=%2B375333226652"
                                 className="rounded-full flex items-center justify-center"
                             >
                                 <Image
@@ -40,7 +40,7 @@ const Cards = () => {
                                 />
                             </Link>
                             <Link
-                                href="#"
+                                href="https://t.me/+375333226652"
                                 className="rounded-full flex items-center justify-center"
                             >
                                 <Image
@@ -51,7 +51,7 @@ const Cards = () => {
                                 />
                             </Link>
                             <Link
-                                href="#"
+                                href="https://wa.me/375333226652"
                                 className="rounded-full flex items-center justify-center"
                             >
                                 <Image

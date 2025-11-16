@@ -99,15 +99,15 @@ const Footer = () => {
               Заказать звонок
             </button>
 
-            <Link href="#" className="flex mr-2">
-              <Image src="/viber.svg" alt="Телефон" width={29} height={28} />
-            </Link>
-            <Link href="#" className="flex mr-2">
+            <a href="viber://chat?number=%2B375333226652" className="flex mr-2" target="_blank" rel="noopener noreferrer">
+              <Image src="/viber.svg" alt="Viber" width={29} height={28} />
+            </a>
+            <a href="https://t.me/+375333226652" className="flex mr-2" target="_blank" rel="noopener noreferrer">
               <Image src="/tm.svg" alt="Telegram" width={28} height={28} />
-            </Link>
-            <Link href="#" className="flex">
+            </a>
+            <a href="https://wa.me/375333226652" className="flex" target="_blank" rel="noopener noreferrer">
               <Image src="/wa.svg" alt="WhatsApp" width={28} height={28} />
-            </Link>
+            </a>
           </div>
 
           <div className="text-sm text-[#969ead] mt-2.5 space-y-1">

@@ -1,10 +1,18 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { generateSlug } from "@/lib/slug-generator";
 import { apiClient } from "@/lib/api-client";
 import { SeoFieldsForm, SeoFieldsData } from "@/components/admin/SeoFieldsForm";
 import { useSeoSave } from "@/lib/hooks/use-seo-save";
+
+interface AdminUser {
+  id: string;
+  username: string;
+  email: string;
+  role: string;
+}
 
 interface BlogBlock {
   id: string;
@@ -33,6 +41,9 @@ interface Blog {
 }
 
 export default function BlogsAdminPage() {
+  const router = useRouter();
+  const [user, setUser] = useState<AdminUser | null>(null);
+  const [checkingAuth, setCheckingAuth] = useState(true);
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [title, setTitle] = useState("");
   const [slug, setSlug] = useState("");
@@ -84,9 +95,9 @@ export default function BlogsAdminPage() {
       } else {
         // Fallback к предустановленному списку с правильными путями
         const predefinedImages = [
-          "https://api.k-r.by/api/static/blog/1.webp",
-          "https://api.k-r.by/api/static/blog/2.webp", 
-          "https://api.k-r.by/api/static/blog/3.webp",
+          "https://k-r.by/api/static/blog/1.webp",
+          "https://k-r.by/api/static/blog/2.webp", 
+          "https://k-r.by/api/static/blog/3.webp",
         ];
         setAvailableImages(predefinedImages);
       }
@@ -94,13 +105,30 @@ export default function BlogsAdminPage() {
       console.error("Error fetching images:", err);
       // Fallback к предустановленному списку при ошибке с правильными путями
       const predefinedImages = [
-        "https://api.k-r.by/api/static/blog/1.webp",
-        "https://api.k-r.by/api/static/blog/2.webp", 
-        "https://api.k-r.by/api/static/blog/3.webp",
+        "https://k-r.by/api/static/blog/1.webp",
+        "https://k-r.by/api/static/blog/2.webp", 
+        "https://k-r.by/api/static/blog/3.webp",
       ];
       setAvailableImages(predefinedImages);
     }
   };
+
+  // Проверка доступа
+  useEffect(() => {
+    const userStr = localStorage.getItem('adminUser');
+    if (!userStr) {
+      router.push('/login');
+      return;
+    }
+
+    try {
+      const userData = JSON.parse(userStr);
+      setUser(userData);
+      setCheckingAuth(false);
+    } catch (e) {
+      router.push('/login');
+    }
+  }, [router]);
 
   useEffect(() => {
     fetchBlogs();
@@ -126,7 +154,7 @@ export default function BlogsAdminPage() {
       formData.append("file", file);
       formData.append("folder", "blog");
 
-      const response = await fetch((process.env.NEXT_PUBLIC_API_URL || 'https://api.k-r.by/api') + "/upload", {
+      const response = await fetch((process.env.NEXT_PUBLIC_API_URL || 'https://k-r.by/api') + "/upload", {
         method: "POST",
         body: formData,
       });
@@ -381,7 +409,7 @@ export default function BlogsAdminPage() {
                     formData.append("file", file);
                     formData.append("folder", "blog");
 
-                    const response = await fetch((process.env.NEXT_PUBLIC_API_URL || 'https://api.k-r.by/api') + "/upload", {
+                    const response = await fetch((process.env.NEXT_PUBLIC_API_URL || 'https://k-r.by/api') + "/upload", {
                       method: "POST",
                       body: formData,
                     });
@@ -487,7 +515,7 @@ export default function BlogsAdminPage() {
                       formData.append("file", file);
                       formData.append("folder", "blog");
 
-                      const response = await fetch((process.env.NEXT_PUBLIC_API_URL || 'https://api.k-r.by/api') + "/upload", {
+                      const response = await fetch((process.env.NEXT_PUBLIC_API_URL || 'https://k-r.by/api') + "/upload", {
                         method: "POST",
                         body: formData,
                       });
@@ -593,8 +621,16 @@ export default function BlogsAdminPage() {
   };
 
   return (
-    <div className="space-y-8">
-      <div className="text-black">
+    <>
+      {checkingAuth && (
+        <div className="flex items-center justify-center min-h-screen">
+          <p className="text-gray-600">Проверка доступа...</p>
+        </div>
+      )}
+      
+      {!checkingAuth && (
+        <div className="space-y-8">
+          <div className="text-black">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-2xl font-bold">
             {editingBlog ? `Редактировать: ${editingBlog.title}` : 'Добавить блог'}
@@ -655,38 +691,40 @@ export default function BlogsAdminPage() {
           </div>
 
           {/* SEO */}
-          <div className="space-y-4 border-t pt-4">
-            <h3 className="text-lg font-semibold">SEO</h3>
-            
-            <input
-              type="text"
-              placeholder="SEO Заголовок (для поисковых систем)"
-              value={seoTitle}
-              onChange={(e) => setSeoTitle(e.target.value)}
-              className="w-full px-4 py-2 border rounded"
-            />
-            <textarea
-              placeholder="SEO Описание (для поисковых систем)"
-              value={seoDescription}
-              onChange={(e) => setSeoDescription(e.target.value)}
-              rows={2}
-              className="w-full px-4 py-2 border rounded"
-            />
-            <input
-              type="text"
-              placeholder="SEO Ключевые слова"
-              value={seoKeywords}
-              onChange={(e) => setSeoKeywords(e.target.value)}
-              className="w-full px-4 py-2 border rounded"
-            />
-            <input
-              type="text"
-              placeholder="OG Изображение (URL для социальных сетей)"
-              value={ogImage}
-              onChange={(e) => setOgImage(e.target.value)}
-              className="w-full px-4 py-2 border rounded"
-            />
-          </div>
+          {user?.role === 'superadmin' && (
+            <div className="space-y-4 border-t pt-4">
+              <h3 className="text-lg font-semibold">SEO</h3>
+              
+              <input
+                type="text"
+                placeholder="SEO Заголовок (для поисковых систем)"
+                value={seoTitle}
+                onChange={(e) => setSeoTitle(e.target.value)}
+                className="w-full px-4 py-2 border rounded"
+              />
+              <textarea
+                placeholder="SEO Описание (для поисковых систем)"
+                value={seoDescription}
+                onChange={(e) => setSeoDescription(e.target.value)}
+                rows={2}
+                className="w-full px-4 py-2 border rounded"
+              />
+              <input
+                type="text"
+                placeholder="SEO Ключевые слова"
+                value={seoKeywords}
+                onChange={(e) => setSeoKeywords(e.target.value)}
+                className="w-full px-4 py-2 border rounded"
+              />
+              <input
+                type="text"
+                placeholder="OG Изображение (URL для социальных сетей)"
+                value={ogImage}
+                onChange={(e) => setOgImage(e.target.value)}
+                className="w-full px-4 py-2 border rounded"
+              />
+            </div>
+          )}
 
           {/* Изображение */}
           <div className="border-t pt-4">
@@ -859,6 +897,8 @@ export default function BlogsAdminPage() {
           )}
         </div>
       </div>
-    </div>
+      </div>
+      )}
+    </>
   );
 }

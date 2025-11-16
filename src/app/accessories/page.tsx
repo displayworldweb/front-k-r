@@ -8,7 +8,7 @@ import Pagination from "../components/Pagination";
 import { categoriesAccessories } from "../mock/categories";
 import Promo from "../components/Promo";
 import { PageDescriptionBlock } from "../components/PageDescriptionBlock";
-import { apiClient } from "@/lib/api-client";
+import { apiClient, API_ENDPOINTS } from "@/lib/api-client";
 
 interface Accessory {
   id: number;
@@ -30,6 +30,28 @@ interface AccessoryProduct {
   createdAt: string;
 }
 
+// Функция для получения минимальной цены по категории
+const fetchMinPrice = async (endpoint: string): Promise<number> => {
+    try {
+        const res = await apiClient.get(endpoint);
+        const items = Array.isArray(res) ? res : res?.data || [];
+        const prices = items
+          .map((p: any) => {
+            const price = typeof p.price === 'string' ? parseFloat(p.price) : p.price;
+            return price;
+          })
+          .filter((p: any) => p && !isNaN(p) && p > 0);
+        return prices.length > 0 ? Math.min(...prices) : 0;
+    } catch (e) {
+        console.error('Error fetching min price from', endpoint, ':', e);
+        return 0;
+    }
+};
+
+// Функция для форматирования цены
+const formatPrice = (price: number): string | undefined =>
+    price > 0 ? `от ${Math.round(price)} руб.` : undefined;
+
 // Функция для получения продуктов для конкретной страницы
 const getProductsForPage = (cards: AccessoryProduct[], page: number, productsPerPage: number) => {
     const startIndex = (page - 1) * productsPerPage;
@@ -50,6 +72,7 @@ const AccessoriesPage = () => {
     const [isMobile, setIsMobile] = useState(false);
     const [isNarrowMobile, setIsNarrowMobile] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [categories, setCategories] = useState<any[]>([]);
 
     // Для адаптивности и загрузки данных
     useEffect(() => {
@@ -92,6 +115,55 @@ const AccessoriesPage = () => {
         return () => window.removeEventListener("resize", checkScreenSize);
     }, []);
 
+    // Загрузка цен для категорий
+    useEffect(() => {
+        const loadCategoryPrices = async () => {
+            try {
+                const vasesPrice = await fetchMinPrice(`${API_ENDPOINTS.accessories}/vases`);
+                const lampsPrice = await fetchMinPrice(`${API_ENDPOINTS.accessories}/lamps`);
+                const sculpturesPrice = await fetchMinPrice(`${API_ENDPOINTS.accessories}/sculptures`);
+                const framesPrice = await fetchMinPrice(`${API_ENDPOINTS.accessories}/frames`);
+                const bronzePrice = await fetchMinPrice(`${API_ENDPOINTS.accessories}/bronze`);
+                const platesPrice = await fetchMinPrice(`${API_ENDPOINTS.accessories}/plates`);
+                const tablesPrice = await fetchMinPrice(`${API_ENDPOINTS.accessories}/tables`);
+
+                const updatedCategories = categoriesAccessories.map((cat) => {
+                    let price: string | undefined;
+                    switch (cat.title) {
+                        case "Вазы":
+                            price = formatPrice(vasesPrice);
+                            break;
+                        case "Лампады":
+                            price = formatPrice(lampsPrice);
+                            break;
+                        case "Скульптуры":
+                            price = formatPrice(sculpturesPrice);
+                            break;
+                        case "Рамки":
+                            price = formatPrice(framesPrice);
+                            break;
+                        case "Изделия из бронзы":
+                            price = formatPrice(bronzePrice);
+                            break;
+                        case "Надгробные плиты":
+                            price = formatPrice(platesPrice);
+                            break;
+                        case "Гранитные таблички":
+                            price = formatPrice(tablesPrice);
+                            break;
+                    }
+                    return { ...cat, price };
+                });
+
+                setCategories(updatedCategories);
+            } catch (error) {
+                console.error("Error loading category prices:", error);
+                setCategories(categoriesAccessories);
+            }
+        };
+        loadCategoryPrices();
+    }, []);
+
     // Получаем продукты для текущей страницы
     const currentProducts = getProductsForPage(accessories, currentPage, productsPerPage);
 
@@ -119,7 +191,7 @@ const AccessoriesPage = () => {
 
                         {/* Блок категорий */}
                         <div className="grid grid-cols-2 md:grid-cols-3 gap-2.5 mb-7.5">
-                            {categoriesAccessories.map((category) => (
+                            {categories.map((category) => (
                                 <a
                                     key={category.title}
                                     href={category.link}
@@ -128,7 +200,7 @@ const AccessoriesPage = () => {
                                     <div className="relative flex h-[80px] lg:h-[120px] py-5 pl-3.75 pr-12.5 lg:pr-25 justify-between bg-[#f5f6fa] rounded-lg hover:border-2 border-[#2c3a54]">
                                         <div className="flex flex-col w-[70%] self-center z-10">
                                             <h2 className="text-[16px] font-bold text-[#222222] mb-2.5">{category.title}</h2>
-                                            <p className="text-[12px] text-[#969ead]">{category.price}</p>
+                                            <p className="text-[12px] text-[#969ead]">{category.price || "\u00A0"}</p>
                                         </div>
                                         <div className="absolute self-center -right-2 rounded-lg max-w-[130px] overflow-hidden">
                                             <img

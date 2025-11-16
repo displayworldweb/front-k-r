@@ -50,7 +50,7 @@ const WhyTrustUs = () => {
                     </div>
                   </div>
                   <Link
-                    href="#"
+                    href="/why/granite"
                     className="w-full absolute bottom-5.5 left-5.75 text-[#2c3a54] rounded-full font-bold underline transition"
                   >
                     Подробнее
@@ -79,7 +79,7 @@ const WhyTrustUs = () => {
                     </p>
                   </div>
                   <Link
-                    href="#"
+                    href="/why/contract"
                     className="w-full absolute bottom-5.5 left-5.75 text-[#2c3a54] rounded-full font-bold underline transition"
                   >
                     Подробнее
@@ -105,7 +105,7 @@ const WhyTrustUs = () => {
                     </p>
                   </div>
                   <Link
-                    href="#"
+                    href="/why/payment"
                     className="w-full absolute bottom-5.5 left-5.75 text-[#2c3a54] rounded-full font-bold underline transition"
                   >
                     Подробнее
@@ -130,7 +130,7 @@ const WhyTrustUs = () => {
                     </p>
                   </div>
                   <Link
-                    href="#"
+                    href="/why/report"
                     className="w-full absolute bottom-5.5 left-5.75 text-white rounded-full font-bold underline transition"
                   >
                     Подробнее
@@ -155,7 +155,7 @@ const WhyTrustUs = () => {
                     </p>
                   </div>
                   <Link
-                    href="#"
+                    href="/why/quality"
                     className="w-full absolute bottom-5.5 left-5.75 text-[#2c3a54] rounded-full font-bold underline transition"
                   >
                     Подробнее
@@ -183,7 +183,7 @@ const WhyTrustUs = () => {
                     </div>
                   </div>
                   <Link
-                    href="#"
+                    href="/why/experience"
                     className="w-full absolute bottom-5.5 left-5.75 text-[#2c3a54] rounded-full font-bold underline transition"
                   >
                     Подробнее
@@ -222,7 +222,7 @@ const WhyTrustUs = () => {
                     </div>
                   </div>
                   <Link
-                    href="#"
+                    href="/why/granite"
                     className="w-full absolute bottom-5.5 left-5.75 text-[#2c3a54] rounded-full font-bold hover:underline transition"
                   >
                     Подробнее
@@ -249,7 +249,7 @@ const WhyTrustUs = () => {
                     </p>
                   </div>
                   <Link
-                    href="#"
+                    href="/why/contract"
                     className="w-full absolute bottom-5.5 left-5.75 text-[#2c3a54] rounded-full font-bold hover:underline transition"
                   >
                     Подробнее
@@ -276,7 +276,7 @@ const WhyTrustUs = () => {
                     </p>
                   </div>
                   <Link
-                    href="#"
+                    href="/why/payment"
                     className="w-full absolute bottom-5.5 left-5.75 text-[#2c3a54] rounded-full font-bold hover:underline transition"
                   >
                     Подробнее
@@ -299,7 +299,7 @@ const WhyTrustUs = () => {
                     </p>
                   </div>
                   <Link
-                    href="#"
+                    href="/why/report"
                     className="w-full absolute bottom-5.5 left-5.75 text-white rounded-full font-bold hover:underline transition"
                   >
                     Подробнее
@@ -325,7 +325,7 @@ const WhyTrustUs = () => {
                     </p>
                   </div>
                   <Link
-                    href="#"
+                    href="/why/quality"
                     className="w-full absolute bottom-5.5 left-5.75 text-[#2c3a54] rounded-full font-bold hover:underline transition"
                   >
                     Подробнее
@@ -351,7 +351,7 @@ const WhyTrustUs = () => {
                     </div>
                   </div>
                   <Link
-                    href="#"
+                    href="/why/experience"
                     className="w-full absolute bottom-5.5 left-5.75 text-[#2c3a54] rounded-full font-bold hover:underline transition"
                   >
                     Подробнее
@@ -390,7 +390,7 @@ const WhyTrustUs = () => {
                     </div>
                   </div>
                   <Link
-                    href="#"
+                    href="/why/granite"
                     className="w-full absolute bottom-5.5 left-5.75 text-[#2c3a54] rounded-full font-bold hover:underline transition"
                   >
                     Подробнее
@@ -417,7 +417,7 @@ const WhyTrustUs = () => {
                     </p>
                   </div>
                   <Link
-                    href="#"
+                    href="/why/contract"
                     className="w-full absolute bottom-5.5 left-5.75 text-[#2c3a54] rounded-full font-bold hover:underline transition"
                   >
                     Подробнее
@@ -441,7 +441,7 @@ const WhyTrustUs = () => {
                     </p>
                   </div>
                   <Link
-                    href="#"
+                    href="/why/payment"
                     className="w-full absolute bottom-5.5 left-5.75 text-[#2c3a54] rounded-full font-bold hover:underline transition"
                   >
                     Подробнее
@@ -467,7 +467,7 @@ const WhyTrustUs = () => {
                     </p>
                   </div>
                   <Link
-                    href="#"
+                    href="/why/report"
                     className="w-full absolute bottom-5.5 left-5.75 text-white rounded-full font-bold hover:underline transition"
                   >
                     Подробнее
@@ -490,7 +490,7 @@ const WhyTrustUs = () => {
                     </p>
                   </div>
                   <Link
-                    href="#"
+                    href="/why/quality"
                     className="w-full absolute bottom-5.5 left-5.75 text-[#2c3a54] rounded-full font-bold hover:underline transition"
                   >
                     Подробнее
@@ -516,7 +516,7 @@ const WhyTrustUs = () => {
                     </div>
                   </div>
                   <Link
-                    href="#"
+                    href="/why/experience"
                     className="w-full absolute bottom-5.5 left-5.75 text-[#2c3a54] rounded-full font-bold hover:underline transition"
                   >
                     Подробнее

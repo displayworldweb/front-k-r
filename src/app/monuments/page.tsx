@@ -34,6 +34,28 @@ function processMonumentData(dbProduct: Record<string, unknown>) {
     };
 }
 
+// Функция для получения минимальной цены по категории
+const fetchMinPrice = async (endpoint: string): Promise<number> => {
+    try {
+        const res = await apiClient.get(endpoint);
+        const items = Array.isArray(res) ? res : res?.data || [];
+        const prices = items
+          .map((p: any) => {
+            const price = typeof p.price === 'string' ? parseFloat(p.price) : p.price;
+            return price;
+          })
+          .filter((p: any) => p && !isNaN(p) && p > 0);
+        return prices.length > 0 ? Math.min(...prices) : 0;
+    } catch (e) {
+        console.error('Error fetching min price from', endpoint, ':', e);
+        return 0;
+    }
+};
+
+// Функция для форматирования цены
+const formatPrice = (price: number): string | undefined =>
+    price > 0 ? `от ${Math.round(price)} руб.` : undefined;
+
 // Функция для получения продуктов для конкретной страницы
 const getProductsForPage = (cards: any[], page: number, productsPerPage: number) => {
     const startIndex = (page - 1) * productsPerPage;
@@ -54,6 +76,7 @@ const MonumentsPage = () => {
     const [isNarrowMobile, setIsNarrowMobile] = useState(false);
     const [monuments, setMonuments] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
+    const [categories, setCategories] = useState<any[]>([]);
 
     // Загрузка данных памятников
     useEffect(() => {
@@ -75,6 +98,51 @@ const MonumentsPage = () => {
             }
         };
         fetchMonuments();
+    }, []);
+
+    // Загрузка цен для категорий
+    useEffect(() => {
+        const loadCategoryPrices = async () => {
+            try {
+                const cheapPrice = await fetchMinPrice(`${API_ENDPOINTS.monuments}/cheap`);
+                const singlePrice = await fetchMinPrice(`${API_ENDPOINTS.monuments}/single`);
+                const doublePrice = await fetchMinPrice(`${API_ENDPOINTS.monuments}/double`);
+                const exclusivePrice = await fetchMinPrice(`${API_ENDPOINTS.monuments}/exclusive`);
+                const complexPrice = await fetchMinPrice(`${API_ENDPOINTS.monuments}/complex`);
+                const monumentPrice = await fetchMinPrice(`${API_ENDPOINTS.monuments}`);
+
+                const updatedCategories = categoriesMonuments.map((cat) => {
+                    let price: string | undefined;
+                    switch (cat.title) {
+                        case "Недорогие":
+                            price = formatPrice(cheapPrice);
+                            break;
+                        case "Одиночные":
+                            price = formatPrice(singlePrice);
+                            break;
+                        case "Двойные":
+                            price = formatPrice(doublePrice);
+                            break;
+                        case "Эксклюзивные":
+                            price = formatPrice(exclusivePrice);
+                            break;
+                        case "Мемориальные комплексы":
+                            price = formatPrice(complexPrice);
+                            break;
+                        case "Памятники":
+                            price = formatPrice(monumentPrice);
+                            break;
+                    }
+                    return { ...cat, price };
+                });
+
+                setCategories(updatedCategories);
+            } catch (error) {
+                console.error("Error loading category prices:", error);
+                setCategories(categoriesMonuments);
+            }
+        };
+        loadCategoryPrices();
     }, []);
 
     // Для адаптивности
@@ -118,7 +186,7 @@ const MonumentsPage = () => {
 
                         {/* Блок категорий */}
                         <div className="grid grid-cols-2 md:grid-cols-3 gap-2.5 mb-7.5">
-                            {categoriesMonuments.map((category) => (
+                            {categories.map((category) => (
                                 <a
                                     key={category.title}
                                     href={category.link}
@@ -127,7 +195,7 @@ const MonumentsPage = () => {
                                     <div className="relative flex h-[80px] lg:h-[120px] py-5 pl-3.75 pr-12.5 lg:pr-25 justify-between bg-[#f5f6fa] rounded-lg hover:border-2 border-[#2c3a54]">
                                         <div className="flex flex-col w-[70%] self-center z-10">
                                             <h2 className="text-[16px] font-bold text-[#222222] mb-2.5">{category.title}</h2>
-                                            <p className="text-[12px] text-[#969ead]">{category.price}</p>
+                                            <p className="text-[12px] text-[#969ead]">{category.price || "\u00A0"}</p>
                                         </div>
                                         <div className="absolute self-center -right-2 rounded-lg max-w-[130px] overflow-hidden">
                                             <img

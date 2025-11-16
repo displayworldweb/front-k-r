@@ -34,7 +34,7 @@ export default function Home() {
         <PopularProducts />
         <RelatedProductsSlider />
         <CompleteSolutionSlider />
-        <BannerForm />
+        {/* <BannerForm /> */}
         <OurWorksSlider />
         <PaymentInfo />
         <OrderStepsSection />

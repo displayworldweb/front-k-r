@@ -143,7 +143,7 @@ const OrderStepsSection = () => {
                 </p>
                 <div className="flex justify-center space-x-2 mt-1.75 mb-3.25">
                   <Link
-                    href="#"
+                    href="viber://chat?number=%2B375333226652"
                     className="rounded-full flex items-center justify-center text-white"
                   >
                     <Image
@@ -154,7 +154,7 @@ const OrderStepsSection = () => {
                     />
                   </Link>
                   <Link
-                    href="#"
+                    href="https://t.me/+375333226652"
                     className="rounded-full flex items-center justify-center text-white"
                   >
                     <Image
@@ -165,7 +165,7 @@ const OrderStepsSection = () => {
                     />
                   </Link>
                   <Link
-                    href="#"
+                    href="https://wa.me/375333226652"
                     className="rounded-full flex items-center justify-center text-white"
                   >
                     <Image

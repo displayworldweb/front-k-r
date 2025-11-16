@@ -18,6 +18,91 @@ import { useDropdown } from "../context/DropDownContext";
 const PHONE_MTS = "+375 33 322-66-52";
 const PHONE_A1 = "+375 29 622-66-45";
 
+// Inline store status component (client-side only)
+function StoreStatusInline() {
+  const [status, setStatus] = useState('');
+  const [colorClass, setColorClass] = useState('bg-red-500');
+
+  useEffect(() => {
+    const compute = () => {
+      const now = new Date();
+      const day = now.getDay(); // 0=вс, 1=пн
+      const hour = now.getHours();
+      const minute = now.getMinutes();
+      const currentTime = hour * 60 + minute;
+
+      const isWeekday = day >= 1 && day <= 5;
+      const isSaturday = day === 6;
+      const isSunday = day === 0;
+
+      const openWeekStart = 9 * 60;
+      const openWeekEnd = 18 * 60;
+      const lunchStart = 12 * 60;
+      const lunchEnd = 13 * 60;
+      const openSatStart = 10 * 60;
+      const openSatEnd = 16 * 60;
+
+      const isDuringLunch = isWeekday && currentTime >= lunchStart && currentTime < lunchEnd;
+      const isOpen = (isWeekday && currentTime >= openWeekStart && currentTime < openWeekEnd && !isDuringLunch) || (isSaturday && currentTime >= openSatStart && currentTime < openSatEnd);
+
+      const color = isDuringLunch ? 'bg-yellow-400' : isOpen ? 'bg-green-500' : 'bg-red-500';
+
+      let text = '';
+      if (isDuringLunch) text = 'Обед';
+      else if (isOpen) {
+        if (isWeekday) text = 'Открыто до 18:00';
+        else if (isSaturday) text = 'Открыто до 16:00';
+      } else {
+        if (isSunday) text = 'Закрыто до 09:00 (пн)';
+        else if (isWeekday) {
+          if (currentTime < openWeekStart) text = 'Закрыто до 09:00';
+          else text = 'Закрыто до 09:00';
+        } else if (isSaturday) {
+          if (currentTime < openSatStart) text = 'Закрыто до 10:00 (сб)';
+          else text = 'Закрыто';
+        }
+      }
+
+      setStatus(text);
+      setColorClass(color);
+    };
+
+    compute();
+    const id = setInterval(compute, 30 * 1000); // update every 30s
+    return () => clearInterval(id);
+  }, []);
+
+  return (
+    <div className="relative group mx-auto inline-block">
+      <button className="flex items-center text-[#2c3a54] hover:text-[#1a2a4a] transition" aria-haspopup="true" aria-expanded="false">
+        <span className={`inline-block w-2 h-2 mr-2 xl:mr-3 rounded-full ${colorClass}`}></span>
+        <span>{status || 'Закрыто'}</span>
+        <Image src={'/arrow.svg'} width={17} height={17} alt="arrow" className="group-hover:rotate-180 transition-transform" />
+      </button>
+
+      <div className="absolute left-1/2 transform -translate-x-1/2 top-full mt-0 bg-[#f5f6fa] border border-gray-200 rounded-md shadow-lg z-50 hidden group-hover:block focus-within:block">
+        <div className="py-1 text-sm whitespace-nowrap">
+          <div className="flex items-center px-4 py-2 text-gray-700">
+            <span>Пн—Пт</span>
+            <span className="flex-1 text-center text-gray-400 mx-2">……………………</span>
+            <span>с 09:00 до 18:00</span>
+          </div>
+          <div className="flex items-center px-4 py-2 text-gray-700">
+            <span>Суббота</span>
+            <span className="flex-1 text-center text-gray-400 mx-2">……………………</span>
+            <span>с 10:00 до 16:00</span>
+          </div>
+          <div className="flex items-center px-4 py-2 text-gray-700">
+            <span>Воскресенье</span>
+            <span className="flex-1 text-center text-gray-400 mx-2">……………………</span>
+            <span>выходной</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 const Header = () => {
   // Состояния открытия dropdown-меню
   const [isPhoneDropdownOpen, setPhoneDropdownOpen] = useState(false);
@@ -247,7 +332,7 @@ if (!isClient) {
               {/* Рассрочка */}
               <div className="hidden xl:flex items-center ">
                 <Link
-                  href={"/"}
+                  href={"/payment"}
                   className="bg-transparent border-3 border-[#2c3a54] hover:bg-[#2c3a54] hover:text-white rounded-full px-[19px] py-2 text-[14px] leading-7 font-bold text-[#2c3a54]"
                 >
                   Рассрочка 0%
@@ -260,55 +345,11 @@ if (!isClient) {
                 <span>Витебск, ул. Терешковой 9Б</span>
               </div>
 
-              {/* Работаем до 19:00 + телефоны */}
               <div className="flex flex-col items-start text-sm text-[#2c3a54]">
-                <div className="relative group mx-auto inline-block">
-                  <button
-                    className="flex items-center text-[#2c3a54] hover:text-[#1a2a4a] transition"
-                    aria-haspopup="true"
-                    aria-expanded="false"
-                  >
-                    <span className="w-2 h-2 bg-[#0bc048] mr-2 xl:mr-3 rounded-full"></span>
-                    <span>Работаем до 19:00</span>
-                    <Image
-                      src={"/arrow.svg"}
-                      width={17}
-                      height={17}
-                      alt="arrow"
-                      className="group-hover:rotate-180 transition-transform"
-                    />
-                  </button>
-
-                  {/* Dropdown */}
-                  <div className="absolute left-1/2 transform -translate-x-1/2 top-full mt-0 w-max bg-[#f5f6fa] border border-gray-200 rounded-md shadow-lg z-50 hidden group-hover:block focus-within:block">
-                    <div className="py-1 text-sm">
-                      <div className="flex justify-between items-center px-4 py-2 text-gray-700">
-                        <span>Пн—Пт</span>
-                        <span className="flex-1 text-center text-gray-400 mx-2">
-                          …………
-                        </span>
-                        <span>с 10:00 до 19:00</span>
-                      </div>
-                      <div className="flex justify-between items-center px-4 py-2 text-gray-700">
-                        <span>Суббота</span>
-                        <span className="flex-1 text-center text-gray-400 mx-2">
-                          …………
-                        </span>
-                        <span>с 10:00 до 15:00</span>
-                      </div>
-                      <div className="flex justify-between items-center px-4 py-2 text-gray-700">
-                        <span>Воскресенье</span>
-                        <span className="flex-1 text-center text-gray-400 mx-2">
-                          …………
-                        </span>
-                        <span>выходной</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <StoreStatusInline />
                 <div className="flex space-x-3 mt-1 font-bold text-3.5 xl:text-4">
-                  <span>+375 33 322-66-52</span>
-                  <span>+375 29 622-66-45</span>
+                  <span>{PHONE_MTS}</span>
+                  <span>{PHONE_A1}</span>
                 </div>
               </div>
 
@@ -320,8 +361,10 @@ if (!isClient) {
                 </div>
                 <div className="flex space-x-2">
                   <a
-                    href="#"
+                    href="viber://chat?number=%2B375333226652"
                     className="rounded-full flex items-center justify-center text-white "
+                    target="_blank"
+                    rel="noopener noreferrer"
                   >
                     <Image
                       width={29}
@@ -331,8 +374,10 @@ if (!isClient) {
                     />
                   </a>
                   <a
-                    href="#"
+                    href="https://t.me/+375333226652"
                     className="rounded-full flex items-center justify-center text-white"
+                    target="_blank"
+                    rel="noopener noreferrer"
                   >
                     <Image
                       width={28}
@@ -342,8 +387,10 @@ if (!isClient) {
                     />
                   </a>
                   <a
-                    href="#"
+                    href="https://wa.me/375333226652"
                     className="rounded-full flex items-center justify-center text-white"
+                    target="_blank"
+                    rel="noopener noreferrer"
                   >
                     <Image
                       width={28}

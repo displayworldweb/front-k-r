@@ -1,8 +1,16 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.k-r.by/api';
+interface AdminUser {
+  id: string;
+  username: string;
+  email: string;
+  role: string;
+}
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://k-r.by/api';
 
 interface SeoTemplate {
   id: number;
@@ -94,6 +102,9 @@ const isCategoryRequired = (entityType: string) => {
 };
 
 export default function SeoTemplatesPage() {
+  const router = useRouter();
+  const [user, setUser] = useState<AdminUser | null>(null);
+  const [checkingAuth, setCheckingAuth] = useState(true);
   const [templates, setTemplates] = useState<SeoTemplate[]>([]);
   const [selectedEntityType, setSelectedEntityType] = useState<string>('monuments');
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -111,10 +122,54 @@ export default function SeoTemplatesPage() {
     ogImage: '',
   });
 
-  // Загрузка шаблонов
+  // Проверка доступа
   useEffect(() => {
-    loadTemplates();
-  }, []);
+    const userStr = localStorage.getItem('adminUser');
+    if (!userStr) {
+      router.push('/login');
+      return;
+    }
+
+    try {
+      const userData = JSON.parse(userStr);
+      setUser(userData);
+
+      // Проверяем доступ
+      if (userData.role !== 'superadmin') {
+        setCheckingAuth(false);
+        setError('У вас нет доступа к SEO разделу. Только superadmin может управлять SEO.');
+        setTimeout(() => router.push('/admin'), 2000);
+        return;
+      }
+
+      setCheckingAuth(false);
+      loadTemplates();
+    } catch (e) {
+      router.push('/login');
+    }
+  }, [router]);
+
+  if (checkingAuth) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <p className="text-gray-600">Проверка доступа...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error && user?.role !== 'superadmin') {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center p-8 bg-red-50 rounded-lg border border-red-200">
+          <p className="text-red-700 font-semibold mb-2">⛔ Доступ запрещён</p>
+          <p className="text-red-600 text-sm">{error}</p>
+          <p className="text-gray-600 text-sm mt-4">Перенаправление на главную панель...</p>
+        </div>
+      </div>
+    );
+  }
 
   // Закрытие формы при смене типа сущности
   useEffect(() => {

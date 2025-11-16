@@ -58,6 +58,8 @@ const AVAILABLE_PAGES = [
   { slug: 'landscape-foundation', title: 'Благоустройство - Основание' },
   { slug: 'landscape-graves', title: 'Благоустройство - Захоронения' },
   { slug: 'landscape-tiles', title: 'Благоустройство - Укладка плитки' },
+  { slug: 'landscape-gravel', title: 'Благоустройство - Щебень' },
+  { slug: 'landscape-lawn', title: 'Благоустройство - Газон' },
   { slug: 'accessories', title: 'Аксессуары' },
   { slug: 'accessories-vases', title: 'Аксессуары - Вазы' },
   { slug: 'accessories-lamps', title: 'Аксессуары - Лампады' },
@@ -66,6 +68,13 @@ const AVAILABLE_PAGES = [
   { slug: 'accessories-bronze', title: 'Аксессуары - Бронза' },
   { slug: 'accessories-plates', title: 'Аксессуары - Плиты' },
   { slug: 'accessories-tables', title: 'Аксессуары - Столики' },
+  // Почему нам доверяют
+  { slug: 'why-granite', title: 'Работаем более чем с 30 породами гранита' },
+  { slug: 'why-contract', title: 'Работаем строго по договору' },
+  { slug: 'why-payment', title: 'Предоставляем разные варианты оплаты' },
+  { slug: 'why-report', title: 'Предоставляем фото и видео отчёт' },
+  { slug: 'why-quality', title: 'Гарантируем качество работ' },
+  { slug: 'why-experience', title: 'Опыт работы более 30 лет' },
 ];
 
 export default function PagesAdminPage() {
@@ -119,7 +128,7 @@ export default function PagesAdminPage() {
       formData.append("file", file);
       formData.append("folder", "pages");
 
-      const response = await fetch((process.env.NEXT_PUBLIC_API_URL || 'https://api.k-r.by/api') + "/upload", {
+      const response = await fetch((process.env.NEXT_PUBLIC_API_URL || 'https://k-r.by/api') + "/upload", {
         method: "POST",
         body: formData,
       });

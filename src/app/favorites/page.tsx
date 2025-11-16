@@ -17,8 +17,8 @@ const fetchProductBySlug = async (slug: string): Promise<Product | null> => {
     
     // Список всех возможных API endpoints
     const endpoints = [
-        'https://api.k-r.by/api/monuments',
-        'https://api.k-r.by/api/fences'
+        'https://k-r.by/api/monuments',
+        'https://k-r.by/api/fences'
     ];
 
     for (const endpoint of endpoints) {

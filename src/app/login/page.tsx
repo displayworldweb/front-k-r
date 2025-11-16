@@ -6,7 +6,7 @@ import Link from 'next/link';
 
 export default function LoginPage() {
   const router = useRouter();
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -17,7 +17,7 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://api.k-r.by';
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://k-r.by';
       const endpoint = `${apiUrl}/auth/login`;
       console.log('Logging in with endpoint:', endpoint);
       
@@ -26,7 +26,7 @@ export default function LoginPage() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ email, password }),
       });
 
       const data = await response.json();
@@ -61,17 +61,17 @@ export default function LoginPage() {
         {/* Login Form Card */}
         <div className="bg-white rounded-lg shadow-lg p-8 border border-[#e5e7eb]">
           <form onSubmit={handleLogin} className="space-y-6">
-            {/* Username */}
+            {/* Email */}
             <div>
-              <label htmlFor="username" className="block text-sm font-medium text-[#2c3a54] mb-2">
-                Логин
+              <label htmlFor="email" className="block text-sm font-medium text-[#2c3a54] mb-2">
+                Email
               </label>
               <input
-                id="username"
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                placeholder="Введите логин"
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Введите email"
                 className="w-full px-4 py-2 border text-black border-[#d1d5db] rounded-lg focus:outline-none focus:border-[#2c3a54] focus:ring-2 focus:ring-[#2c3a54] focus:ring-opacity-20"
                 required
                 disabled={loading}
@@ -111,13 +111,6 @@ export default function LoginPage() {
               {loading ? 'Вход...' : 'Войти'}
             </button>
           </form>
-
-          {/* Test Credentials */}
-          <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg text-sm text-blue-800">
-            <p className="font-semibold mb-2">Тестовые учетные данные:</p>
-            <p>Логин: <code className="bg-white px-2 py-1 rounded">admin</code></p>
-            <p>Пароль: <code className="bg-white px-2 py-1 rounded">admin123</code></p>
-          </div>
         </div>
 
         {/* Back to Home */}

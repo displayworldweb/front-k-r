@@ -28,8 +28,10 @@ interface CategoryData {
 }
 
 const CATEGORY_MAP: Record<string, string> = {
+  "benches": "Столы и скамейки",
   "tables": "Столы и скамейки",
-  "gravel": "Щебень декоративный",
+  "gravel": "Щебень",
+  "tiles": "Укладка плитки",
   "lawn": "Искусственный газон",
 };
 

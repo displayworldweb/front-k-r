@@ -17,8 +17,8 @@ const PopularProducts = () => {
   const fetchPopularProducts = async () => {
     setLoading(true);
     const endpoints = [
-      'https://api.k-r.by/api/monuments',
-      'https://api.k-r.by/api/fences'
+      'https://k-r.by/api/monuments',
+      'https://k-r.by/api/fences'
     ];
 
     let allPopularProducts: Product[] = [];
@@ -134,7 +134,7 @@ const PopularProducts = () => {
           </button>
         )}
         <button className="md:min-w-[330px] px-7.5 py-3 bg-[#2c3a54] text-white rounded-full hover:bg-white hover:border hover:border-[#2c3a54] hover:text-[#2c3a54] transition">
-          <Link href="/">Перейти в каталог</Link>
+          <Link href="/monuments">Перейти в каталог</Link>
         </button>
       </div>
     </section>

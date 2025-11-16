@@ -31,7 +31,7 @@ const PaymentInfo = () => {
             </p>
             <Link
               className="font-bold w-full text-center py-3 px-4.5 border border-white rounded-full inline-block hover:bg-white hover:text-[#2c3a54] transition"
-              href={"/"}
+              href={"/payment"}
             >
               Подробнее о рассрочке
             </Link>

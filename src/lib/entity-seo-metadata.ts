@@ -27,7 +27,7 @@ export interface EntitySEOData {
 export async function getBlogSEOData(slug: string): Promise<EntitySEOData | null> {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL || 'https://api.k-r.by/api'}/blogs/by-slug/${slug}`,
+      `${process.env.NEXT_PUBLIC_API_BASE_URL || 'https://k-r.by/api'}/blogs/by-slug/${slug}`,
       {
         next: { revalidate: 3600 },
       }
@@ -57,7 +57,7 @@ export async function getBlogSEOData(slug: string): Promise<EntitySEOData | null
 export async function getCampaignSEOData(slug: string): Promise<EntitySEOData | null> {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL || 'https://api.k-r.by/api'}/campaigns/by-slug/${slug}`,
+      `${process.env.NEXT_PUBLIC_API_BASE_URL || 'https://k-r.by/api'}/campaigns/by-slug/${slug}`,
       {
         next: { revalidate: 3600 },
       }
@@ -90,7 +90,7 @@ export async function getMonumentSEOData(
 ): Promise<EntitySEOData | null> {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL || 'https://api.k-r.by/api'}/monuments/${category}/${slug}`,
+      `${process.env.NEXT_PUBLIC_API_BASE_URL || 'https://k-r.by/api'}/monuments/${category}/${slug}`,
       {
         next: { revalidate: 3600 },
       }
@@ -123,7 +123,7 @@ export async function getFenceSEOData(
 ): Promise<EntitySEOData | null> {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL || 'https://api.k-r.by/api'}/fences/${category}/${slug}`,
+      `${process.env.NEXT_PUBLIC_API_BASE_URL || 'https://k-r.by/api'}/fences/${category}/${slug}`,
       {
         next: { revalidate: 3600 },
       }
@@ -244,7 +244,7 @@ export async function getAccessorySEOData(
 ): Promise<EntitySEOData | null> {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL || 'https://api.k-r.by/api'}/accessories/${category}/${slug}`,
+      `${process.env.NEXT_PUBLIC_API_BASE_URL || 'https://k-r.by/api'}/accessories/${category}/${slug}`,
       {
         next: { revalidate: 3600 },
       }
@@ -277,7 +277,7 @@ export async function getLandscapeSEOData(
 ): Promise<EntitySEOData | null> {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL || 'https://api.k-r.by/api'}/landscape/${category}/${slug}`,
+      `${process.env.NEXT_PUBLIC_API_BASE_URL || 'https://k-r.by/api'}/landscape/${category}/${slug}`,
       {
         next: { revalidate: 3600 },
       }

@@ -1,9 +1,17 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { useRouter } from "next/navigation";
 import { apiClient } from "@/lib/api-client";
 import { SeoFieldsForm, SeoFieldsData } from "@/components/admin/SeoFieldsForm";
 import { useSeoSave } from "@/lib/hooks/use-seo-save";
+
+interface AdminUser {
+  id: string;
+  username: string;
+  email: string;
+  role: string;
+}
 
 interface CampaignBlock {
   id: string;
@@ -33,6 +41,9 @@ interface Campaign {
 }
 
 export default function AdminCampaignsNewPage() {
+  const router = useRouter();
+  const [user, setUser] = useState<AdminUser | null>(null);
+  const [checkingAuth, setCheckingAuth] = useState(true);
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -75,12 +86,12 @@ export default function AdminCampaignsNewPage() {
       } else {
         // Fallback к предустановленному списку с правильными путями
         const predefinedImages = [
-          "https://api.k-r.by/api/static/promo/1.webp",
-          "https://api.k-r.by/api/static/promo/2.webp",
-          "https://api.k-r.by/api/static/promo/3.webp",
-          "https://api.k-r.by/api/static/campaigns/campaign-1.webp",
-          "https://api.k-r.by/api/static/campaigns/campaign-2.webp",
-          "https://api.k-r.by/api/static/campaigns/campaign-3.webp",
+          "https://k-r.by/api/static/promo/1.webp",
+          "https://k-r.by/api/static/promo/2.webp",
+          "https://k-r.by/api/static/promo/3.webp",
+          "https://k-r.by/api/static/campaigns/campaign-1.webp",
+          "https://k-r.by/api/static/campaigns/campaign-2.webp",
+          "https://k-r.by/api/static/campaigns/campaign-3.webp",
         ];
         setAvailableImages(predefinedImages);
       }
@@ -88,16 +99,33 @@ export default function AdminCampaignsNewPage() {
       console.error('Ошибка загрузки изображений:', error);
       // Fallback к предустановленному списку при ошибке с правильными путями
       const predefinedImages = [
-        "https://api.k-r.by/api/static/promo/1.webp",
-        "https://api.k-r.by/api/static/promo/2.webp",
-        "https://api.k-r.by/api/static/promo/3.webp",
-        "https://api.k-r.by/api/static/campaigns/campaign-1.webp",
-        "https://api.k-r.by/api/static/campaigns/campaign-2.webp",
-        "https://api.k-r.by/api/static/campaigns/campaign-3.webp",
+        "https://k-r.by/api/static/promo/1.webp",
+        "https://k-r.by/api/static/promo/2.webp",
+        "https://k-r.by/api/static/promo/3.webp",
+        "https://k-r.by/api/static/campaigns/campaign-1.webp",
+        "https://k-r.by/api/static/campaigns/campaign-2.webp",
+        "https://k-r.by/api/static/campaigns/campaign-3.webp",
       ];
       setAvailableImages(predefinedImages);
     }
   };
+
+  // Проверка доступа
+  useEffect(() => {
+    const userStr = localStorage.getItem('adminUser');
+    if (!userStr) {
+      router.push('/login');
+      return;
+    }
+
+    try {
+      const userData = JSON.parse(userStr);
+      setUser(userData);
+      setCheckingAuth(false);
+    } catch (e) {
+      router.push('/login');
+    }
+  }, [router]);
 
   useEffect(() => {
     fetchCampaigns();
@@ -132,7 +160,7 @@ export default function AdminCampaignsNewPage() {
       formData.append('file', file);
       formData.append('folder', 'campaigns');
 
-      const response = await fetch((process.env.NEXT_PUBLIC_API_URL || 'https://api.k-r.by/api') + '/upload', {
+      const response = await fetch((process.env.NEXT_PUBLIC_API_URL || 'https://k-r.by/api') + '/upload', {
         method: 'POST',
         body: formData,
       });
@@ -164,10 +192,16 @@ export default function AdminCampaignsNewPage() {
         };
         return map[char] || char;
       })
-      .replace(/[^a-z0-9]/g, '-')
-      .replace(/-+/g, '-')
-      .replace(/^-|-$/g, '');
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
   };
+
+  // Автогенерация slug из title (как в blogs)
+  useEffect(() => {
+    if (title && !editingCampaign) {
+      setSlug(generateSlug(title));
+    }
+  }, [title, editingCampaign]);
 
   const getDefaultContentForType = (type: CampaignBlock['type']) => {
     switch (type) {
@@ -378,7 +412,7 @@ export default function AdminCampaignsNewPage() {
                     formData.append("file", file);
                     formData.append("folder", "campaigns");
 
-                    const response = await fetch((process.env.NEXT_PUBLIC_API_URL || 'https://api.k-r.by/api') + "/upload", {
+                    const response = await fetch((process.env.NEXT_PUBLIC_API_URL || 'https://k-r.by/api') + "/upload", {
                       method: "POST",
                       body: formData,
                     });
@@ -483,7 +517,7 @@ export default function AdminCampaignsNewPage() {
                       formData.append("file", file);
                       formData.append("folder", "campaigns");
 
-                      const response = await fetch((process.env.NEXT_PUBLIC_API_URL || 'https://api.k-r.by/api') + "/upload", {
+                      const response = await fetch((process.env.NEXT_PUBLIC_API_URL || 'https://k-r.by/api') + "/upload", {
                         method: "POST",
                         body: formData,
                       });
@@ -617,8 +651,16 @@ export default function AdminCampaignsNewPage() {
   };
 
   return (
-    <div className="space-y-8">
-      <div className="text-black">
+    <>
+      {checkingAuth && (
+        <div className="flex items-center justify-center min-h-screen">
+          <p className="text-gray-600">Проверка доступа...</p>
+        </div>
+      )}
+      
+      {!checkingAuth && (
+        <div className="space-y-8">
+          <div className="text-black">
         <h2 className="text-2xl font-bold mb-4">Управление кампаниями</h2>
 
         {/* Сообщения */}
@@ -660,12 +702,7 @@ export default function AdminCampaignsNewPage() {
               type="text"
               placeholder="Заголовок кампании"
               value={title}
-              onChange={(e) => {
-                setTitle(e.target.value);
-                if (!slug) {
-                  setSlug(generateSlug(e.target.value));
-                }
-              }}
+              onChange={(e) => setTitle(e.target.value)}
               required
               className="w-full px-4 py-2 border rounded"
             />
@@ -696,42 +733,44 @@ export default function AdminCampaignsNewPage() {
           </div>
 
           {/* SEO */}
-          <div className="border-t pt-4">
-            <h3 className="text-lg font-semibold mb-3">SEO настройки</h3>
-            <div className="space-y-4">
-              <hr className="my-3" />
-              <h4 className="font-medium text-gray-700">SEO поля</h4>
-              
-              <input
-                type="text"
-                placeholder="SEO Заголовок (для поисковых систем)"
-                value={seoTitle}
-                onChange={(e) => setSeoTitle(e.target.value)}
-                className="w-full px-4 py-2 border rounded"
-              />
-              <textarea
-                placeholder="SEO Описание (для поисковых систем)"
-                value={seoDescription}
-                onChange={(e) => setSeoDescription(e.target.value)}
-                rows={2}
-                className="w-full px-4 py-2 border rounded"
-              />
-              <input
-                type="text"
-                placeholder="SEO Ключевые слова"
-                value={seoKeywords}
-                onChange={(e) => setSeoKeywords(e.target.value)}
-                className="w-full px-4 py-2 border rounded"
-              />
-              <input
-                type="text"
-                placeholder="OG Изображение (URL для социальных сетей)"
-                value={ogImage}
-                onChange={(e) => setOgImage(e.target.value)}
-                className="w-full px-4 py-2 border rounded"
-              />
+          {user?.role === 'superadmin' && (
+            <div className="border-t pt-4">
+              <h3 className="text-lg font-semibold mb-3">SEO настройки</h3>
+              <div className="space-y-4">
+                <hr className="my-3" />
+                <h4 className="font-medium text-gray-700">SEO поля</h4>
+                
+                <input
+                  type="text"
+                  placeholder="SEO Заголовок (для поисковых систем)"
+                  value={seoTitle}
+                  onChange={(e) => setSeoTitle(e.target.value)}
+                  className="w-full px-4 py-2 border rounded"
+                />
+                <textarea
+                  placeholder="SEO Описание (для поисковых систем)"
+                  value={seoDescription}
+                  onChange={(e) => setSeoDescription(e.target.value)}
+                  rows={2}
+                  className="w-full px-4 py-2 border rounded"
+                />
+                <input
+                  type="text"
+                  placeholder="SEO Ключевые слова"
+                  value={seoKeywords}
+                  onChange={(e) => setSeoKeywords(e.target.value)}
+                  className="w-full px-4 py-2 border rounded"
+                />
+                <input
+                  type="text"
+                  placeholder="OG Изображение (URL для социальных сетей)"
+                  value={ogImage}
+                  onChange={(e) => setOgImage(e.target.value)}
+                  className="w-full px-4 py-2 border rounded"
+                />
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Главное изображение */}
           <div className="border-t pt-4">
@@ -957,6 +996,8 @@ export default function AdminCampaignsNewPage() {
           )}
         </div>
       </div>
-    </div>
+      </div>
+      )}
+    </>
   );
 }

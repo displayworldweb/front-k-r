@@ -163,16 +163,16 @@ const WorksAdmin = () => {
       } else {
         // Fallback к предустановленному списку с правильными путями
         const predefinedImages = [
-          'https://api.k-r.by/api/static/works/1.webp',
-          'https://api.k-r.by/api/static/works/2.webp',
-          'https://api.k-r.by/api/static/works/3.webp',
-          'https://api.k-r.by/api/static/works/4.webp',
-          'https://api.k-r.by/api/static/works/5.webp',
-          'https://api.k-r.by/api/static/works/6.webp',
-          'https://api.k-r.by/api/static/works/7.webp',
-          'https://api.k-r.by/api/static/works/8.webp',
-          'https://api.k-r.by/api/static/works/9.webp',
-          'https://api.k-r.by/api/static/works/10.webp',
+          'https://k-r.by/api/static/works/1.webp',
+          'https://k-r.by/api/static/works/2.webp',
+          'https://k-r.by/api/static/works/3.webp',
+          'https://k-r.by/api/static/works/4.webp',
+          'https://k-r.by/api/static/works/5.webp',
+          'https://k-r.by/api/static/works/6.webp',
+          'https://k-r.by/api/static/works/7.webp',
+          'https://k-r.by/api/static/works/8.webp',
+          'https://k-r.by/api/static/works/9.webp',
+          'https://k-r.by/api/static/works/10.webp',
         ];
         setAvailableImages(predefinedImages);
       }
@@ -180,16 +180,16 @@ const WorksAdmin = () => {
       console.error('Error loading images:', error);
       // Fallback к предустановленному списку при ошибке с правильными путями
       const predefinedImages = [
-        'https://api.k-r.by/api/static/works/1.webp',
-        'https://api.k-r.by/api/static/works/2.webp',
-        'https://api.k-r.by/api/static/works/3.webp',
-        'https://api.k-r.by/api/static/works/4.webp',
-        'https://api.k-r.by/api/static/works/5.webp',
-        'https://api.k-r.by/api/static/works/6.webp',
-        'https://api.k-r.by/api/static/works/7.webp',
-        'https://api.k-r.by/api/static/works/8.webp',
-        'https://api.k-r.by/api/static/works/9.webp',
-        'https://api.k-r.by/api/static/works/10.webp',
+        'https://k-r.by/api/static/works/1.webp',
+        'https://k-r.by/api/static/works/2.webp',
+        'https://k-r.by/api/static/works/3.webp',
+        'https://k-r.by/api/static/works/4.webp',
+        'https://k-r.by/api/static/works/5.webp',
+        'https://k-r.by/api/static/works/6.webp',
+        'https://k-r.by/api/static/works/7.webp',
+        'https://k-r.by/api/static/works/8.webp',
+        'https://k-r.by/api/static/works/9.webp',
+        'https://k-r.by/api/static/works/10.webp',
       ];
       setAvailableImages(predefinedImages);
     }
@@ -208,7 +208,7 @@ const WorksAdmin = () => {
       formData.append("file", file);
       formData.append("folder", "works");
 
-      const response = await fetch((process.env.NEXT_PUBLIC_API_URL || 'https://api.k-r.by/api') + "/upload", {
+      const response = await fetch((process.env.NEXT_PUBLIC_API_URL || 'https://k-r.by/api') + "/upload", {
         method: "POST",
         body: formData,
       });

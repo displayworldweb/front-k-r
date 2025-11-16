@@ -18,8 +18,8 @@ const RelatedProductsSlider = () => {
   const fetchDiscountedProducts = async () => {
     setLoading(true);
     const endpoints = [
-      'https://api.k-r.by/api/monuments',
-      'https://api.k-r.by/api/fences'
+      'https://k-r.by/api/monuments',
+      'https://k-r.by/api/fences'
     ];
 
     let allDiscountedProducts: Product[] = [];
@@ -205,7 +205,7 @@ const RelatedProductsSlider = () => {
       {/* Кнопка внизу */}
       <div className="mt-10 flex">
         <button className="font-bold md:min-w-[330px] px-7.5 py-3 bg-[#2c3a54] border border-[#2c3a54] text-white rounded-full hover:bg-white hover:text-[#2c3a54] transition">
-          <Link href="/">Смотреть все</Link>
+          <Link href="/monuments">Смотреть все</Link>
         </button>
       </div>
     </section>

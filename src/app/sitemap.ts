@@ -1,7 +1,11 @@
 import { MetadataRoute } from 'next';
 
-const BASE_URL = 'https://k-r.by';
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.k-r.by/api';
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://k-r.by';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://k-r.by/api';
+
+if (!process.env.NEXT_PUBLIC_SITE_URL || !process.env.NEXT_PUBLIC_API_URL) {
+  console.warn('⚠️ Missing environment variables for sitemap generation. Using defaults.');
+}
 
 // Статические страницы с приоритетами
 const staticPages = [
@@ -37,7 +41,7 @@ const accessoryCategories = [
 
 // Категории благоустройства
 const landscapeCategories = [
-  'graves', 'foundation', 'tiles', 'shheben', 'stoly-i-skamejki'
+  'graves', 'foundation', 'tiles', 'gravel', 'benches', 'lawn'
 ];
 
 // Страницы услуг
@@ -250,6 +254,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
 // Вспомогательные функции для маппинга категорий
 function getCategorySlug(category: string): string {
+  // Если категория уже в английском формате - возвращаем как есть
+  if (category.length < 15 && !category.includes(' ')) {
+    return category;
+  }
+  
+  // Иначе маппируем с русского на английский
   const mapping: Record<string, string> = {
     'Одиночные': 'single',
     'Двойные': 'double',
@@ -263,19 +273,32 @@ function getCategorySlug(category: string): string {
     'В виде деревьев': 'tree',
     'Мемориальные комплексы': 'complex',
   };
-  return mapping[category] || 'single';
+  return mapping[category] || category;
 }
 
 function getFenceCategorySlug(category: string): string {
+  // Если уже в английском формате - возвращаем как есть
+  if (category.length < 15 && !category.includes(' ')) {
+    return category;
+  }
+  
   const mapping: Record<string, string> = {
     'Гранитные': 'granite',
     'Металлические': 'metal',
     'С полимерным покрытием': 'polymer',
+    'Гранитные ограды': 'granite',
+    'Металлические ограды': 'metal',
+    'Кованные ограды': 'forged',
   };
   return mapping[category] || 'granite';
 }
 
 function getAccessoryCategorySlug(category: string): string {
+  // Если уже в английском формате - возвращаем как есть
+  if (category.length < 15 && !category.includes(' ')) {
+    return category;
+  }
+  
   const mapping: Record<string, string> = {
     'Вазы': 'vases',
     'Лампады': 'lamps',
@@ -284,17 +307,28 @@ function getAccessoryCategorySlug(category: string): string {
     'Бронза': 'bronze',
     'Надгробные плиты': 'plates',
     'Гранитные таблички': 'tables',
+    'Изделия из бронзы': 'bronze',
   };
   return mapping[category] || 'vases';
 }
 
 function getLandscapeCategorySlug(category: string): string {
+  // Если уже в английском формате - возвращаем как есть
+  if (category.length < 15 && !category.includes(' ')) {
+    return category;
+  }
+  
   const mapping: Record<string, string> = {
     'Благоустройство могил': 'graves',
+    'Фундамент для памятников': 'foundation',
     'Фундамент': 'foundation',
+    'Укладка плитки': 'tiles',
     'Плитка': 'tiles',
-    'Щебень': 'shheben',
-    'Столы и скамейки': 'stoly-i-skamejki',
+    'Щебень': 'gravel',
+    'Щебень декоративный': 'gravel',
+    'Столы и скамейки': 'benches',
+    'Искусственный газон': 'lawn',
+    'Газон': 'lawn',
   };
   return mapping[category] || 'graves';
 }

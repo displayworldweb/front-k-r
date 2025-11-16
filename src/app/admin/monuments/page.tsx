@@ -1,9 +1,17 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { generateSlug } from "@/lib/slug-generator";
 import { apiClient } from "@/lib/api-client";
 import { SeoFieldsForm, SeoFieldsData } from "@/components/admin/SeoFieldsForm";
+
+interface AdminUser {
+  id: string;
+  username: string;
+  email: string;
+  role: string;
+}
 
 interface MonumentColor {
   name: string;
@@ -49,7 +57,10 @@ interface MonumentCategory {
 }
 
 export default function ProductsAdminPage() {
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.k-r.by/api';
+  const router = useRouter();
+  const [user, setUser] = useState<AdminUser | null>(null);
+  const [checkingAuth, setCheckingAuth] = useState(true);
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://k-r.by/api';
   
   const [monuments, setMonuments] = useState<Monument[]>([]);
   const [loading, setLoading] = useState(false);
@@ -245,9 +256,9 @@ export default function ProductsAdminPage() {
       } else {
         // Fallback к предустановленному списку
         const fallbackImages = [
-          'https://api.k-r.by/api/static/monuments/default1.jpg',
-          'https://api.k-r.by/api/static/monuments/default2.jpg',
-          'https://api.k-r.by/api/static/monuments/default3.jpg'
+          'https://k-r.by/api/static/monuments/default1.jpg',
+          'https://k-r.by/api/static/monuments/default2.jpg',
+          'https://k-r.by/api/static/monuments/default3.jpg'
         ];
         setAvailableImages(fallbackImages);
       }
@@ -998,7 +1009,7 @@ export default function ProductsAdminPage() {
       formData.append("file", file);
       formData.append("folder", "monuments");
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://api.k-r.by/api'}/upload`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://k-r.by/api'}/upload`, {
         method: "POST",
         body: formData,
       });
@@ -1035,6 +1046,23 @@ export default function ProductsAdminPage() {
     }
   };
 
+  // Проверка доступа
+  useEffect(() => {
+    const userStr = localStorage.getItem('adminUser');
+    if (!userStr) {
+      router.push('/login');
+      return;
+    }
+
+    try {
+      const userData = JSON.parse(userStr);
+      setUser(userData);
+      setCheckingAuth(false);
+    } catch (e) {
+      router.push('/login');
+    }
+  }, [router]);
+
   useEffect(() => {
     // Автоматически выбираем первую категорию при загрузке
     if (monumentCategories.length > 0 && !selectedCategory) {
@@ -1045,8 +1073,16 @@ export default function ProductsAdminPage() {
   }, []);
 
   return (
-    <div className="space-y-8">
-      <div className="text-black">
+    <>
+      {checkingAuth && (
+        <div className="flex items-center justify-center min-h-screen">
+          <p className="text-gray-600">Проверка доступа...</p>
+        </div>
+      )}
+      
+      {!checkingAuth && (
+        <div className="space-y-8">
+          <div className="text-black">
         <h2 className="text-2xl font-bold mb-4">Управление памятниками</h2>
         
         {/* Выбор категории */}
@@ -1162,7 +1198,7 @@ export default function ProductsAdminPage() {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-4">
                       <img 
-                        src={monument.image.startsWith('http') ? monument.image : `https://api.k-r.by${monument.image}`} 
+                        src={monument.image.startsWith('http') ? monument.image : `https://k-r.by${monument.image}`} 
                         alt={monument.name}
                         className="w-16 h-16 object-cover rounded"
                       />
@@ -1595,8 +1631,8 @@ export default function ProductsAdminPage() {
                           src={(() => {
                             if (!editForm.image) return '';
                             if (editForm.image.startsWith('http')) return editForm.image;
-                            if (editForm.image.startsWith('/')) return `https://api.k-r.by${editForm.image}`;
-                            return `https://api.k-r.by/api/static/monuments/${editForm.image}`;
+                            if (editForm.image.startsWith('/')) return `https://k-r.by${editForm.image}`;
+                            return `https://k-r.by/api/static/monuments/${editForm.image}`;
                           })()} 
                           alt="Превью" 
                           className="w-32 h-32 object-cover rounded border"
@@ -1909,7 +1945,7 @@ export default function ProductsAdminPage() {
                 </div>
 
                 {/* SEOFields Form */}
-                {(editingMonument || addingMonument) && (
+                {user?.role === 'superadmin' && (editingMonument || addingMonument) && (
                   <div className="mt-8 pt-8 border-t">
                     <h3 className="text-lg font-semibold mb-4 text-gray-800">SEO Данные</h3>
                     <SeoFieldsForm
@@ -1960,6 +1996,8 @@ export default function ProductsAdminPage() {
           </div>
         )}
       </div>
-    </div>
+      </div>
+      )}
+    </>
   );
 }

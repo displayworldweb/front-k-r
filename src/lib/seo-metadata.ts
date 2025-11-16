@@ -41,7 +41,7 @@ const DEFAULT_SEO = {
 export async function getPageSEOData(pageSlug: string): Promise<PageSEOData | null> {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL || 'https://api.k-r.by/api'}/page-seo/by-slug/${pageSlug}`,
+      `${process.env.NEXT_PUBLIC_API_BASE_URL || 'https://k-r.by/api'}/page-seo/by-slug/${pageSlug}`,
       {
         // Кэшируем на 1 час
         next: { revalidate: 3600 },

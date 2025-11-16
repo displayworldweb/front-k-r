@@ -81,8 +81,8 @@ export default function CampaignPage({ params }: CampaignPageProps) {
     if (!imagePath) return '';
     if (imagePath.startsWith('http')) return imagePath; // уже полный URL
     if (imagePath.startsWith('/')) {
-      // Конвертируем /folder/filename в https://api.k-r.by/api/static/folder/filename  
-      return `https://api.k-r.by/api/static${imagePath}`;
+      // Конвертируем /folder/filename в https://k-r.by/api/static/folder/filename  
+      return `https://k-r.by/api/static${imagePath}`;
     }
     return imagePath;
   };
@@ -173,7 +173,7 @@ export default function CampaignPage({ params }: CampaignPageProps) {
       case 'image':
         const imageSrc = block.content.src?.startsWith('http') 
           ? block.content.src 
-          : `https://api.k-r.by/api/static${block.content.src}`;
+          : `https://k-r.by/api/static${block.content.src}`;
         return (
           <div key={block.id || index} className="mb-8">
             <img
@@ -196,7 +196,7 @@ export default function CampaignPage({ params }: CampaignPageProps) {
               {block.content.images?.map((imageSrc: string, imgIndex: number) => {
                 const fullImageSrc = imageSrc?.startsWith('http') 
                   ? imageSrc 
-                  : `https://api.k-r.by/api/static${imageSrc}`;
+                  : `https://k-r.by/api/static${imageSrc}`;
                 return (
                   <img
                     key={imgIndex}
@@ -362,11 +362,11 @@ export default function CampaignPage({ params }: CampaignPageProps) {
                       category: product.category || product.displayCategory,
                       price: product.price,
                       textPrice: product.textPrice || undefined,
-                      image: product.image?.startsWith('http') ? product.image : `https://api.k-r.by/api/static${product.image}`,
+                      image: product.image?.startsWith('http') ? product.image : `https://k-r.by/api/static${product.image}`,
                       colors: product.image ? [{ 
                         name: "Стандартный",
                         color: "#000000",
-                        image: product.image?.startsWith('http') ? product.image : `https://api.k-r.by/api/static${product.image}`, 
+                        image: product.image?.startsWith('http') ? product.image : `https://k-r.by/api/static${product.image}`, 
                         price: product.price
                       }] : [],
                     }}

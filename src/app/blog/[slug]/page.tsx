@@ -48,7 +48,7 @@ export default function BlogPage({ params }: BlogPageProps) {
     const fetchBlog = async () => {
       try {
         const resolvedParams = await params;
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://api.k-r.by/api'}/blogs?slug=${resolvedParams.slug}`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://k-r.by/api'}/blogs?slug=${resolvedParams.slug}`);
         const data = await response.json();
         
         if (data.success && data.data && data.data.length > 0) {

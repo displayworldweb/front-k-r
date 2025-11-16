@@ -2,6 +2,14 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
+
+interface AdminUser {
+  id: string;
+  username: string;
+  email: string;
+  role: string;
+}
 
 export default function AdminLayout({
   children,
@@ -9,6 +17,22 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const [user, setUser] = useState<AdminUser | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const userStr = localStorage.getItem('adminUser');
+    if (userStr) {
+      try {
+        setUser(JSON.parse(userStr));
+      } catch (e) {
+        console.error('Failed to parse user:', e);
+      }
+    }
+    setLoading(false);
+  }, []);
+
+  const isSuperadmin = user?.role === 'superadmin';
 
   const menuItems = [
     { href: "/admin", label: "Панель управления", icon: "📊" },
@@ -21,6 +45,11 @@ export default function AdminLayout({
     { href: "/admin/blogs", label: "Блоги", icon: "📝" },
     { href: "/admin/monuments", label: "Памятники", icon: "🏛️" },
     { href: "/admin/works", label: "Готовые работы", icon: "📸" },
+    ...(isSuperadmin ? [
+      { href: "/admin/seo", label: "SEO", icon: "🔍" },
+      { href: "/admin/seo/templates", label: "SEO Шаблоны", icon: "📋" },
+    ] : []),
+    { href: "/admin/settings", label: "Настройки аккаунта", icon: "⚙️" },
   ];
 
   const isActive = (href: string) => {

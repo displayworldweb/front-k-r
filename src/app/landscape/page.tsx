@@ -6,7 +6,7 @@ import SidebarStickyHelp from "../components/Sidebar/SidebarStickyHelp";
 import ProductCard from "../components/ProductCard";
 import Promo from "../components/Promo";
 import { PageDescriptionBlock } from "../components/PageDescriptionBlock";
-import { apiClient } from "@/lib/api-client";
+import { apiClient, API_ENDPOINTS } from "@/lib/api-client";
 
 interface LandscapeItem {
   id: number;
@@ -21,43 +21,73 @@ interface LandscapeItem {
   createdAt: string;
 }
 
+// Функция для получения минимальной цены по категории
+const fetchMinPrice = async (categoryName: string): Promise<number> => {
+    try {
+        const res = await apiClient.get(`${API_ENDPOINTS.landscape}`);
+        const allItems = Array.isArray(res) ? res : res?.data || [];
+        // Фильтруем по категории (на русском языке)
+        const items = allItems.filter((item: any) => item.category === categoryName);
+        const prices = items
+          .map((p: any) => {
+            const price = typeof p.price === 'string' ? parseFloat(p.price) : p.price;
+            return price;
+          })
+          .filter((p: any) => p && !isNaN(p) && p > 0);
+        return prices.length > 0 ? Math.min(...prices) : 0;
+    } catch (e) {
+        console.error('Error fetching min price for category', categoryName, ':', e);
+        return 0;
+    }
+};
+
+// Функция для форматирования цены
+const formatPrice = (price: number): string | undefined =>
+    price > 0 ? `от ${Math.round(price)} руб.` : undefined;
+
 // Статичные категории landscape с правильными изображениями
-const categoriesLandscape = [
+const categoriesLandscapeMock = [
   {
     title: "Щебень",
-    price: "от 150 руб. за мешок",
+    price: undefined,
     img: "/landscape/gravel.webp",
-    link: "/landscape/shheben",
+    link: "/landscape/gravel",
+    hasProducts: true,
   },
   {
     title: "Столы и скамейки",
-    price: "от 15 000 руб.",
+    price: undefined,
     img: "/landscape/tables.webp", 
-    link: "/landscape/stoly-i-skamejki",
-  },
-  {
-    title: "Благоустройство могил",
-    price: undefined,
-    img: "/landscape/graves.webp",
-    link: "/landscape/graves",
-  },
-  {
-    title: "Фундамент для памятников",
-    price: undefined,
-    img: "/landscape/foundation.webp",
-    link: "/landscape/foundation",
+    link: "/landscape/benches",
+    hasProducts: true,
   },
   {
     title: "Укладка плитки",
     price: undefined,
     img: "/landscape/tiles.webp",
     link: "/landscape/tiles",
+    hasProducts: true,
   },
   {
     title: "Искусственный газон",
     price: undefined,
     img: "/landscape/lawn.webp",
     link: "/landscape/lawn",
+    hasProducts: true,
+  },
+  {
+    title: "Благоустройство могил",
+    price: undefined,
+    img: "/landscape/graves.webp",
+    link: "/landscape/graves",
+    hasProducts: false,
+  },
+  {
+    title: "Фундамент для памятников",
+    price: undefined,
+    img: "/landscape/foundation.webp",
+    link: "/landscape/foundation",
+    hasProducts: false,
   },
 ];
 
@@ -76,6 +106,7 @@ const LandscapePage = () => {
     const [isNarrowMobile, setIsNarrowMobile] = useState(false);
     const [landscapeItems, setLandscapeItems] = useState<LandscapeItem[]>([]);
     const [loading, setLoading] = useState(true);
+    const [categories, setCategories] = useState<any[]>([]);
 
     // Для адаптивности
     useEffect(() => {
@@ -108,6 +139,45 @@ const LandscapePage = () => {
         };
 
         fetchLandscapeData();
+    }, []);
+
+    // Загрузка цен для категорий
+    useEffect(() => {
+        const loadCategoryPrices = async () => {
+            try {
+                const gravelPrice = await fetchMinPrice("Щебень");
+                const benchesPrice = await fetchMinPrice("Столы и скамейки");
+                const tilesPrice = await fetchMinPrice("Укладка плитки");
+                const lawnPrice = await fetchMinPrice("Искусственный газон");
+
+                const updatedCategories = categoriesLandscapeMock.map((cat) => {
+                    let price: string | undefined;
+                    switch (cat.title) {
+                        case "Щебень":
+                            price = formatPrice(gravelPrice);
+                            break;
+                        case "Столы и скамейки":
+                            price = formatPrice(benchesPrice);
+                            break;
+                        case "Укладка плитки":
+                            price = formatPrice(tilesPrice);
+                            break;
+                        case "Искусственный газон":
+                            price = formatPrice(lawnPrice);
+                            break;
+                        default:
+                            price = undefined;
+                    }
+                    return { ...cat, price };
+                });
+
+                setCategories(updatedCategories);
+            } catch (error) {
+                console.error("Error loading category prices:", error);
+                setCategories(categoriesLandscapeMock);
+            }
+        };
+        loadCategoryPrices();
     }, []);
 
     // Обработчик изменения количества товаров на странице
@@ -150,7 +220,7 @@ const LandscapePage = () => {
 
                         {/* Блок категорий */}
                         <div className="grid grid-cols-2 md:grid-cols-3 gap-2.5 mb-7.5">
-                            {categoriesLandscape.map((category) => (
+                            {categories.map((category) => (
                                 <a
                                     key={category.title}
                                     href={category.link}
@@ -159,7 +229,7 @@ const LandscapePage = () => {
                                     <div className="relative flex h-[80px] lg:h-[120px] py-5 pl-3.75 pr-12.5 lg:pr-25 justify-between bg-[#f5f6fa] rounded-lg hover:border-2 border-[#2c3a54]">
                                         <div className="flex flex-col w-[70%] self-center z-10">
                                             <h2 className="text-[16px] font-bold text-[#222222] mb-2.5">{category.title}</h2>
-                                            <p className="text-[12px] text-[#969ead]">{category.price}</p>
+                                            <p className="text-[12px] text-[#969ead]">{category.price || "\u00A0"}</p>
                                         </div>
                                         <div className="absolute self-center -right-2 rounded-lg max-w-[130px] overflow-hidden">
                                             <img

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { SeoFieldsData } from '@/components/admin/SeoFieldsForm';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.k-r.by/api';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://k-r.by/api';
 
 export function useSeoSave(entityType: string) {
   const [isLoading, setIsLoading] = useState(false);

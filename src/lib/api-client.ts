@@ -1,5 +1,5 @@
 // API configuration
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.k-r.by/api';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://k-r.by/api';
 
 export const apiClient = {
   async get(endpoint: string) {

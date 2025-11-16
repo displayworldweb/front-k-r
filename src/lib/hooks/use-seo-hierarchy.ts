@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.k-r.by/api';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://k-r.by/api';
 
 interface SeoTemplate {
   id: number;

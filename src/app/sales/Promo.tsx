@@ -23,8 +23,8 @@ const Promo = () => {
     if (!imagePath) return '';
     if (imagePath.startsWith('http')) return imagePath; // уже полный URL
     if (imagePath.startsWith('/')) {
-      // Конвертируем /folder/filename в https://api.k-r.by/api/static/folder/filename  
-      return `https://api.k-r.by/api/static${imagePath}`;
+      // Конвертируем /folder/filename в https://k-r.by/api/static/folder/filename  
+      return `https://k-r.by/api/static${imagePath}`;
     }
     return imagePath;
   };

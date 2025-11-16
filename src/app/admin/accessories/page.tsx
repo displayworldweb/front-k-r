@@ -1,10 +1,18 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { generateSlug } from "@/lib/slug-generator";
 import { apiClient } from "@/lib/api-client";
 import { SeoFieldsForm, SeoFieldsData } from "@/components/admin/SeoFieldsForm";
 import { useSeoSave } from "@/lib/hooks/use-seo-save";
+
+interface AdminUser {
+  id: string;
+  username: string;
+  email: string;
+  role: string;
+}
 
 interface Accessory {
   id: number;
@@ -42,6 +50,9 @@ const CATEGORY_TO_KEY_MAP: {[key: string]: string} = {
 };
 
 export default function AccessoriesAdminPage() {
+  const router = useRouter();
+  const [user, setUser] = useState<AdminUser | null>(null);
+  const [checkingAuth, setCheckingAuth] = useState(true);
   const [accessories, setAccessories] = useState<Accessory[]>([]);
   const [name, setName] = useState("");
   const [slug, setSlug] = useState("");
@@ -88,6 +99,23 @@ export default function AccessoriesAdminPage() {
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState("");
 
+  // Проверка доступа
+  useEffect(() => {
+    const userStr = localStorage.getItem('adminUser');
+    if (!userStr) {
+      router.push('/login');
+      return;
+    }
+
+    try {
+      const userData = JSON.parse(userStr);
+      setUser(userData);
+      setCheckingAuth(false);
+    } catch (e) {
+      router.push('/login');
+    }
+  }, [router]);
+
   const fetchAccessories = async () => {
     try {
       const data = await apiClient.get("/admin/accessories?limit=200");
@@ -107,13 +135,13 @@ export default function AccessoriesAdminPage() {
       } else {
         // Fallback к предустановленному списку с правильными путями
         const predefinedImages = [
-          "https://api.k-r.by/api/static/accessories/vases.webp",
-          "https://api.k-r.by/api/static/accessories/lamps.webp", 
-          "https://api.k-r.by/api/static/accessories/sculptures.webp",
-          "https://api.k-r.by/api/static/accessories/frames.webp",
-          "https://api.k-r.by/api/static/accessories/bronze.webp",
-          "https://api.k-r.by/api/static/accessories/plates.webp",
-          "https://api.k-r.by/api/static/accessories/tables.webp"
+          "https://k-r.by/api/static/accessories/vases.webp",
+          "https://k-r.by/api/static/accessories/lamps.webp", 
+          "https://k-r.by/api/static/accessories/sculptures.webp",
+          "https://k-r.by/api/static/accessories/frames.webp",
+          "https://k-r.by/api/static/accessories/bronze.webp",
+          "https://k-r.by/api/static/accessories/plates.webp",
+          "https://k-r.by/api/static/accessories/tables.webp"
         ];
         setAvailableImages(predefinedImages);
       }
@@ -121,13 +149,13 @@ export default function AccessoriesAdminPage() {
       console.error("Error fetching images:", err);
       // Fallback к предустановленному списку при ошибке с правильными путями
       const predefinedImages = [
-        "https://api.k-r.by/api/static/accessories/vases.webp",
-        "https://api.k-r.by/api/static/accessories/lamps.webp", 
-        "https://api.k-r.by/api/static/accessories/sculptures.webp",
-        "https://api.k-r.by/api/static/accessories/frames.webp",
-        "https://api.k-r.by/api/static/accessories/bronze.webp",
-        "https://api.k-r.by/api/static/accessories/plates.webp",
-        "https://api.k-r.by/api/static/accessories/tables.webp"
+        "https://k-r.by/api/static/accessories/vases.webp",
+        "https://k-r.by/api/static/accessories/lamps.webp", 
+        "https://k-r.by/api/static/accessories/sculptures.webp",
+        "https://k-r.by/api/static/accessories/frames.webp",
+        "https://k-r.by/api/static/accessories/bronze.webp",
+        "https://k-r.by/api/static/accessories/plates.webp",
+        "https://k-r.by/api/static/accessories/tables.webp"
       ];
       setAvailableImages(predefinedImages);
     }
@@ -160,7 +188,7 @@ export default function AccessoriesAdminPage() {
       formData.append("file", file);
       formData.append("folder", "accessories");
 
-      const response = await fetch((process.env.NEXT_PUBLIC_API_URL || 'https://api.k-r.by/api') + "/upload", {
+      const response = await fetch((process.env.NEXT_PUBLIC_API_URL || 'https://k-r.by/api') + "/upload", {
         method: "POST",
         body: formData,
       });
@@ -401,8 +429,16 @@ export default function AccessoriesAdminPage() {
   };
 
   return (
-    <div className="space-y-8">
-      <div className="text-black">
+    <>
+      {checkingAuth && (
+        <div className="flex items-center justify-center min-h-screen">
+          <p className="text-gray-600">Проверка доступа...</p>
+        </div>
+      )}
+      
+      {!checkingAuth && (
+        <div className="space-y-8">
+          <div className="text-black">
         <h2 className="text-2xl font-bold mb-4">Добавить аксессуар</h2>
         {error && <div className="text-red-600 mb-4 p-2 bg-red-50">{error}</div>}
         {success && <div className="text-green-600 mb-4 p-2 bg-green-50">{success}</div>}
@@ -609,53 +645,55 @@ export default function AccessoriesAdminPage() {
           </div>
 
           {/* SEO Поля */}
-          <div className="border-t pt-4">
-            <h3 className="text-lg font-semibold mb-3">SEO (опционально)</h3>
-            <div className="bg-white p-4 rounded border border-gray-200">
-              <div className="space-y-3">
-                <div>
-                  <label className="block text-sm font-medium mb-1">SEO Заголовок</label>
-                  <input
-                    type="text"
-                    placeholder="Заголовок для SEO"
-                    value={editForm.seo_title}
-                    onChange={(e) => setEditForm({...editForm, seo_title: e.target.value})}
-                    className="w-full px-4 py-2 border rounded"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-1">SEO Описание</label>
-                  <input
-                    type="text"
-                    placeholder="Описание для SEO"
-                    value={editForm.seo_description}
-                    onChange={(e) => setEditForm({...editForm, seo_description: e.target.value})}
-                    className="w-full px-4 py-2 border rounded"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-1">SEO Ключевые слова</label>
-                  <input
-                    type="text"
-                    placeholder="Ключевые слова для SEO"
-                    value={editForm.seo_keywords}
-                    onChange={(e) => setEditForm({...editForm, seo_keywords: e.target.value})}
-                    className="w-full px-4 py-2 border rounded"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-1">OG Изображение (URL)</label>
-                  <input
-                    type="text"
-                    placeholder="URL изображения для социальных сетей"
-                    value={editForm.og_image}
-                    onChange={(e) => setEditForm({...editForm, og_image: e.target.value})}
-                    className="w-full px-4 py-2 border rounded"
-                  />
+          {user?.role === 'superadmin' && (
+            <div className="border-t pt-4">
+              <h3 className="text-lg font-semibold mb-3">SEO (опционально)</h3>
+              <div className="bg-white p-4 rounded border border-gray-200">
+                <div className="space-y-3">
+                  <div>
+                    <label className="block text-sm font-medium mb-1">SEO Заголовок</label>
+                    <input
+                      type="text"
+                      placeholder="Заголовок для SEO"
+                      value={editForm.seo_title}
+                      onChange={(e) => setEditForm({...editForm, seo_title: e.target.value})}
+                      className="w-full px-4 py-2 border rounded"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-1">SEO Описание</label>
+                    <input
+                      type="text"
+                      placeholder="Описание для SEO"
+                      value={editForm.seo_description}
+                      onChange={(e) => setEditForm({...editForm, seo_description: e.target.value})}
+                      className="w-full px-4 py-2 border rounded"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-1">SEO Ключевые слова</label>
+                    <input
+                      type="text"
+                      placeholder="Ключевые слова для SEO"
+                      value={editForm.seo_keywords}
+                      onChange={(e) => setEditForm({...editForm, seo_keywords: e.target.value})}
+                      className="w-full px-4 py-2 border rounded"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-1">OG Изображение (URL)</label>
+                    <input
+                      type="text"
+                      placeholder="URL изображения для социальных сетей"
+                      value={editForm.og_image}
+                      onChange={(e) => setEditForm({...editForm, og_image: e.target.value})}
+                      className="w-full px-4 py-2 border rounded"
+                    />
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          )}
 
           <button
             type="submit"
@@ -706,33 +744,35 @@ export default function AccessoriesAdminPage() {
                   </div>
                   
                   {/* SEO Fields */}
-                  <div className="border-t pt-4 mt-4">
-                    <h4 className="font-semibold mb-3 text-gray-800">SEO Данные</h4>
-                    <SeoFieldsForm
-                      key={`${editingAccessory.id}-${addingAccessory}`}
-                      entityType="accessories"
-                      categoryName="Аксессуары"
-                      initialData={{
-                        seoTitle: editForm.seo_title,
-                        seoDescription: editForm.seo_description,
-                        seoKeywords: editForm.seo_keywords,
-                        ogImage: editForm.og_image,
-                      }}
-                      onChange={(data) => {
-                        console.log('SeoFieldsForm onChange:', data);
-                        setEditForm(prev => ({
-                          ...prev,
-                          seo_title: data.seoTitle,
-                          seo_description: data.seoDescription,
-                          seo_keywords: data.seoKeywords,
-                          og_image: data.ogImage,
-                        }));
-                      }}
-                      onSave={handleSaveSeo}
-                      isLoading={seoLoading}
-                      error={seoError || undefined}
-                    />
-                  </div>
+                  {user?.role === 'superadmin' && (
+                    <div className="border-t pt-4 mt-4">
+                      <h4 className="font-semibold mb-3 text-gray-800">SEO Данные</h4>
+                      <SeoFieldsForm
+                        key={`${editingAccessory?.id}-${addingAccessory}`}
+                        entityType="accessories"
+                        categoryName="Аксессуары"
+                        initialData={{
+                          seoTitle: editForm.seo_title,
+                          seoDescription: editForm.seo_description,
+                          seoKeywords: editForm.seo_keywords,
+                          ogImage: editForm.og_image,
+                        }}
+                        onChange={(data) => {
+                          console.log('SeoFieldsForm onChange:', data);
+                          setEditForm(prev => ({
+                            ...prev,
+                            seo_title: data.seoTitle,
+                            seo_description: data.seoDescription,
+                            seo_keywords: data.seoKeywords,
+                            og_image: data.ogImage,
+                          }));
+                        }}
+                        onSave={handleSaveSeo}
+                        isLoading={seoLoading}
+                        error={seoError || undefined}
+                      />
+                    </div>
+                  )}
                   <div className="flex gap-2 mt-4">
                     <button
                       onClick={handleSaveEdit}
@@ -775,6 +815,8 @@ export default function AccessoriesAdminPage() {
           ))}
         </div>
       </div>
-    </div>
+      </div>
+      )}
+    </>
   );
 }

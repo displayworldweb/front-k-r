@@ -178,7 +178,7 @@ export const categoriesLandscape: Category[] = [
   {
     title: "Столый и скамейки",
     price: undefined,
-    img: "/landscape/tables.webp",
+    img: "/landscape/benches.webp",
     link: "/",
   },
   {

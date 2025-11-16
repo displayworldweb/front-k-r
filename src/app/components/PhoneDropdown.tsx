@@ -65,7 +65,7 @@ const PhoneDropdown = forwardRef<HTMLDivElement, PhoneDropdownProps> (({
       <div className="flex justify-between border-b border-gray-200 items-center px-5 py-3">
         <div className="flex gap-2.5 items-center space-y-1 text-center">
           <a
-            href="viber://chat?number=%2B375336770166"
+            href="viber://chat?number=%2B375333226652"
             aria-label="Viber"
             target="_blank"
             rel="noopener noreferrer"
@@ -77,7 +77,7 @@ const PhoneDropdown = forwardRef<HTMLDivElement, PhoneDropdownProps> (({
         </div>
         <div className="flex gap-2.5 items-center space-y-1 text-center">
           <a
-            href="tg://resolve?domain=krby"
+            href="https://t.me/+375333226652"
             aria-label="Telegram"
             target="_blank"
             rel="noopener noreferrer"
@@ -89,7 +89,7 @@ const PhoneDropdown = forwardRef<HTMLDivElement, PhoneDropdownProps> (({
         </div>
         <div className="flex gap-2.5 items-center space-y-1 text-center">
           <a
-            href="whatsapp://send?phone=+375333226652"
+            href="https://wa.me/375333226652"
             aria-label="WhatsApp"
             target="_blank"
             rel="noopener noreferrer"
