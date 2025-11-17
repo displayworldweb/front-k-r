@@ -1,10 +1,19 @@
-"use client";
+import { Metadata } from 'next';
+import { getMetadataForPage } from '@/lib/seo-metadata';
 import PathPage from "@/app/components/PathPage";
 import SidebarCatalogMenu from "@/app/components/Sidebar/SidebarCatalogMenu";
 import SidebarStickyHelp from "@/app/components/Sidebar/SidebarStickyHelp";
 import Promo from "@/app/components/Promo";
 import { PageDescriptionBlock } from "@/app/components/PageDescriptionBlock";
 import Link from "next/link";
+
+export async function generateMetadata(): Promise<Metadata> {
+  return await getMetadataForPage(
+    'why-contract',
+    'Работаем строго по договору',
+    'Все наши услуги оформляются официальным договором, защищающим ваши интересы'
+  );
+}
 
 const ContractPage = () => {
 

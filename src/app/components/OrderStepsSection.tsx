@@ -88,12 +88,9 @@ const OrderStepsSection = () => {
 
   // Обработчик отправки формы
   const handleModalSubmit = (formData: { name: string; phone: string }) => {
-    // Здесь можно обработать данные формы, например, отправить на сервер
-    console.log("Данные формы:", formData);
-    alert(
-      `Форма отправлена! Имя: ${formData.name}, Телефон: ${formData.phone} (реализация отправки на сервер позже)`
-    );
-    closeModal(); // Закрываем модалку после отправки
+    // Отправка уже произойдёт в ModalCommunication компоненте
+    // Эта функция вызывается после успешной отправки
+    console.log("Заявка отправлена:", formData);
   };
 
   return (

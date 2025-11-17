@@ -1,10 +1,20 @@
-"use client";
+import { Metadata } from 'next';
+import { getMetadataForPage } from '@/lib/seo-metadata';
 import PathPage from "@/app/components/PathPage";
 import SidebarCatalogMenu from "@/app/components/Sidebar/SidebarCatalogMenu";
 import SidebarStickyHelp from "@/app/components/Sidebar/SidebarStickyHelp";
 import Promo from "@/app/components/Promo";
 import { PageDescriptionBlock } from "@/app/components/PageDescriptionBlock";
 import Link from "next/link";
+
+// Генерируем метаданные для SEO
+export async function generateMetadata(): Promise<Metadata> {
+  return await getMetadataForPage(
+    'why-granite',
+    'Работаем более чем с 30 породами гранита',
+    'Используем более 30 пород гранита для создания красивых и надежных памятников'
+  );
+}
 
 const GranitePage = () => {
 

@@ -55,7 +55,7 @@ export const menuCategories = [
       { name: 'Благоустройство могил', href: '/landscape/graves', img: '/landscape/graves.webp' },
       { name: 'Фундамент для памятников', href: '/landscape/foundation', img: '/landscape/foundation.webp' },
       { name: 'Укладка плитки', href: '/landscape/tiles', img: '/landscape/tiles.webp' },
-      { name: 'Столы и скамейки', href: '/landscape/benches', img: '/landscape/benches.webp' },
+      { name: 'Столы и скамейки', href: '/landscape/benches', img: '/landscape/tables.webp' },
       { name: 'Щебень декоративный', href: '/landscape/gravel', img: '/landscape/gravel.webp' },
       { name: 'Искусственный газон', href: '/landscape/lawn', img: '/landscape/lawn.webp' },
     ],

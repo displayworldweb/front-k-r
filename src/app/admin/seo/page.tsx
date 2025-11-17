@@ -73,6 +73,13 @@ const AVAILABLE_PAGES = [
   { slug: 'accessories-bronze', title: 'Аксессуары - Бронза' },
   { slug: 'accessories-plates', title: 'Аксессуары - Плиты' },
   { slug: 'accessories-tables', title: 'Аксессуары - Столики' },
+  // Почему нам доверяют
+  { slug: 'why-granite', title: 'Работаем более чем с 30 породами гранита' },
+  { slug: 'why-contract', title: 'Работаем строго по договору' },
+  { slug: 'why-payment', title: 'Предоставляем разные варианты оплаты' },
+  { slug: 'why-report', title: 'Предоставляем фото и видео отчёт' },
+  { slug: 'why-quality', title: 'Гарантируем качество работ' },
+  { slug: 'why-experience', title: 'Опыт работы более 30 лет' },
 ];
 
 export default function SEOAdminPage() {

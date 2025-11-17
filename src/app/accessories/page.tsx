@@ -31,11 +31,11 @@ interface AccessoryProduct {
 }
 
 // Функция для получения минимальной цены по категории
-const fetchMinPrice = async (endpoint: string): Promise<number> => {
+const fetchMinPrice = async (categoryName: string, allAccessories: AccessoryProduct[]): Promise<number> => {
     try {
-        const res = await apiClient.get(endpoint);
-        const items = Array.isArray(res) ? res : res?.data || [];
-        const prices = items
+        // Фильтруем товары по категории из уже загруженных данных
+        const categoryItems = allAccessories.filter((item: any) => item.category === categoryName);
+        const prices = categoryItems
           .map((p: any) => {
             const price = typeof p.price === 'string' ? parseFloat(p.price) : p.price;
             return price;
@@ -43,7 +43,7 @@ const fetchMinPrice = async (endpoint: string): Promise<number> => {
           .filter((p: any) => p && !isNaN(p) && p > 0);
         return prices.length > 0 ? Math.min(...prices) : 0;
     } catch (e) {
-        console.error('Error fetching min price from', endpoint, ':', e);
+        console.error('Error fetching min price for category', categoryName, ':', e);
         return 0;
     }
 };
@@ -117,15 +117,17 @@ const AccessoriesPage = () => {
 
     // Загрузка цен для категорий
     useEffect(() => {
+        if (accessories.length === 0) return; // Ждем загрузки аксессуаров
+        
         const loadCategoryPrices = async () => {
             try {
-                const vasesPrice = await fetchMinPrice(`${API_ENDPOINTS.accessories}/vases`);
-                const lampsPrice = await fetchMinPrice(`${API_ENDPOINTS.accessories}/lamps`);
-                const sculpturesPrice = await fetchMinPrice(`${API_ENDPOINTS.accessories}/sculptures`);
-                const framesPrice = await fetchMinPrice(`${API_ENDPOINTS.accessories}/frames`);
-                const bronzePrice = await fetchMinPrice(`${API_ENDPOINTS.accessories}/bronze`);
-                const platesPrice = await fetchMinPrice(`${API_ENDPOINTS.accessories}/plates`);
-                const tablesPrice = await fetchMinPrice(`${API_ENDPOINTS.accessories}/tables`);
+                const vasesPrice = await fetchMinPrice("Вазы", accessories);
+                const lampsPrice = await fetchMinPrice("Лампады", accessories);
+                const sculpturesPrice = await fetchMinPrice("Скульптуры", accessories);
+                const framesPrice = await fetchMinPrice("Рамки", accessories);
+                const bronzePrice = await fetchMinPrice("Изделия из бронзы", accessories);
+                const platesPrice = await fetchMinPrice("Надгробные плиты", accessories);
+                const tablesPrice = await fetchMinPrice("Гранитные таблички", accessories);
 
                 const updatedCategories = categoriesAccessories.map((cat) => {
                     let price: string | undefined;
@@ -162,7 +164,7 @@ const AccessoriesPage = () => {
             }
         };
         loadCategoryPrices();
-    }, []);
+    }, [accessories]);
 
     // Получаем продукты для текущей страницы
     const currentProducts = getProductsForPage(accessories, currentPage, productsPerPage);

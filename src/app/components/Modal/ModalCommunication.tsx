@@ -1,22 +1,24 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (formData: { name: string; phone: string }) => void; // Добавляем пропс для обработки отправки
+  onSubmit: (formData: { name: string; phone: string }) => void;
   modalContentClassName?: string;
 }
 
 const ModalCommunication: React.FC<ModalProps> = ({
   isOpen,
   onClose,
-  onSubmit, // Принимаем функцию onSubmit
+  onSubmit,
   modalContentClassName = "",
 }) => {
   const modalRef = useRef<HTMLDivElement>(null);
   const backdropRef = useRef<HTMLDivElement>(null);
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
 
   // Блокировка скролла
   useEffect(() => {
@@ -74,12 +76,66 @@ const ModalCommunication: React.FC<ModalProps> = ({
   }, [isOpen, onClose]);
 
   // Обработчик отправки формы
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    
     const formData = new FormData(e.currentTarget);
     const name = formData.get('name') as string;
     const phone = formData.get('phone') as string;
-    onSubmit({ name, phone }); // Вызываем переданную функцию onSubmit с данными
+
+    // Валидация
+    if (!name.trim() || !phone.trim()) {
+      setMessage({ type: 'error', text: 'Пожалуйста, заполните все поля' });
+      return;
+    }
+
+    setLoading(true);
+    setMessage(null);
+
+    try {
+      // Отправляем в Telegram бот
+      const telegramBotToken = process.env.NEXT_PUBLIC_TELEGRAM_BOT_TOKEN;
+      const chatId = process.env.NEXT_PUBLIC_TELEGRAM_CHAT_ID;
+      
+      if (!telegramBotToken || !chatId) {
+        throw new Error('Telegram конфигурация не найдена');
+      }
+      
+      const messageText = `📞 Новый звонок\n\nИмя: ${name}\nТелефон: ${phone}`;
+      
+      const response = await fetch(
+        `https://api.telegram.org/bot${telegramBotToken}/sendMessage`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            chat_id: chatId,
+            text: messageText,
+            parse_mode: 'HTML',
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error('Ошибка при отправке сообщения');
+      }
+
+      // Вызываем функцию обработки из props
+      onSubmit({ name, phone });
+      
+      setMessage({ type: 'success', text: '✓ Спасибо! Мы свяжемся с вами в ближайшее время' });
+      
+      // Закрываем модаль через 2 секунды
+      setTimeout(() => {
+        onClose();
+        setMessage(null);
+      }, 2000);
+    } catch (error) {
+      console.error('Ошибка отправки:', error);
+      setMessage({ type: 'error', text: 'Ошибка при отправке. Попробуйте позже' });
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (!isOpen) return null;
@@ -106,10 +162,23 @@ const ModalCommunication: React.FC<ModalProps> = ({
         {/* Заголовок формы */}
         <div>
           <h2 className="text-2xl font-bold text-[#2c3a54] leading-7.5">Заказать звонок</h2>
-          <p className="text-[#2c3a5499] mt-2.5 font-[600]">
+          <p className="text-[#2c3a5499] mt-2.5 font-semibold">
             Оставьте Ваши контактные данные и наши специалисты свяжутся с Вами в ближайшее рабочее время для решения Вашего вопроса
           </p>
         </div>
+
+        {/* Сообщения об успехе/ошибке */}
+        {message && (
+          <div
+            className={`mt-4 p-3 rounded-lg text-sm font-medium ${
+              message.type === 'success'
+                ? 'bg-green-100 border border-green-400 text-green-700'
+                : 'bg-red-100 border border-red-400 text-red-700'
+            }`}
+          >
+            {message.text}
+          </div>
+        )}
 
         {/* Форма */}
         <form
@@ -154,9 +223,10 @@ const ModalCommunication: React.FC<ModalProps> = ({
           <div className="mb-2.5 md:mb-5">
             <button
               type="submit"
-              className="w-full py-2.25 px-3.75 mt-5 text-sm leading-5.5 bg-[#2c3a54] border-[#2c3a54] border-1 rounded-3xl font-bold focus:outline-none text-white transition hover:bg-white hover:text-[#2c3a54]"
+              disabled={loading}
+              className="w-full py-2.25 px-3.75 mt-5 text-sm leading-5.5 bg-[#2c3a54] border-[#2c3a54] border rounded-3xl font-bold focus:outline-none text-white transition hover:bg-white hover:text-[#2c3a54] disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Отправить
+              {loading ? 'Отправка...' : 'Отправить'}
             </button>
           </div>
 
