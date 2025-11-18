@@ -13,13 +13,15 @@ interface Work {
 interface ProductWorksGalleryProps {
     productId: string;
     productType: "monuments" | "fences" | "accessories" | "landscape" | "exclusive";
+    category: string;
     title?: string;
     className?: string;
 }
 
 const ProductWorksGallery = ({ 
     productId, 
-    productType, 
+    productType,
+    category,
     title = "Готовые работы с этим товаром",
     className = ""
 }: ProductWorksGalleryProps) => {
@@ -39,6 +41,34 @@ const ProductWorksGallery = ({
         return () => window.removeEventListener("resize", checkScreenSize);
     }, []);
 
+    // Маппинг slug категорий в их русские названия (как они хранятся в БД)
+    const categorySlugToName: Record<string, string> = {
+        // Памятники
+        'single': 'Одиночные',
+        'double': 'Двойные',
+        'exclusive': 'Эксклюзивные',
+        'cheap': 'Недорогие',
+        'cross': 'В виде креста',
+        'heart': 'В виде сердца',
+        'composite': 'Составные',
+        'europe': 'Европейские',
+        'artistic': 'Художественная резка',
+        'tree': 'В виде деревьев',
+        'complex': 'Мемориальные комплексы',
+        // Ограды
+        'granite': 'Гранитные ограды',
+        'polymer': 'С полимерным покрытием',
+        'metal': 'Металлические ограды',
+        // Аксессуары
+        'benches': 'Лавки и столики',
+        'vases': 'Вазы для цветов',
+        'lanterns': 'Фонари',
+        'plates': 'Таблички',
+        // Благоустройство
+        'foundation': 'Основания',
+        'graves': 'Могильные плиты'
+    };
+
     // Загрузка работ для конкретного товара
     useEffect(() => {
         loadWorks();
@@ -49,6 +79,9 @@ const ProductWorksGallery = ({
             const params = new URLSearchParams();
             params.append('productId', productId);
             params.append('productType', productType);
+            // Преобразуем slug категории в русское название
+            const categoryName = categorySlugToName[category] || category;
+            params.append('category', categoryName);
             
             const data = await apiClient.get(`/works?${params.toString()}`);
             

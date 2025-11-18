@@ -1001,6 +1001,7 @@ const ProductPage = () => {
                     <ProductWorksGallery 
                         productId={product.id.toString()}
                         productType="monuments"
+                        category={Array.isArray(params.category) ? params.category[0] : (params.category || 'single')}
                         title="Готовые работы с этим товаром"
                     />
 

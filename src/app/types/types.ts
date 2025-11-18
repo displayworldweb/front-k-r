@@ -25,6 +25,8 @@ export type Product = {
   hit?: boolean;
   popular?: boolean;
   new?: boolean;
+  productType?: string; // Тип товара: monuments, fences, accessories, landscape
+  categorySlug?: string; // Slug категории для корректной генерации ссылок
 };
 
 export type Category = {

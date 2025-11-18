@@ -679,6 +679,7 @@ const ExclusiveProductPage = () => {
       <ProductWorksGallery 
         productId={product.id.toString()}
         productType="exclusive"
+        category="exclusive"
         title="Готовые работы с этим товаром"
       />
 

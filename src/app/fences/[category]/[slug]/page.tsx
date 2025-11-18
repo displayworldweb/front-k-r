@@ -423,6 +423,7 @@ const FenceDetailPage = () => {
             <ProductWorksGallery
                 productId={fence.id.toString()}
                 productType="fences"
+                category={Array.isArray(params.category) ? params.category[0] : (params.category || 'granite')}
                 title="Готовые работы с этим товаром"
             />
 

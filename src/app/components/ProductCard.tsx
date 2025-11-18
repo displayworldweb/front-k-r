@@ -13,6 +13,11 @@ interface ProductCardProps {
 
 // Функция для формирования ссылки на товар в зависимости от категории
 const generateProductHref = (product: Product): string => {
+  // Если есть явный productType и categorySlug - используем их
+  if (product.productType && product.categorySlug) {
+    return `/${product.productType}/${product.categorySlug}/${product.slug}`;
+  }
+
   // Если это памятник
   const monumentCategories = [
     // Русские названия

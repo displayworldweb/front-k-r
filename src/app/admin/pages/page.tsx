@@ -39,6 +39,7 @@ const AVAILABLE_PAGES = [
   { slug: 'fences-polymer', title: 'Ограды с полимерным покрытием' },
   { slug: 'fences-metal', title: 'Металлические ограды' },
   // Прочие страницы
+  { slug: 'discount', title: 'Товары на скидке' },
   { slug: 'sales', title: 'Акции' },
   { slug: 'blogs', title: 'Блоги' },
   { slug: 'granite', title: 'Гранит' },
