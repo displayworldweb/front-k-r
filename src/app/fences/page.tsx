@@ -30,6 +30,7 @@ interface FenceProduct {
   category: string;
   image: string;
   createdAt: string;
+  popular?: boolean;
 }
 
 // Функция для получения минимальной цены по категории
