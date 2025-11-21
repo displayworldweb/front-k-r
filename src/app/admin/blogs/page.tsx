@@ -660,6 +660,7 @@ export default function BlogsAdminPage() {
             </button>
           )}
         </div>
+        </div>
         {error && <div className="text-red-600 mb-4 p-2 bg-red-50">{error}</div>}
         {success && <div className="text-green-600 mb-4 p-2 bg-green-50">{success}</div>}
         
@@ -909,7 +910,7 @@ export default function BlogsAdminPage() {
           )}
         </div>
       </div>
-      </div>
+        </div>
       )}
     </>
   );
