@@ -53,7 +53,7 @@ const Promo = () => {
         {campaigns.map((campaign) => (
           <div
             key={campaign.id}
-            className="max-w-1/3 md:w-1/3 px-2.5 overflow-hidden"
+            className="max-w-full md:w-1/3 px-2.5 overflow-hidden"
           >
             <a
               href={campaign.link || (campaign.slug ? `/sales/${campaign.slug}` : '#')}
@@ -66,7 +66,7 @@ const Promo = () => {
                   <img
                     src={imgSrc}
                     alt={campaign.title}
-                    className="w-full h-auto aspect-square object-cover rounded-lg"
+                    className="w-full h-auto object-cover rounded-lg"
                     loading="lazy"
                   />
                 );
@@ -88,7 +88,7 @@ const Promo = () => {
       </div>
 
       <div className="mt-6 md:mt-8 flex text-center">
-        <Link href={'/campaigns'} className="font-bold w-full md:max-w-[338px] px-7.5 py-3 bg-[#2c3a54] border border-[#2c3a54] text-white rounded-full hover:bg-white hover:text-[#2c3a54] transition">
+        <Link href={'/sales'} className="font-bold w-full md:max-w-[338px] px-7.5 py-3 bg-[#2c3a54] border border-[#2c3a54] text-white rounded-full hover:bg-white hover:text-[#2c3a54] transition">
           Смотреть все
         </Link>
       </div>

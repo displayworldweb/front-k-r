@@ -6,6 +6,7 @@ import { generateSlug } from "@/lib/slug-generator";
 import { apiClient } from "@/lib/api-client";
 import { SeoFieldsForm, SeoFieldsData } from "@/app/components/admin/SeoFieldsForm";
 import { useSeoSave } from "@/lib/hooks/use-seo-save";
+import { BulkSeoUpdateButton } from "@/app/components/admin/BulkSeoUpdateButton";
 
 interface AdminUser {
   id: string;
@@ -444,7 +445,19 @@ export default function LandscapeAdminPage() {
       {!checkingAuth && (
         <div className="space-y-8">
           <div className="text-black">
-        <h2 className="text-2xl font-bold mb-4">Добавить товар (Landscape)</h2>
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-2xl font-bold">Добавить товар (Landscape)</h2>
+          <BulkSeoUpdateButton
+            entityType="landscape"
+            categoryKey="landscape"
+            categoryName="Благоустройство"
+            onSuccess={async (stats) => {
+              setSuccess(`✅ Обновлено ${stats.updated} товаров`);
+              await fetchLandscape();
+              setTimeout(() => setSuccess(""), 3000);
+            }}
+          />
+        </div>
         {error && <div className="text-red-600 mb-4 p-2 bg-red-50">{error}</div>}
         {success && <div className="text-green-600 mb-4 p-2 bg-green-50">{success}</div>}
         <form onSubmit={handleSubmit} className="space-y-4 bg-gray-50 p-6 rounded">

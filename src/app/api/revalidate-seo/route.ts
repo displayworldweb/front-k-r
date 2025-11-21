@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
 
     if (revalidateAll) {
       // Инвалидируем все SEO данные
-      revalidateTag('seo-data');
+      revalidateTag('seo-data', {});
       console.log('[Revalidate] Инвалидированы все SEO данные');
       
       return NextResponse.json(
@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Инвалидируем кэш для конкретной страницы
-    revalidateTag(`seo-${pageSlug}`);
+    revalidateTag(`seo-${pageSlug}`, {});
     console.log(`[Revalidate] SEO кэш инвалидирован для страницы: ${pageSlug}`);
 
     return NextResponse.json(

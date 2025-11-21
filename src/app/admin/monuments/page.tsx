@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { generateSlug } from "@/lib/slug-generator";
 import { apiClient } from "@/lib/api-client";
 import { SeoFieldsForm, SeoFieldsData } from "@/app/components/admin/SeoFieldsForm";
+import { BulkSeoUpdateButton } from "@/app/components/admin/BulkSeoUpdateButton";
 
 interface AdminUser {
   id: string;
@@ -1200,13 +1201,25 @@ export default function ProductsAdminPage() {
               <h3 className="text-lg font-semibold">
                 Список памятников - {monumentCategories.find(c => c.key === selectedCategory)?.title}
               </h3>
-              <button
-                onClick={startAdding}
-                disabled={loading}
-                className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
-              >
-                ➕ Добавить памятник
-              </button>
+              <div className="flex gap-3">
+                <BulkSeoUpdateButton
+                  entityType="monuments"
+                  categoryKey={selectedCategory}
+                  categoryName={monumentCategories.find(c => c.key === selectedCategory)?.title}
+                  onSuccess={async (stats) => {
+                    setSuccess(`✅ Обновлено ${stats.updated} памятников`);
+                    await fetchMonuments(selectedCategory);
+                    setTimeout(() => setSuccess(""), 3000);
+                  }}
+                />
+                <button
+                  onClick={startAdding}
+                  disabled={loading}
+                  className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
+                >
+                  ➕ Добавить памятник
+                </button>
+              </div>
             </div>
             
             {loading ? (

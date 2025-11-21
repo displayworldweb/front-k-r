@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { apiClient } from "@/lib/api-client";
 import { SeoFieldsForm, SeoFieldsData } from "@/app/components/admin/SeoFieldsForm";
 import { useSeoSave } from "@/lib/hooks/use-seo-save";
+import { BulkSeoUpdateButton } from "@/app/components/admin/BulkSeoUpdateButton";
 
 interface AdminUser {
   id: string;
@@ -661,7 +662,19 @@ export default function AdminCampaignsNewPage() {
       {!checkingAuth && (
         <div className="space-y-8">
           <div className="text-black">
-        <h2 className="text-2xl font-bold mb-4">Управление кампаниями</h2>
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-2xl font-bold">Управление кампаниями</h2>
+          <BulkSeoUpdateButton
+            entityType="campaigns"
+            categoryKey="campaigns"
+            categoryName="Акции"
+            onSuccess={async (stats) => {
+              setSuccess(`✅ Обновлено ${stats.updated} акций`);
+              await fetchCampaigns();
+              setTimeout(() => setSuccess(""), 3000);
+            }}
+          />
+        </div>
 
         {/* Сообщения */}
         {error && (

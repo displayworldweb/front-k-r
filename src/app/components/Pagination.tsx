@@ -19,6 +19,7 @@ const Pagination = ({ totalPages, onPageChange, initialPage = 1 }: PaginationPro
         if (page >= 1 && page <= totalPages) {
             setActivePage(page);
             onPageChange(page);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     };
 

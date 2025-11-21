@@ -44,6 +44,7 @@ export default function AdminLayout({
     { href: "/admin/landscape", label: "Landscape", icon: "🌳" },
     { href: "/admin/blogs", label: "Блоги", icon: "📝" },
     { href: "/admin/monuments", label: "Памятники", icon: "🏛️" },
+    { href: "/admin/import", label: "Импорт памятников", icon: "📥" },
     { href: "/admin/works", label: "Готовые работы", icon: "📸" },
     ...(isSuperadmin ? [
       { href: "/admin/seo", label: "SEO", icon: "🔍" },

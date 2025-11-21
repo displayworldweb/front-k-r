@@ -39,7 +39,7 @@ export const menuCategories = [
     icon: '/accessories.webp',
     subcategories: [
       { name: 'Вазы', href: '/accessories/vases', img: '/accessories/vases.webp' },
-      { name: 'Лампы', href: '/accessories/lamps', img: '/accessories/lamps.webp' },
+      { name: 'Лампады', href: '/accessories/lamps', img: '/accessories/lamps.webp' },
       { name: 'Скульптуры', href: '/accessories/sculptures', img: '/accessories/sculptures.webp' },
       { name: 'Рамки', href: '/accessories/frames', img: '/accessories/frames.webp' },
       { name: 'Изделия из бронзы', href: '/accessories/bronze', img: '/accessories/bronze.webp' },

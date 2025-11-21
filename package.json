@@ -15,11 +15,11 @@
     "cheerio": "^1.1.2",
     "drizzle-kit": "^0.31.6",
     "drizzle-orm": "^0.44.7",
-    "next": "15.5.3",
+    "next": "^16.0.3",
     "pg": "^8.16.3",
     "postgres": "^3.4.7",
-    "react": "19.1.0",
-    "react-dom": "19.1.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
     "sharp": "^0.34.5"
   },
   "devDependencies": {
@@ -29,7 +29,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "15.5.3",
+    "eslint-config-next": "^16.0.3",
     "tailwindcss": "^4",
     "typescript": "^5",
     "xml2js": "^0.6.2"

@@ -36,7 +36,7 @@ const ServicesPage = () => {
                         <h1 className="text-black text-[28px] mt-2.5 mb-5 leading-8 lg:text-[40px] lg:leading-12 font-[600]">Услуги гранитной мастерской</h1>
 
                         {/* Блок категорий */}
-                        <div className="grid grid-cols-2 md:grid-cols-3 gap-2.5 mb-7.5">
+                        <div className="grid grid-cols-1; sm:grid-cols-2 md:grid-cols-3 gap-2.5 mb-7.5">
                             {categoriesServices.map((category) => (
                                 <a
                                     key={category.title}

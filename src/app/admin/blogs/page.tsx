@@ -6,6 +6,7 @@ import { generateSlug } from "@/lib/slug-generator";
 import { apiClient } from "@/lib/api-client";
 import { SeoFieldsForm, SeoFieldsData } from "@/app/components/admin/SeoFieldsForm";
 import { useSeoSave } from "@/lib/hooks/use-seo-save";
+import { BulkSeoUpdateButton } from "@/app/components/admin/BulkSeoUpdateButton";
 
 interface AdminUser {
   id: string;
@@ -635,6 +636,17 @@ export default function BlogsAdminPage() {
           <h2 className="text-2xl font-bold">
             {editingBlog ? `Редактировать: ${editingBlog.title}` : 'Добавить блог'}
           </h2>
+          <div className="flex gap-3">
+            <BulkSeoUpdateButton
+              entityType="blogs"
+              categoryKey="blogs"
+              categoryName="Блоги"
+              onSuccess={async (stats) => {
+                setSuccess(`✅ Обновлено ${stats.updated} блогов`);
+                await fetchBlogs();
+                setTimeout(() => setSuccess(""), 3000);
+              }}
+            />
           {editingBlog && (
             <button
               type="button"

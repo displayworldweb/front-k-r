@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { generateSlug } from "@/lib/slug-generator";
 import { apiClient } from "@/lib/api-client";
 import { SeoFieldsForm, SeoFieldsData } from "@/app/components/admin/SeoFieldsForm";
+import { BulkSeoUpdateButton } from "@/app/components/admin/BulkSeoUpdateButton";
 
 interface AdminUser {
   id: string;
@@ -681,7 +682,21 @@ export default function FencesAdminPage() {
       {!checkingAuth && (
         <div className="space-y-8">
           <div className="text-black">
-        <h2 className="text-2xl font-bold mb-4">Управление оградами</h2>
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-2xl font-bold">Управление оградами</h2>
+          {selectedCategory && (
+            <BulkSeoUpdateButton
+              entityType="fences"
+              categoryKey={selectedCategory}
+              categoryName={fenceCategories.find(c => c.key === selectedCategory)?.title}
+              onSuccess={async (stats) => {
+                setSuccess(`✅ Обновлено ${stats.updated} оград`);
+                await fetchFences(selectedCategory);
+                setTimeout(() => setSuccess(""), 3000);
+              }}
+            />
+          )}
+        </div>
         
         {/* Выбор категории */}
         <div className="bg-gray-50 p-6 rounded mb-6">

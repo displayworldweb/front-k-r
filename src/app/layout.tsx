@@ -6,6 +6,8 @@ import FooterMenu from "./components/FooterMenu";
 import ScrollToTop from "./components/ScrollToTop";
 import { DropdownProvider } from "./context/DropDownContext";
 import { AdminProtector } from "./components/AdminProtector";
+import YandexMetrika from "./components/YandexMetrika";
+import CookieConsent from "./components/CookieConsent";
 
 // Default metadata для корневого layout - используется как fallback
 export const metadata: Metadata = {
@@ -24,15 +26,17 @@ export default function RootLayout({
   return (
     <html lang="ru">
       <body className="min-w-[360px]">
-      <DropdownProvider>
-        <AdminProtector>
-          <ScrollToTop />
-          <Header />
-          {children}
-          <Footer />
-          <FooterMenu />
-        </AdminProtector>
-    </DropdownProvider>
+        <YandexMetrika />
+        <DropdownProvider>
+          <AdminProtector>
+            <ScrollToTop />
+            <Header />
+            {children}
+            <Footer />
+            <FooterMenu />
+            <CookieConsent />
+          </AdminProtector>
+        </DropdownProvider>
       </body>
     </html>
   );

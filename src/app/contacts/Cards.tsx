@@ -80,8 +80,8 @@ const Cards = () => {
                     <div className="p-5 lg:shadow-sm bg-white flex-grow flex flex-col">
                         <span className="text-sm text-[#969ead]">Время работы</span>
                         <div className="mt-2.5">
-                            <p>Пн-пт с 10:00 до 19:00</p>
-                            <p>Сб с 10:00 до 15:00</p>
+                            <p>Пн-пт с 09:00 до 18:00</p>
+                            <p>Сб с 10:00 до 16:00</p>
                             <p>Вскр выходной</p>
                         </div>
                         <span className="mt-2.5 text-sm text-[#969ead] ">

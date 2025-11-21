@@ -47,7 +47,7 @@ const StoreInfo = () => {
     else if (isWeekday) {
       // закрыто в будний день (раньше 9 или после 18 или в обед)
       if (currentTime < openWeekStart) storeStatus = "Закрыто до 09:00";
-      else if (isDuringLunch) storeStatus = "Обед"; // на всякий случай
+      else if (isDuringLunch) storeStatus = "Обед (12:00-13:00)"; // на всякий случай
       else storeStatus = "Закрыто до 09:00";
     } else if (isSaturday) {
       if (currentTime < openSatStart) storeStatus = "Закрыто до 10:00 (сб)";
