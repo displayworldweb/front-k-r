@@ -126,7 +126,7 @@ const HeroSlider = () => {
       subtitle: "Ограды на кладбище любой сложности",
       button: {
         text: "Выбрать ограду",
-        href: "/monuments/fences",
+        href: "/fences",
       },
     },
   ];
