@@ -1,21 +1,23 @@
 import { Metadata } from 'next';
 import { getMetadataForPage } from '@/lib/seo-metadata';
 import { generateOpenGraphMetadata } from '@/lib/open-graph';
+import dynamic from 'next/dynamic';
 import HeroSlider from "./components/HeroSlider";
 import PopularCategories from "./components/PopularCategories";
 import StoreInfo from "./components/StoreInfo";
-import PopularProducts from "./components/PopularProducts";
-import RelatedProductsSlider from "./components/RelatedProductsSlider";
-import CompleteSolutionSlider from "./components/CompleteSolutionSlider";
-import BannerForm from "./components/BannerForm";
-import PaymentInfo from "./components/PaymentInfo";
-import OurWorksSlider from "./components/OurWorksSlider";
-import OrderStepsSection from "./components/OrderStepsSection";
-import WhyTrustUs from "./components/WhyTrustUs";
-import ReviewsSlider from "./components/ReviewsSlider";
-import Promo from "./components/Promo";
-import Blog from "./components/Blog";
-import FAQ from "./components/FAQ";
+
+// Lazy load компоненты ниже the fold
+const PopularProducts = dynamic(() => import("./components/PopularProducts"), { ssr: true });
+const RelatedProductsSlider = dynamic(() => import("./components/RelatedProductsSlider"), { ssr: true });
+const CompleteSolutionSlider = dynamic(() => import("./components/CompleteSolutionSlider"), { ssr: true });
+const OurWorksSlider = dynamic(() => import("./components/OurWorksSlider"), { ssr: true });
+const PaymentInfo = dynamic(() => import("./components/PaymentInfo"), { ssr: true });
+const OrderStepsSection = dynamic(() => import("./components/OrderStepsSection"), { ssr: true });
+const WhyTrustUs = dynamic(() => import("./components/WhyTrustUs"), { ssr: true });
+const ReviewsSlider = dynamic(() => import("./components/ReviewsSlider"), { ssr: true });
+const Promo = dynamic(() => import("./components/Promo"), { ssr: true });
+const Blog = dynamic(() => import("./components/Blog"), { ssr: true });
+const FAQ = dynamic(() => import("./components/FAQ"), { ssr: true });
 
 // Генерируем метаданные для SEO
 export async function generateMetadata(): Promise<Metadata> {

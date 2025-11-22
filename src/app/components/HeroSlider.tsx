@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import Link from "next/link";
 
 const HeroSlider = () => {
@@ -176,13 +177,18 @@ const HeroSlider = () => {
             className={`absolute rounded-xl inset-0 transition-opacity duration-500 ${
               index === currentSlide ? "opacity-100" : "opacity-0"
             }`}
-            style={{
-              backgroundImage: windowWidth >= 768 ? `url(${slide.image})` : "",
-              backgroundSize: "cover",
-              backgroundPosition: windowWidth >= 768 ? "center" : "",
-              backgroundRepeat: "no-repeat",
-            }}
           >
+            {/* Фоновое изображение для десктопа */}
+            {windowWidth >= 768 && (
+              <Image
+                src={slide.image}
+                alt={slide.title}
+                fill
+                className="rounded-xl object-cover -z-10"
+                priority={index === 0}
+                quality={80}
+              />
+            )}
             {/* Контент слайда */}
             {windowWidth >= 768 ? (
               // Десктопная версия - текст слева, изображение справа

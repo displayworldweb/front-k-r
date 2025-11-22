@@ -52,6 +52,25 @@ export default function RootLayout({
   return (
     <html lang="ru">
       <head>
+        {/* Critical CSS inline для быстрого первого рендера */}
+        <style dangerouslySetInnerHTML={{__html: `
+          html { scroll-behavior: smooth; }
+          body { 
+            margin: 0; 
+            padding: 0; 
+            font-family: Arial, sans-serif;
+            background: #ffffff;
+            color: #2c3a54;
+            min-width: 360px;
+          }
+          .container-centered {
+            margin-left: 20px;
+            margin-right: 20px;
+          }
+          @media (min-width: 1300px) {
+            .container-centered { margin-left: auto; margin-right: auto; }
+          }
+        `}} />
         {/* Preload critical fonts */}
         <link
           rel="preload"
