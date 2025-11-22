@@ -52,6 +52,9 @@ export default function RootLayout({
   return (
     <html lang="ru">
       <head>
+        {/* Preconnect to external domains */}
+        <link rel="dns-prefetch" href="https://mc.yandex.ru" />
+        
         {/* Preload critical fonts */}
         <link
           rel="preload"

@@ -171,7 +171,15 @@ const HeroSlider = () => {
     >
       {/* Слайды */}
       <div className="max-w-[1300px] container-centered h-full relative">
-        {slides.map((slide, index) => (
+        {slides.map((slide, index) => {
+          // Рендерим только текущий слайд и соседние для плавного перехода
+          const shouldRender = index === currentSlide || 
+                               index === (currentSlide - 1 + slides.length) % slides.length ||
+                               index === (currentSlide + 1) % slides.length;
+          
+          if (!shouldRender) return null;
+          
+          return (
           <div
             key={slide.id}
             className={`absolute rounded-xl inset-0 transition-opacity duration-500 ${
@@ -277,7 +285,8 @@ const HeroSlider = () => {
               </div>
             )}
           </div>
-        ))}
+        );
+        })}
 
       {/* Кнопки навигации */}
       {windowWidth >= 768 && (
