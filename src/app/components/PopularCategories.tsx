@@ -142,7 +142,7 @@ export default function PopularCategories() {
           {/* Список для экранов <768px */}
           <div className="block md:hidden">
             <ul className="space-y-3">
-              {categories.map(({ title, img, link, price }) => (
+              {categories.map(({ title, img, link, price }, index) => (
                 <li key={title}>
                   <a
                     href={link}
@@ -154,6 +154,8 @@ export default function PopularCategories() {
                       className="w-8 h-8 object-contain mr-4"
                       width={32}
                       height={32}
+                      priority={index === 0}
+                      loading={index === 0 ? "eager" : "lazy"}
                     />
                     <span className="grow text-base font-medium">{title}</span>
                     <IconArrow />
@@ -169,7 +171,7 @@ export default function PopularCategories() {
 
           {/* Сетка для экранов >=768px (md и выше) */}
           <div className="hidden md:grid grid-cols-2 xl:grid-cols-4">
-            {categories.map(({ title, price, img, link }) => (
+            {categories.map(({ title, price, img, link }, index) => (
               <div className="mt-5 px-2.5" key={title}>
                 <a
                   href={link}
@@ -181,6 +183,9 @@ export default function PopularCategories() {
                     className="mx-auto mb-4.5 object-contain"
                     width={198}
                     height={198}
+                    priority={index < 4}
+                    fetchPriority={index < 4 ? "high" : "auto"}
+                    loading={index < 4 ? "eager" : "lazy"}
                   />
                   <h3 className="font-bold text-gray-800">{title}</h3>
                   <div className="grow" />

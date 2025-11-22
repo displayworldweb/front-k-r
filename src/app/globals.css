@@ -3,13 +3,13 @@
 @font-face {
     font-family: LatoBold;
     src: url(/fonts/LatoBold.ttf) format("truetype");
-    font-display: swap;
+    font-display: optional;
 }
 
 @font-face {
     font-family: LatoRegular;
     src: url(/fonts/LatoRegular.ttf) format("truetype");
-    font-display: swap;
+    font-display: optional;
 }
 
 :root {
