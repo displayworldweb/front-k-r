@@ -52,8 +52,10 @@ export default function RootLayout({
   return (
     <html lang="ru">
       <head>
-        {/* Preconnect to external domains */}
+        {/* Preconnect to external domains - before other resources */}
+        <link rel="preconnect" href="https://mc.yandex.ru" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://mc.yandex.ru" />
+        <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="anonymous" />
         
         {/* Preload critical fonts */}
         <link

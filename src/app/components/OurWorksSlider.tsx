@@ -192,8 +192,9 @@ const OurWorksSlider = ({
                     height={401}
                     sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
                     className="w-full h-auto aspect-square object-cover rounded-xl hover:opacity-80 duration-500"
-                    quality={60}
-                    priority={index < 4}
+                    quality={65}
+                    loading={index < 4 ? "eager" : "lazy"}
+                    style={{ aspectRatio: '1/1' }}
                 />
                 {work.title && (
                     <div className="mt-2 text-sm text-gray-700 text-center">

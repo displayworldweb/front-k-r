@@ -185,6 +185,7 @@ const HeroSlider = () => {
             className={`absolute rounded-xl inset-0 transition-opacity duration-500 ${
               index === currentSlide ? "opacity-100" : "opacity-0"
             }`}
+            style={{ aspectRatio: '1300/400' }}
           >
             {/* Фоновое изображение */}
             <Image
@@ -194,7 +195,7 @@ const HeroSlider = () => {
               className="rounded-xl object-cover -z-10"
               priority={index === 0}
               fetchPriority={index === 0 ? "high" : "auto"}
-              quality={80}
+              quality={85}
               sizes="(max-width: 768px) 100vw, 1300px"
             />
             {/* Контент слайда */}

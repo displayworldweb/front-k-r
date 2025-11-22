@@ -300,7 +300,9 @@ const StoreInfo = () => {
                 }
                 width={400}
                 height={400}
-                quality={80}
+                sizes="(max-width: 425px) 100vw, (max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
+                quality={70}
+                loading={index < 3 ? "eager" : "lazy"}
               />
             </div>
           ))}

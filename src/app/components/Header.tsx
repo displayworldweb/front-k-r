@@ -328,12 +328,14 @@ const Header = () => {
         <div className="w-full bg-[#f5f6fa] border-b border-gray-200">
           <div className="max-w-[1300px] flex justify-between h-[80px] items-center container-centered">
             <div className="flex justify-between items-center w-full">
-              <Link href={"/"}>
+              <Link href={"/"} style={{ width: '200px', height: '48px', display: 'block' }}>
                 <Image
                   width={200}
                   height={48}
                   src={"/logo_kamenaya_roza.svg"}
                   alt="logo"
+                  priority
+                  style={{ width: '200px', height: '48px' }}
                 />
               </Link>
               {/* Рассрочка */}
@@ -369,15 +371,17 @@ const Header = () => {
                 <div className="flex space-x-2">
                   <a
                     href="viber://chat?number=%2B375333226652"
-                    className="rounded-full flex items-center justify-center text-white "
+                    className="rounded-full flex items-center justify-center text-white"
                     target="_blank"
                     rel="noopener noreferrer"
+                    style={{ width: '29px', height: '29px' }}
                   >
                     <Image
                       width={29}
                       height={29}
                       src={"/viber.svg"}
                       alt="Viber"
+                      style={{ width: '29px', height: '29px' }}
                     />
                   </a>
                   <a
@@ -385,12 +389,14 @@ const Header = () => {
                     className="rounded-full flex items-center justify-center text-white"
                     target="_blank"
                     rel="noopener noreferrer"
+                    style={{ width: '28px', height: '28px' }}
                   >
                     <Image
                       width={28}
                       height={28}
                       src={"/tm.svg"}
                       alt="Telegram"
+                      style={{ width: '28px', height: '28px' }}
                     />
                   </a>
                   <a
@@ -398,12 +404,14 @@ const Header = () => {
                     className="rounded-full flex items-center justify-center text-white"
                     target="_blank"
                     rel="noopener noreferrer"
+                    style={{ width: '28px', height: '28px' }}
                   >
                     <Image
                       width={28}
                       height={28}
                       src={"/wa.svg"}
                       alt="WhatsApp"
+                      style={{ width: '28px', height: '28px' }}
                     />
                   </a>
                 </div>
@@ -538,7 +546,8 @@ const Header = () => {
     <header className="w-full select-none">
       {/* Верхняя строка (первая) */}
       <div
-        className="flex justify-between items-center max-w-[1300px] container-centered border-b-[1px] border-[#e3e5ef]"      >
+        className="flex justify-between items-center max-w-[1300px] container-centered border-b border-[#e3e5ef]"
+      >
         {/* Логотип слева */}
         <Link aria-label="На главную" className="flex items-center" href="/">
           <Image
