@@ -303,6 +303,7 @@ const StoreInfo = () => {
                 sizes="(max-width: 425px) 100vw, (max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
                 quality={70}
                 loading={index < 3 ? "eager" : "lazy"}
+                fetchPriority={index === 0 ? "high" : "auto"}
               />
             </div>
           ))}

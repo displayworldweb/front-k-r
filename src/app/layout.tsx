@@ -53,33 +53,27 @@ export default function RootLayout({
   return (
     <html lang="ru">
       <head>
-        {/* Critical inline styles to prevent CLS and eliminate render-blocking CSS */}
+        {/* Critical inline styles to eliminate render-blocking CSS */}
         <style dangerouslySetInnerHTML={{__html: `
+          @font-face{font-family:LatoRegular;src:url(/fonts/LatoRegular.ttf) format("truetype");font-display:swap;font-weight:400}
+          @font-face{font-family:LatoBold;src:url(/fonts/LatoBold.ttf) format("truetype");font-display:swap;font-weight:700}
           *{box-sizing:border-box;margin:0;padding:0}
-          body{font-family:system-ui,-apple-system,BlinkMacSystemFont,Arial,sans-serif;font-size:16px;line-height:1.5;contain:layout style;min-width:360px}
+          body{font-family:LatoRegular,system-ui,-apple-system,BlinkMacSystemFont,Arial,sans-serif;font-size:16px;line-height:1.5;contain:layout style;min-width:360px;background:#fff;color:#000}
           main{min-height:100vh;display:block;contain:layout style}
           .min-h-screen{min-height:100vh}
           section:first-of-type{min-height:clamp(226px,29.5vw,400px);aspect-ratio:1300/400;contain:layout style paint;position:relative}
-          img{content-visibility:auto;contain-intrinsic-size:auto 400px;max-width:100%;height:auto}
-          h1,h2,h3,h4,h5,h6{font-weight:700;line-height:1.2}
+          img{content-visibility:auto;contain-intrinsic-size:auto 400px;max-width:100%;height:auto;display:block}
+          h1,h2,h3,h4,h5,h6{font-family:LatoBold,Arial,sans-serif;font-weight:700;line-height:1.2}
           a{text-decoration:none;color:inherit}
+          .font-bold,strong{font-family:LatoBold,Arial,sans-serif;font-weight:700}
         `}} />
         
-        {/* Preconnect FIRST for early connection establishment */}
+        {/* Preconnect для раннего установления соединения */}
+        <link rel="preconnect" href="https://k-r.by" />
         <link rel="preconnect" href="https://mc.yandex.ru" />
         <link rel="dns-prefetch" href="https://mc.yandex.ru" />
-        <link rel="preconnect" href="https://k-r.by" />
         
-        {/* Preload critical font FIRST to prevent FOUT */}
-        <link
-          rel="preload"
-          href="/fonts/LatoRegular.ttf"
-          as="font"
-          type="font/ttf"
-          crossOrigin="anonymous"
-        />
-        
-        {/* Preload LCP image - highest priority */}
+        {/* Preload LCP изображения с наивысшим приоритетом */}
         <link
           rel="preload"
           as="image"
