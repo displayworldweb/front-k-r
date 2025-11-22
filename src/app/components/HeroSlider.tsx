@@ -187,7 +187,8 @@ const HeroSlider = () => {
       className="relative"
       style={{
         height: getSliderHeight(),
-        minHeight: 'clamp(226px, 29.5vw, 400px)' // Резервируем минимальную высоту
+        minHeight: 'clamp(226px, 29.5vw, 400px)',
+        aspectRatio: '1300/400'
       }}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
@@ -195,9 +196,9 @@ const HeroSlider = () => {
       {/* Слайды */}
       <div className="max-w-[1300px] container-centered h-full relative">
         {slides.map((slide, index) => {
-          // Всегда рендерим первый слайд для SSR + текущий слайд и соседние после hydration
-          const isFirstSlide = index === 0;
-          const shouldRender = isFirstSlide || 
+          // Всегда рендерим первые 2 слайда для SSR + текущий слайд и соседние после hydration
+          const isFirstSlides = index <= 1;
+          const shouldRender = isFirstSlides || 
             index === currentSlide ||
             index === (currentSlide - 1 + slides.length) % slides.length ||
             index === (currentSlide + 1) % slides.length;
@@ -220,7 +221,7 @@ const HeroSlider = () => {
                 priority={index === 0}
                 fetchPriority={index === 0 ? "high" : "auto"}
                 loading={index === 0 ? "eager" : "lazy"}
-                quality={85}
+                quality={index === 0 ? 90 : 85}
                 sizes="(max-width: 768px) 100vw, 1300px"
               />
               {/* Контент слайда */}

@@ -58,24 +58,19 @@ export default function RootLayout({
           as="image"
           href="/sliders/single.webp"
           fetchPriority="high"
+          imageSizes="(max-width: 768px) 100vw, 1300px"
+          imageSrcSet="/_next/image?url=%2Fsliders%2Fsingle.webp&w=640&q=90 640w, /_next/image?url=%2Fsliders%2Fsingle.webp&w=1200&q=90 1200w, /_next/image?url=%2Fsliders%2Fsingle.webp&w=1920&q=90 1920w"
         />
         
-        {/* Preconnect to external domains */}
-        <link rel="preconnect" href="https://mc.yandex.ru" crossOrigin="anonymous" />
+        {/* Preconnect to external domains - низкий приоритет */}
+        <link rel="preconnect" href="https://mc.yandex.ru" />
         <link rel="dns-prefetch" href="https://mc.yandex.ru" />
-        <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://cdn.jsdelivr.net" />
         
-        {/* Preload critical fonts - убираем fetchPriority для снижения конкуренции с LCP */}
+        {/* Preload critical fonts - убираем для снижения конкуренции с LCP */}
         <link
           rel="preload"
           href="/fonts/LatoRegular.ttf"
-          as="font"
-          type="font/ttf"
-          crossOrigin="anonymous"
-        />
-        <link
-          rel="preload"
-          href="/fonts/LatoBold.ttf"
           as="font"
           type="font/ttf"
           crossOrigin="anonymous"

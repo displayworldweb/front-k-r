@@ -38,7 +38,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default function Home() {
    return (
-    <main style={{ minHeight: '100vh' }}>
+    <main className="min-h-screen">
         <HeroSlider/>
         <PopularCategories />
         <StoreInfo />

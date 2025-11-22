@@ -347,7 +347,7 @@ const StoreInfo = () => {
                 Витебск, ул. Терешковой 9Б
               </p>
 
-              <div className="relative group mb-6 no-wrap">
+              <div className="relative group mb-6 no-wrap" style={{ minHeight: '24px' }}>
                 <button className="relative flex items-center text-[16px] font-medium">
                   <span
                     className={`inline-block w-3 h-3 rounded-full ${statusColor} mr-2`}
