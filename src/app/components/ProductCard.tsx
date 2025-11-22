@@ -2,6 +2,7 @@
 "use client";
 import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { ColorOption, Product } from "../types/types";
 
 interface ProductCardProps {
@@ -481,27 +482,17 @@ const ProductCard = ({
         onTouchStart={handleTouchStartImage}
       >
         <Link href={generateProductHref(product)}>
-        {displayImage.includes('/800x800/') ? (
-          <img
-            src={displayImage}
-            srcSet={(() => {
-              const ext = displayImage.split('.').pop() || 'webp';
-              const pathWithoutExt = displayImage.substring(0, displayImage.lastIndexOf('.'));
-              return `${pathWithoutExt}-256w.${ext} 256w, ${pathWithoutExt}-512w.${ext} 512w, ${displayImage} 800w`;
-            })()}
-            sizes="256px"
-            alt={product.name}
-            className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105"
-            loading="lazy"
-          />
-        ) : (
-          <img
-            src={displayImage}
-            alt={product.name}
-            className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105"
-            loading="lazy"
-          />
-        )}
+          <div className="relative w-full h-full">
+            <Image
+              src={displayImage}
+              alt={product.name}
+              fill
+              className="object-contain transition-transform duration-300 group-hover:scale-105"
+              loading="lazy"
+              sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+              quality={80}
+            />
+          </div>
         </Link>
         {/* Индикаторы цветов для десктопа */}
         {!isTablet && hasColors && (
