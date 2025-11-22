@@ -234,15 +234,21 @@ const HeroSlider = () => {
               <div className="flex flex-col h-full">
                 {/* Верхняя часть - изображение */}
                 <div
-                  className="w-full mb-5.5 rounded-xl"
+                  className="w-full mb-5.5 rounded-xl relative"
                   style={{
                     height: "clamp(200px, 50vh, 300px)",
-                    backgroundImage: `url(${slide.image})`,
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                    backgroundRepeat: "no-repeat",
                   }}
-                ></div>
+                >
+                  <Image
+                    src={slide.image}
+                    alt={slide.title}
+                    fill
+                    className="rounded-xl object-cover"
+                    priority={index === 0}
+                    quality={75}
+                    sizes="100vw"
+                  />
+                </div>
 
                 {/* Нижняя часть - текст и кнопка на белом фоне */}
                 <div className="bg-white text-[#2c3a54]">
