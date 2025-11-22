@@ -3,15 +3,17 @@
 @font-face {
     font-family: LatoBold;
     src: url(/fonts/LatoBold.ttf) format("truetype");
-    font-display: optional;
+    font-display: swap;
     font-weight: 700;
+    size-adjust: 100%;
 }
 
 @font-face {
     font-family: LatoRegular;
     src: url(/fonts/LatoRegular.ttf) format("truetype");
-    font-display: optional;
+    font-display: swap;
     font-weight: 400;
+    size-adjust: 100%;
 }
 
 :root {
@@ -19,10 +21,16 @@
   --foreground: #ffffff;
 }
 
-/* Prevent layout shift from fonts */
+/* Prevent layout shift from fonts and images */
 body {
   font-size: 16px;
   line-height: 1.5;
+}
+
+/* Prevent CLS for hero slider - reserve space */
+section[class*="relative"] > div[class*="container-centered"] {
+  min-height: clamp(226px, 29.5vw, 400px);
+  contain: layout;
 }
 
 @theme inline {

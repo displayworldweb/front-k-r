@@ -8,6 +8,7 @@ const HeroSlider = () => {
   const [isPaused, setIsPaused] = useState(false);
   const [windowWidth, setWindowWidth] = useState(1024); // Значение по умолчанию для SSR
   const [mounted, setMounted] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Адаптивная высота
   const getSliderHeight = () => {
@@ -76,6 +77,10 @@ const HeroSlider = () => {
   useEffect(() => {
     setMounted(true);
     setWindowWidth(window.innerWidth);
+    // Отключаем загрузку после первого рендера
+    requestAnimationFrame(() => {
+      setIsLoading(false);
+    });
   }, []);
 
   // Отслеживаем ширину окна с debounce для уменьшения принудительной компоновки
@@ -188,7 +193,8 @@ const HeroSlider = () => {
       style={{
         height: getSliderHeight(),
         minHeight: 'clamp(226px, 29.5vw, 400px)',
-        aspectRatio: '1300/400'
+        aspectRatio: '1300/400',
+        contain: 'layout style paint'
       }}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
@@ -237,11 +243,17 @@ const HeroSlider = () => {
                     minWidth: "45vw",
                     maxWidth: "54vw",
                     color: "#2c3a54",
+                    minHeight: "200px",
+                    contain: "layout"
                   }}
                 >
                   <h2
                     className="font-bold mb-2"
-                    style={{ fontSize: fontSize.title, paddingInlineEnd: "300px" }}
+                    style={{ 
+                      fontSize: fontSize.title, 
+                      paddingInlineEnd: "300px",
+                      minHeight: "1.2em"
+                    }}
                   >
                     {slide.title}
                   </h2>
@@ -249,6 +261,7 @@ const HeroSlider = () => {
                     style={{
                       fontSize: fontSize.subtitle,
                       marginBottom: windowWidth > 1200 ? "56px" : "20px",
+                      minHeight: "1.5em"
                     }}
                   >
                     {slide.subtitle}
