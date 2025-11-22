@@ -23,6 +23,12 @@ const nextConfig: NextConfig = {
   experimental: {
     scrollRestoration: false,
   },
+  // Настройка компилятора для современных браузеров
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production',
+  },
+  // Отключаем полифилы для современных браузеров
+  swcMinify: true,
   // Добавляем поддержку статических файлов
   async rewrites() {
     return [

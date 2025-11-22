@@ -38,7 +38,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default function Home() {
    return (
-    <main className="overflow-hidden">
+    <main>
         <HeroSlider/>
         <PopularCategories />
         <StoreInfo />
