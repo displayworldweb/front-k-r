@@ -2,6 +2,10 @@ import type { NextConfig } from "next";
 import path from "path";
 
 const nextConfig: NextConfig = {
+  // Turbopack конфигурация для Next.js 16+
+  turbopack: {
+    // Пустой объект для использования дефолтных настроек Turbopack
+  },
   // Таргетинг на современные браузеры - отключаем полифилы через SWC
   transpilePackages: [],
   modularizeImports: {
@@ -41,60 +45,7 @@ const nextConfig: NextConfig = {
   },
   reactStrictMode: true,
   // Минимальная целевая версия JS для современных браузеров
-  webpack: (config, { isServer, webpack }) => {
-    // Отключаем полифилы для современных браузеров
-    config.resolve = config.resolve || {};
-    config.resolve.alias = {
-      ...config.resolve.alias,
-      // Отключаем core-js полифилы
-      'core-js': false,
-      'core-js/modules': false,
-    };
-    
-    if (!isServer) {
-      // Агрессивная оптимизация для клиентской сборки
-      config.optimization = {
-        ...config.optimization,
-        moduleIds: 'deterministic',
-        runtimeChunk: 'single',
-        splitChunks: {
-          chunks: 'all',
-          cacheGroups: {
-            default: false,
-            vendors: false,
-            // Vendor chunks для библиотек
-            vendor: {
-              name: 'vendor',
-              test: /[\\/]node_modules[\\/]/,
-              priority: 20,
-              reuseExistingChunk: true,
-            },
-            // React и React-DOM отдельно
-            react: {
-              test: /[\\/]node_modules[\\/](react|react-dom|scheduler)[\\/]/,
-              name: 'react',
-              priority: 30,
-              reuseExistingChunk: true,
-            },
-            // Next.js runtime
-            next: {
-              test: /[\\/]node_modules[\\/]next[\\/]/,
-              name: 'next',
-              priority: 25,
-              reuseExistingChunk: true,
-            },
-            // Общий код между страницами
-            common: {
-              minChunks: 2,
-              priority: 10,
-              reuseExistingChunk: true,
-            },
-          },
-        },
-      };
-    }
-    return config;
-  },
+  // Оптимизации теперь обрабатываются Turbopack автоматически
   // Оптимизация для production
   poweredByHeader: false,
   compress: true,
