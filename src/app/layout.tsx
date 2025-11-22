@@ -62,12 +62,7 @@ export default function RootLayout({
           imageSrcSet="/_next/image?url=%2Fsliders%2Fsingle.webp&w=640&q=90 640w, /_next/image?url=%2Fsliders%2Fsingle.webp&w=1200&q=90 1200w, /_next/image?url=%2Fsliders%2Fsingle.webp&w=1920&q=90 1920w"
         />
         
-        {/* Preconnect to external domains - низкий приоритет */}
-        <link rel="preconnect" href="https://mc.yandex.ru" />
-        <link rel="dns-prefetch" href="https://mc.yandex.ru" />
-        <link rel="preconnect" href="https://cdn.jsdelivr.net" />
-        
-        {/* Preload critical fonts - убираем для снижения конкуренции с LCP */}
+        {/* Preload critical fonts */}
         <link
           rel="preload"
           href="/fonts/LatoRegular.ttf"
@@ -75,6 +70,18 @@ export default function RootLayout({
           type="font/ttf"
           crossOrigin="anonymous"
         />
+        <link
+          rel="preload"
+          href="/fonts/LatoBold.ttf"
+          as="font"
+          type="font/ttf"
+          crossOrigin="anonymous"
+        />
+        
+        {/* Preconnect to external domains */}
+        <link rel="preconnect" href="https://mc.yandex.ru" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://mc.yandex.ru" />
+        
         <SchemaOrg schema={schemaOrganization} />
       </head>
       <body className="min-w-[360px]">

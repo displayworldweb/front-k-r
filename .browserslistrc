@@ -1,0 +1,14 @@
+# Современные браузеры - без полифилов для ES6+
+[production]
+chrome >= 90
+firefox >= 88
+safari >= 14
+edge >= 90
+and_chr >= 90
+and_ff >= 88
+ios_saf >= 14
+
+[development]
+last 1 chrome version
+last 1 firefox version
+last 1 safari version

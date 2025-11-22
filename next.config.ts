@@ -5,6 +5,13 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: path.resolve(__dirname),
   },
+  // Таргетинг на современные браузеры - отключаем полифилы
+  transpilePackages: [],
+  modularizeImports: {
+    'react-icons': {
+      transform: 'react-icons/{{member}}',
+    },
+  },
   images: {
     remotePatterns: [
       {
@@ -30,6 +37,7 @@ const nextConfig: NextConfig = {
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
   },
+  reactStrictMode: true,
   // Оптимизация для production
   poweredByHeader: false,
   compress: true,
