@@ -27,7 +27,7 @@ const YandexMetrika = () => {
             src="https://mc.yandex.ru/watch/105383661"
             style={{ position: 'absolute', left: '-9999px' }}
             alt=""
-          />
+           loading="lazy"/>
         </div>
       </noscript>
     </>

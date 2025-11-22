@@ -533,7 +533,7 @@ export default function SEOAdminPage() {
                             <img
                               src={seoData.ogImage}
                               alt="OG Preview"
-                              className="max-h-48 rounded-lg border border-gray-300"
+                              className="max-h-48 rounded-lg border border-gray-300" loading="lazy"
                             />
                           </div>
                         )}

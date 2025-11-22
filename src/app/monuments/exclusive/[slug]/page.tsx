@@ -726,7 +726,7 @@ const ExclusiveProductPage = () => {
                       <img
                         src={type.image}
                         alt={type.name}
-                        className="w-full h-auto object-cover rounded-lg"
+                        className="w-full h-auto object-cover rounded-lg" loading="lazy"
                       />
                       <p className="text-[14px] text-[#6B809E]">{type.name}</p>
                     </div>
@@ -774,7 +774,7 @@ const ExclusiveProductPage = () => {
                     <img
                       src={`/single/example${id}.webp`}
                       alt={`Пример оформления ${id}`}
-                      className="w-full h-auto object-cover rounded-lg group-hover:scale-105 transition-transform duration-300"
+                      className="w-full h-auto object-cover rounded-lg group-hover:scale-105 transition-transform duration-300" loading="lazy"
                     />
                     <p className="text-[12px] text-[#2D4266] mt-2 text-center">
                       {imageSlides[id - 1]?.caption}
@@ -856,7 +856,7 @@ const ExclusiveProductPage = () => {
               <img
                 src={graniteTypes[currentGraniteSlide].image}
                 alt={graniteTypes[currentGraniteSlide].name}
-                className="max-w-full max-h-[90vh] object-contain"
+                className="max-w-full max-h-[90vh] object-contain" loading="lazy"
               />
             </div>
 
@@ -907,7 +907,7 @@ const ExclusiveProductPage = () => {
               <img
                 src={imageSlides[currentImageSlide].src}
                 alt={imageSlides[currentImageSlide].alt}
-                className="max-w-full max-h-[90vh] object-contain"
+                className="max-w-full max-h-[90vh] object-contain" loading="lazy"
               />
             </div>
 

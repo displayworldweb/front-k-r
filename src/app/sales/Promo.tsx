@@ -98,6 +98,7 @@ const Promo = () => {
                     src={imageUrl}
                     alt={campaign.title}
                     className="w-full h-48 rounded-t-lg object-cover"
+                    loading="lazy"
                     onError={(e) => {
                       // Если изображение не загружается, скрываем его
                       (e.target as HTMLImageElement).style.display = 'none';

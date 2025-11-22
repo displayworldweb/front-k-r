@@ -6,6 +6,7 @@ interface FooterPhoneDropdownProps {
   PHONE_MTS: string;
   PHONE_A1: string;
   onLinkClick?: () => void;
+  onModalOpen?: () => void;
 }
 
 const FooterPhoneDropdown: React.FC<FooterPhoneDropdownProps> = ({
@@ -13,6 +14,7 @@ const FooterPhoneDropdown: React.FC<FooterPhoneDropdownProps> = ({
   PHONE_MTS,
   PHONE_A1,
   onLinkClick,
+  onModalOpen,
 }) => {
   if (!isPhoneDropdownOpen) return null;
 
@@ -134,7 +136,7 @@ const FooterPhoneDropdown: React.FC<FooterPhoneDropdownProps> = ({
       {/* Кнопка "Заказать звонок" */}
       <button
         className="w-full bg-[#2c3a54] text-white text-[16px] font-bold px-2.5 py-3.5"
-        onClick={() => (window.location.href = "/order-call")}
+        onClick={onModalOpen}
       >
         Заказать звонок
       </button>

@@ -555,7 +555,7 @@ export default function LandscapeAdminPage() {
             {editForm.image && (
               <div className="mt-3">
                 <p className="text-sm text-gray-600 mb-2">Превью:</p>
-                <img src={editForm.image} alt="Preview" className="h-24 w-24 object-cover rounded" />
+                <img src={editForm.image} alt="Preview" className="h-24 w-24 object-cover rounded" loading="lazy" />
               </div>
             )}
           </div>

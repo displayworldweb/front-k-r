@@ -81,7 +81,7 @@ export function PageBlocksRenderer({ blocks, className = "" }: PageBlocksRendere
             <img 
               src={block.content.src} 
               alt={block.content.alt || ''} 
-              className="w-full h-auto rounded-lg shadow-md"
+              className="w-full h-auto rounded-lg shadow-md" loading="lazy"
             />
             {block.content.caption && (
               <figcaption className="text-sm text-gray-500 mt-2 text-center italic">

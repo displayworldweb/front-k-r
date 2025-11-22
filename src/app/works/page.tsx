@@ -170,7 +170,7 @@ const OurWorksPage = () => {
                                     <img
                                         src={work.image}
                                         alt={work.title || `Работа ${work.id}`}
-                                        className="w-full h-auto object-cover px-1.25"
+                                        className="w-full h-auto object-cover px-1.25" loading="lazy"
                                     />
                                     {work.title && (
                                         <div className="p-2 text-center text-sm text-gray-700">
@@ -242,7 +242,7 @@ const OurWorksPage = () => {
                             <img
                                 src={filteredWorks[currentModalSlide].image}
                                 alt={`Работа ${filteredWorks[currentModalSlide].id}`}
-                                className="max-w-full max-h-[90vh] object-contain"
+                                className="max-w-full max-h-[90vh] object-contain" loading="lazy"
                             />
                         </div>
 

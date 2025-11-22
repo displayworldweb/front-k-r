@@ -12,16 +12,6 @@ import Link from "next/link";
 import { apiClient, API_ENDPOINTS } from "@/lib/api-client";
 import { PageDescriptionBlock } from "../components/PageDescriptionBlock";
 
-interface Fence {
-  id: number;
-  name: string;
-  price?: number;
-  textPrice?: string;
-  category: string;
-  image: string;
-  createdAt: string;
-}
-
 interface FenceProduct {
   id: number;
   name: string;
@@ -177,7 +167,7 @@ const FencesPageClient = () => {
                         <h1 className="text-black text-[28px] mt-2.5 mb-5 leading-8 lg:text-[40px] lg:leading-12 font-semibold">Ограды на кладбище</h1>
 
                         {/* Блок категорий */}
-                        <div className="grid grid-cols-2 md:grid-cols-3 gap-2.5 mb-7.5">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5 mb-7.5">
                             {categories.map((category) => (
                                 <a
                                     key={category.title}
@@ -193,7 +183,7 @@ const FencesPageClient = () => {
                                             <img
                                                 src={category.img}
                                                 alt={category.title}
-                                                className={`h-full object-cover rounded-lg ${isTablet ? 'w-[75px]' : 'w-[130px]'}`}
+                                                className={`h-full object-cover rounded-lg ${isTablet ? 'w-[75px]' : 'w-[130px]'}`} loading="lazy"
                                             />
                                         </div>
                                     </div>
@@ -281,7 +271,7 @@ const FencesPageClient = () => {
                                             right: '10px',
                                             transform: 'translateY(-50%)',
                                         }}
-                                    />
+                                     loading="lazy"/>
                                 </Link>
                             </div>
 
@@ -304,7 +294,7 @@ const FencesPageClient = () => {
                                             right: '10px',
                                             transform: 'translateY(-50%)',
                                         }}
-                                    />
+                                     loading="lazy"/>
                                 </Link>
                             </div>
                         </div>

@@ -49,7 +49,7 @@ const MonumentDismantlePage = () => {
                         <div className={`flex flex-wrap ${isNarrowMobile ? 'flex-col space-y-2.5' : ''}`}>
                             {/* Карточка "Установка оград" */}
                             <div className={`px-1.25 md:px-2.5 max-w-1/2 flex-1/2 min-h-[60px] lg:min-h-[140px] ${isNarrowMobile ? 'max-w-full' : ''}`}>
-                                <a href="/fences-installation" className="block overflow-hidden rounded-lg hover:border-2 border-[#2c3a54] bg-[#f5f6fa] relative h-full items-center pr-40 p-7.5">
+                                <a href="/services/fence-installation" className="block overflow-hidden rounded-lg hover:border-2 border-[#2c3a54] bg-[#f5f6fa] relative h-full items-center pr-40 p-7.5">
                                     {/* Текст */}
                                     <h2 className="text-[16px] font-bold text-[#222222] self-start">Установка оград</h2>
                                     {/* Изображение с абсолютным позиционированием */}
@@ -57,12 +57,12 @@ const MonumentDismantlePage = () => {
                                         src="/services/fence-installation.webp"
                                         alt="Установка оград"
                                         className="w-[75px] lg:w-[130px] h-auto object-cover rounded-lg absolute top-1/2 right-2.5 transform -translate-y-1/2"
-                                    />
+                                     loading="lazy"/>
                                 </a>
                             </div>
                             {/* Карточка "Изготовление памятников" */}
                             <div className={`px-1.25 md:px-2.5 max-w-1/2 flex-1/2 min-h-[60px] lg:min-h-[140px] ${isNarrowMobile ? 'max-w-full' : ''}`}>
-                                <a href="/monument-manufacturing" className="block overflow-hidden rounded-lg hover:border-2 border-[#2c3a54] bg-[#f5f6fa] relative h-full items-center pr-40 p-7.5">
+                                <a href="/services/monument-production" className="block overflow-hidden rounded-lg hover:border-2 border-[#2c3a54] bg-[#f5f6fa] relative h-full items-center pr-40 p-7.5">
                                     {/* Текст */}
                                     <h2 className="text-[16px] font-bold text-[#222222] self-start">Изготовление памятников</h2>
                                     {/* Изображение с абсолютным позиционированием */}
@@ -70,7 +70,7 @@ const MonumentDismantlePage = () => {
                                         src="/services/monument-production.webp"
                                         alt="Изготовление памятников"
                                         className="w-[75px] lg:w-[130px] h-auto object-cover rounded-lg absolute top-1/2 right-2.5 transform -translate-y-1/2"
-                                    />
+                                     loading="lazy"/>
                                 </a>
                             </div>
                         </div>

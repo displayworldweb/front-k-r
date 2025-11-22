@@ -194,7 +194,7 @@ export default function View360({ baseImagePath, sourceImagePath = '', totalFram
         }`}
         onMouseDown={handleDragStart}
         onTouchStart={handleDragStart}
-        draggable={false}
+        draggable={false} loading="lazy"
       />
 
       {/* Кнопка 360° - маленькая как звёздочка */}

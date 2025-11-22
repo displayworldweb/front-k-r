@@ -447,7 +447,7 @@ export default function AdminCampaignsNewPage() {
             />
             {block.content.src && (
               <div className="mt-3">
-                <img src={block.content.src} alt="Preview" className="h-32 w-auto object-cover rounded border" />
+                <img src={block.content.src} alt="Preview" className="h-32 w-auto object-cover rounded border" loading="lazy" />
               </div>
             )}
           </div>
@@ -487,7 +487,7 @@ export default function AdminCampaignsNewPage() {
                     ×
                   </button>
                   {imageSrc && (
-                    <img src={imageSrc} alt="Preview" className="h-12 w-12 object-cover rounded border" />
+                    <img src={imageSrc} alt="Preview" className="h-12 w-12 object-cover rounded border" loading="lazy" />
                   )}
                 </div>
               ))}
@@ -817,7 +817,7 @@ export default function AdminCampaignsNewPage() {
               </div>
               {featuredImage && (
                 <div className="mt-3">
-                  <img src={featuredImage} alt="Preview" className="h-24 w-24 object-cover rounded" />
+                  <img src={featuredImage} alt="Preview" className="h-24 w-24 object-cover rounded" loading="lazy" />
                 </div>
               )}
             </div>

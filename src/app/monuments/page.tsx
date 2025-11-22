@@ -269,7 +269,7 @@ const MonumentsPage = () => {
                                             <img
                                                 src={category.img}
                                                 alt={category.title}
-                                                className={`h-full object-cover rounded-lg ${isTablet ? 'w-[75px]' : 'w-[130px]'}`}
+                                                className={`h-full object-cover rounded-lg ${isTablet ? 'w-[75px]' : 'w-[130px]'}`} loading="lazy"
                                             />
                                         </div>
                                     </div>
@@ -363,7 +363,7 @@ const MonumentsPage = () => {
                                             right: '10px',
                                             transform: 'translateY(-50%)',
                                         }}
-                                    />
+                                     loading="lazy"/>
                                 </a>
                             </div>
 
@@ -386,7 +386,7 @@ const MonumentsPage = () => {
                                             right: '10px',
                                             transform: 'translateY(-50%)',
                                         }}
-                                    />
+                                     loading="lazy"/>
                                 </a>
                             </div>
                         </div>

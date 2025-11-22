@@ -1237,7 +1237,7 @@ export default function ProductsAdminPage() {
                       <img 
                         src={monument.image.startsWith('http') ? monument.image : `https://k-r.by${monument.image}`} 
                         alt={monument.name}
-                        className="w-16 h-16 object-cover rounded"
+                        className="w-16 h-16 object-cover rounded" loading="lazy"
                       />
                       <div>
                         <h4 className="font-semibold text-lg">{monument.name}</h4>
@@ -1673,6 +1673,7 @@ export default function ProductsAdminPage() {
                           })()} 
                           alt="Превью" 
                           className="w-32 h-32 object-cover rounded border"
+                          loading="lazy"
                           onError={(e) => {
                             console.error('Image load error:', editForm.image);
                             e.currentTarget.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTI4IiBoZWlnaHQ9Ijk2IiB2aWV3Qm94PSIwIDAgMTI4IDk2IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cmVjdCB3aWR0aD0iMTI4IiBoZWlnaHQ9Ijk2IiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik00MCA0MEg4OFY1Nkg0MFY0MFoiIGZpbGw9IiM5Q0EzQUYiLz4KUGF0aCBkPSJNNDggNDhIODBWNTZINDhWNDhaIiBmaWxsPSJ3aGl0ZSIvPgo8dGV4dCB4PSI2NCIgeT0iNzYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM5Q0EzQUYiIGZvbnQtc2l6ZT0iMTIiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiI+0J7RiNC40LHQutCwINC30LDQs9GA0YPQt9C60Lg8L3RleHQ+Cjwvc3ZnPg==';

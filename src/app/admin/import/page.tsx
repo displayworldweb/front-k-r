@@ -375,6 +375,52 @@ export default function MonumentsImportPage() {
             </div>
           </div>
         </div>
+
+        {/* Примеры файлов */}
+        <div className="bg-green-50 border border-green-200 rounded-lg p-6">
+          <h2 className="text-lg font-semibold text-green-900 mb-4">📥 Примеры файлов для скачивания</h2>
+          <p className="text-sm text-green-800 mb-4">
+            Скачайте пример Excel файла для нужной категории, отредактируйте данные и загрузите обратно
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <a
+              href="/import-examples/single-monuments.xlsx"
+              download="single-monuments.xlsx"
+              className="flex items-center gap-2 p-3 bg-white border border-green-300 rounded-lg hover:bg-green-100 transition-colors text-green-700 font-medium"
+            >
+              <span>📥</span>
+              <span>Одиночные памятники</span>
+              <span className="text-xs ml-auto text-gray-600">(59 шт)</span>
+            </a>
+            <a
+              href="/import-examples/double-monuments.xlsx"
+              download="double-monuments.xlsx"
+              className="flex items-center gap-2 p-3 bg-white border border-green-300 rounded-lg hover:bg-green-100 transition-colors text-green-700 font-medium"
+            >
+              <span>📥</span>
+              <span>Двойные памятники</span>
+              <span className="text-xs ml-auto text-gray-600">(32 шт)</span>
+            </a>
+            <a
+              href="/import-examples/composite-monuments.xlsx"
+              download="composite-monuments.xlsx"
+              className="flex items-center gap-2 p-3 bg-white border border-green-300 rounded-lg hover:bg-green-100 transition-colors text-green-700 font-medium"
+            >
+              <span>📥</span>
+              <span>Составные памятники</span>
+              <span className="text-xs ml-auto text-gray-600">(106 шт)</span>
+            </a>
+            <a
+              href="/import-examples/exclusive-monuments.xlsx"
+              download="exclusive-monuments.xlsx"
+              className="flex items-center gap-2 p-3 bg-white border border-green-300 rounded-lg hover:bg-green-100 transition-colors text-green-700 font-medium"
+            >
+              <span>📥</span>
+              <span>Эксклюзивные памятники</span>
+              <span className="text-xs ml-auto text-gray-600">(49 шт)</span>
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   );

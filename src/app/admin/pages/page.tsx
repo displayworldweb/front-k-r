@@ -380,7 +380,7 @@ export default function PagesAdminPage() {
             />
             {block.content.src && (
               <div className="mt-3">
-                <img src={block.content.src} alt="Preview" className="h-32 w-auto object-cover rounded border" />
+                <img src={block.content.src} alt="Preview" className="h-32 w-auto object-cover rounded border" loading="lazy" />
               </div>
             )}
           </div>

@@ -445,7 +445,7 @@ export default function BlogsAdminPage() {
             />
             {block.content.src && (
               <div className="mt-3">
-                <img src={block.content.src} alt="Preview" className="h-32 w-auto object-cover rounded border" />
+                <img src={block.content.src} alt="Preview" className="h-32 w-auto object-cover rounded border" loading="lazy" />
               </div>
             )}
           </div>
@@ -485,7 +485,7 @@ export default function BlogsAdminPage() {
                     ×
                   </button>
                   {imageSrc && (
-                    <img src={imageSrc} alt="Preview" className="h-12 w-12 object-cover rounded border" />
+                    <img src={imageSrc} alt="Preview" className="h-12 w-12 object-cover rounded border" loading="lazy" />
                   )}
                 </div>
               ))}
@@ -771,7 +771,7 @@ export default function BlogsAdminPage() {
             </div>
             {featuredImage && (
               <div className="mt-3">
-                <img src={featuredImage} alt="Preview" className="h-24 w-24 object-cover rounded" />
+                <img src={featuredImage} alt="Preview" className="h-24 w-24 object-cover rounded" loading="lazy" />
               </div>
             )}
           </div>
@@ -885,7 +885,7 @@ export default function BlogsAdminPage() {
                 </div>
                 <div className="flex items-center space-x-2 ml-4">
                   {blog.featuredImage && (
-                    <img src={blog.featuredImage} alt={blog.title} className="w-16 h-16 object-cover rounded" />
+                    <img src={blog.featuredImage} alt={blog.title} className="w-16 h-16 object-cover rounded" loading="lazy" />
                   )}
                   <button
                     onClick={() => startEditing(blog)}

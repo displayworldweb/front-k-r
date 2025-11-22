@@ -134,7 +134,7 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(({ isOpen, image, descr
                 <img
                     src={image}
                     alt="Информация"
-                    className="w-full h-auto object-contain mb-2 rounded-lg"
+                    className="w-full h-auto object-contain mb-2 rounded-lg" loading="lazy"
                 />
             )}
             <p className="text-sm">{description}</p>

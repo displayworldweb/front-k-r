@@ -300,7 +300,7 @@ const AccessoryDetailPage = () => {
               <img
                 src={accessory.image}
                 alt={accessory.name}
-                className="w-full h-auto object-contain rounded-lg md:pr-4"
+                className="w-full h-auto object-contain rounded-lg md:pr-4" loading="lazy"
               />
             </div>
 

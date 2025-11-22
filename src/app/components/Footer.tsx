@@ -99,7 +99,7 @@ const Footer = () => {
           <div className="flex mt-1">
             <button 
               onClick={() => setIsModalOpen(true)}
-              className="bg-white border border-[#2c3a54] text-[#2c3a54] px-3.5 py-1 mr-4.25 md:px-3.75 md:py-2.25 rounded-full font-bold hover:bg-[#2c3a54] hover:text-white transition"
+              className="bg-white border cursor-pointer border-[#2c3a54] text-[#2c3a54] px-3.5 py-1 mr-4.25 md:px-3.75 md:py-2.25 rounded-full font-bold hover:bg-[#2c3a54] hover:text-white transition"
             >
               Заказать звонок
             </button>

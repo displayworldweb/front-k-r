@@ -297,7 +297,7 @@ const StoreInfo = () => {
                   isSmallScreen
                     ? "w-full h-60 rounded-lg object-cover"
                     : "w-full h-full aspect-square rounded-lg object-cover"
-                }
+                } loading="lazy"
               />
             </div>
           ))}
@@ -368,6 +368,9 @@ const StoreInfo = () => {
                         <span>Пн—Пт</span>
                         <span className="flex-1 text-center text-gray-400 mx-2">…………………</span>
                         <span>с 09:00 до 18:00</span>
+                      </div>
+                      <div className="flex justify-end items-center px-4 py-2 text-gray-700">
+                        <span className="text-[12px]">Обед с 12:00 до 13:00</span>
                       </div>
                       <div className="flex items-center px-4 py-2 text-gray-700">
                         <span>Суббота</span>
@@ -459,6 +462,9 @@ const StoreInfo = () => {
                       <span className="flex-1 text-center text-gray-400 mx-2">…………………</span>
                       <span>с 09:00 до 18:00</span>
                     </div>
+                    <div className="flex justify-end items-center px-4 py-2 text-gray-700">
+                      <span className="text-[12px]">Обед с 12:00 до 13:00</span>
+                    </div>
                     <div className="flex items-center px-4 py-2 text-gray-700">
                       <span>Суббота</span>
                       <span className="flex-1 text-center text-gray-400 mx-2">…………………</span>
@@ -544,6 +550,9 @@ const StoreInfo = () => {
                     <span className="flex-1 text-center text-gray-400 mx-2">…………………</span>
                     <span>с 09:00 до 18:00</span>
                   </div>
+                  <div className="flex justify-end items-center px-4 py-2 text-gray-700">
+                    <span className="text-[12px]">Обед с 12:00 до 13:00</span>
+                  </div>
                   <div className="flex items-center px-4 py-2 text-gray-700">
                     <span>Суббота</span>
                     <span className="flex-1 text-center text-gray-400 mx-2">…………………</span>
@@ -625,25 +634,28 @@ const StoreInfo = () => {
                 </svg>
               </button>
 
-                <div className="absolute left-0 transform translate-x-0 top-full mt-0 bg-[#f5f6fa] border border-gray-200 rounded-md shadow-lg z-50 hidden group-hover:block focus-within:block">
-                  <div className="py-1 text-sm whitespace-nowrap">
-                    <div className="flex items-center px-4 py-2 text-gray-700">
-                      <span className="text-blue-600">Пн—Пт</span>
-                      <span className="flex-1 text-center text-gray-400 mx-2">…………………</span>
-                      <span>с 09:00 до 18:00</span>
-                    </div>
-                    <div className="flex items-center px-4 py-2 text-gray-700">
-                      <span>Суббота</span>
-                      <span className="flex-1 text-center text-gray-400 mx-2">…………………</span>
-                      <span>с 10:00 до 16:00</span>
-                    </div>
-                    <div className="flex items-center px-4 py-2 text-gray-700">
-                      <span>Воскресенье</span>
-                      <span className="flex-1 text-center text-gray-400 mx-2">…………………</span>
-                      <span className="text-gray-600">выходной</span>
-                    </div>
+              <div className="absolute left-0 transform translate-x-0 top-full mt-0 bg-[#f5f6fa] border border-gray-200 rounded-md shadow-lg z-50 hidden group-hover:block focus-within:block">
+                <div className="py-1 text-sm whitespace-nowrap">
+                  <div className="flex items-center px-4 py-2 text-gray-700">
+                    <span className="text-blue-600">Пн—Пт</span>
+                    <span className="flex-1 text-center text-gray-400 mx-2">…………………</span>
+                    <span>с 09:00 до 18:00</span>
+                  </div>
+                  <div className="flex justify-end items-center px-4 py-2 text-gray-700">
+                    <span className="text-[12px]">Обед с 12:00 до 13:00</span>
+                  </div>
+                  <div className="flex items-center px-4 py-2 text-gray-700">
+                    <span>Суббота</span>
+                    <span className="flex-1 text-center text-gray-400 mx-2">…………………</span>
+                    <span>с 10:00 до 16:00</span>
+                  </div>
+                  <div className="flex items-center px-4 py-2 text-gray-700">
+                    <span>Воскресенье</span>
+                    <span className="flex-1 text-center text-gray-400 mx-2">…………………</span>
+                    <span className="text-gray-600">выходной</span>
                   </div>
                 </div>
+              </div>
             </div>
 
             <div className="flex items-start mb-3 translate-x-[-2px]">
@@ -669,9 +681,9 @@ const StoreInfo = () => {
             </div>
           </div>
 
-          <button className="w-max mt-4 px-6 py-2 font-bold border-1 border-[#2c3a54] rounded-full text-[#2c3a54] hover:bg-[#2c3a54] hover:text-white transition-colors">
+          <Link href="/contacts" className="w-max mt-4 px-6 py-2 font-bold border-1 border-[#2c3a54] rounded-full text-[#2c3a54] hover:bg-[#2c3a54] hover:text-white transition-colors">
             Подробнее
-          </button>
+          </Link>
         </div>
       </div>
 
@@ -713,7 +725,7 @@ const StoreInfo = () => {
               <img
                 src={slides[currentModalSlide].src}
                 alt={slides[currentModalSlide].alt}
-                className="max-w-full max-h-[90vh] object-contain"
+                className="max-w-full max-h-[90vh] object-contain" loading="lazy"
               />
             </div>
           </div>

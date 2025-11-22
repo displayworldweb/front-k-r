@@ -548,9 +548,10 @@ const WorksAdmin = () => {
                     src={formData.image} 
                     alt="Preview" 
                     className="w-32 h-24 object-cover border rounded"
+                    loading="lazy"
                     onError={(e) => {
                       console.error('Image load error:', formData.image);
-                      e.currentTarget.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTI4IiBoZWlnaHQ9Ijk2IiB2aWV3Qm94PSIwIDAgMTI4IDk2IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cmVjdCB3aWR0aD0iMTI4IiBoZWlnaHQ9Ijk2IiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik00MCA0MEg4OFY1Nkg0MFY0MFoiIGZpbGw9IiM5Q0EzQUYiLz4KPHBhdGggZD0iTTQ4IDQ4SCA4MFY1Nkg0OFY0OFoiIGZpbGw9IndoaXRlIi8+Cjx0ZXh0IHg9IjY0IiB5PSI3NiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzlDQTNBRiIgZm9udC1zaXplPSIxMiIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIj7QntGI0LjQsdC60LAg0LfQsNCz0YDRg9C30LrQuDwvdGV4dD4KPC9zdmc+'; // Placeholder изображение
+                      e.currentTarget.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTI4IiBoZWlnaHQ9Ijk2IiB2aWV3Qm94PSIwIDAgMTI4IDk2IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cmVjdCB3aWR0aD0iMTI4IiBoZWlnaHQ9Ijk2IiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik00MCA0MEg4OFY1Nkg0MFY0MFoiIGZpbGw9IiM5Q0EzQUYiLz4KPHBhdGggZD0iTTQ4IDQ4SCA4MFY1Nkg0OVY0OFoiIGZpbGw9IndoaXRlIi8+Cjx0ZXh0IHg9IjY0IiB5PSI3NiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzlDQTNBRiIgZm9udC1zaXplPSIxMiIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIj7QntGI0LjQsdC60LAg0LfQsNCz0YDRg9C30LrQuDwvdGV4dD4KPC9zdmc+'; // Placeholder изображение
                     }}
                   />
                 </div>
@@ -608,7 +609,7 @@ const WorksAdmin = () => {
                     <img 
                       src={work.image} 
                       alt={work.title}
-                      className="w-16 h-12 object-cover rounded"
+                      className="w-16 h-12 object-cover rounded" loading="lazy"
                     />
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">

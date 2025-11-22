@@ -129,7 +129,22 @@ export default function AdminPage() {
       color: "bg-teal-50 border-teal-200",
       count: stats.works,
     },
-
+    {
+      href: "/admin/import",
+      title: "Импорт данных",
+      description: "Загрузка памятников и данных из внешних источников",
+      icon: "📥",
+      color: "bg-orange-50 border-orange-200",
+      count: 0,
+    },
+    {
+      href: "/admin/settings",
+      title: "Настройки",
+      description: "Параметры учетной записи и предпочтения",
+      icon: "⚙️",
+      color: "bg-gray-50 border-gray-200",
+      count: 0,
+    },
   ];
 
   return (
@@ -140,7 +155,7 @@ export default function AdminPage() {
           Панель управления
         </h1>
         <p className="text-gray-600">
-          Добро пожаловать в админ-панель. Выберите модуль для управления.
+          Добро пожаловать в админ-панель. Выберите модуль для управления или используйте меню слева.
         </p>
       </div>
 
@@ -232,68 +247,70 @@ export default function AdminPage() {
       {/* Quick Actions */}
       <div className="mt-12 bg-white rounded-lg shadow p-6">
         <h2 className="text-2xl font-bold text-gray-900 mb-4">Быстрые действия</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-8 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <Link
             href="/admin/epitaphs"
-            className="bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-lg p-4 hover:shadow-lg transition-shadow font-semibold text-center"
+            className="bg-linear-to-r from-purple-500 to-purple-600 text-white rounded-lg p-4 hover:shadow-lg transition-shadow font-semibold text-center"
           >
             + Добавить эпитафию
           </Link>
           <Link
             href="/admin/campaigns"
-            className="bg-gradient-to-r from-red-500 to-red-600 text-white rounded-lg p-4 hover:shadow-lg transition-shadow font-semibold text-center"
+            className="bg-linear-to-r from-red-500 to-red-600 text-white rounded-lg p-4 hover:shadow-lg transition-shadow font-semibold text-center"
           >
             + Добавить акцию
           </Link>
           <Link
             href="/admin/blogs"
-            className="bg-gradient-to-r from-indigo-500 to-indigo-600 text-white rounded-lg p-4 hover:shadow-lg transition-shadow font-semibold text-center"
+            className="bg-linear-to-r from-indigo-500 to-indigo-600 text-white rounded-lg p-4 hover:shadow-lg transition-shadow font-semibold text-center"
           >
             + Добавить блог
           </Link>
           <Link
-            href="/admin/accessories"
-            className="bg-gradient-to-r from-pink-500 to-pink-600 text-white rounded-lg p-4 hover:shadow-lg transition-shadow font-semibold text-center"
-          >
-            + Добавить аксессуар
-          </Link>
-          <Link
-            href="/admin/fences"
-            className="bg-gradient-to-r from-amber-500 to-amber-600 text-white rounded-lg p-4 hover:shadow-lg transition-shadow font-semibold text-center"
-          >
-            + Добавить ограду
-          </Link>
-          <Link
             href="/admin/monuments"
-            className="bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg p-4 hover:shadow-lg transition-shadow font-semibold text-center"
+            className="bg-linear-to-r from-blue-500 to-blue-600 text-white rounded-lg p-4 hover:shadow-lg transition-shadow font-semibold text-center"
           >
             🏛️ Памятники
-          </Link>
-          <Link
-            href="/admin/works"
-            className="bg-gradient-to-r from-teal-500 to-teal-600 text-white rounded-lg p-4 hover:shadow-lg transition-shadow font-semibold text-center"
-          >
-            📸 Работы
           </Link>
         </div>
       </div>
 
       {/* SEO Management */}
       <div className="mt-8 bg-linear-to-r from-cyan-50 to-blue-50 rounded-lg shadow p-6 border-2 border-cyan-200">
-        <h2 className="text-2xl font-bold text-gray-900 mb-4">SEO Управление</h2>
+        <h2 className="text-2xl font-bold text-gray-900 mb-4">🔍 SEO Управление</h2>
         <p className="text-gray-600 mb-6">Управляйте SEO данными для всех сущностей в системе</p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Link
             href="/admin/seo/templates"
             className="bg-linear-to-r from-cyan-500 to-cyan-600 text-white rounded-lg p-4 hover:shadow-lg transition-shadow font-semibold text-center"
           >
-            🔍 SEO Шаблоны категорий
+            SEO Шаблоны категорий
           </Link>
           <Link
             href="/admin/seo"
             className="bg-linear-to-r from-blue-500 to-blue-600 text-white rounded-lg p-4 hover:shadow-lg transition-shadow font-semibold text-center"
           >
-            📋 Управление SEO страниц
+            Управление SEO страниц
+          </Link>
+        </div>
+      </div>
+
+      {/* Import Section */}
+      <div className="mt-8 bg-linear-to-r from-orange-50 to-amber-50 rounded-lg shadow p-6 border-2 border-orange-200">
+        <h2 className="text-2xl font-bold text-gray-900 mb-4">📥 Импорт и Система</h2>
+        <p className="text-gray-600 mb-6">Загрузка данных и системные настройки</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <Link
+            href="/admin/import"
+            className="bg-linear-to-r from-orange-500 to-orange-600 text-white rounded-lg p-4 hover:shadow-lg transition-shadow font-semibold text-center"
+          >
+            Импорт памятников
+          </Link>
+          <Link
+            href="/admin/settings"
+            className="bg-linear-to-r from-gray-500 to-gray-600 text-white rounded-lg p-4 hover:shadow-lg transition-shadow font-semibold text-center"
+          >
+            Настройки аккаунта
           </Link>
         </div>
       </div>

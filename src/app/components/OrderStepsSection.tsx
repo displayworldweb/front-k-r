@@ -136,7 +136,7 @@ const OrderStepsSection = () => {
             </div>
             <button
               onClick={openModal}
-              className="w-full p-2.5 mb-3.75 lg:mb-0 bg-[#2c3a54] text-white font-bold rounded-full hover:bg-[#1e2b40] transition"
+              className="w-full cursor-pointer p-2.5 mb-3.75 lg:mb-0 bg-[#2c3a54] text-white font-bold rounded-full hover:bg-[#1e2b40] transition"
             >
               Оставить заявку
             </button>
@@ -169,7 +169,7 @@ const OrderStepsSection = () => {
                 src="/order/1.webp"
                 alt="Менеджер"
                 className="rounded-lg max-w-[185px] max-h-[170px]"
-              />
+               loading="lazy"/>
             </div>
           </div>
 
@@ -200,7 +200,7 @@ const OrderStepsSection = () => {
                 src="/order/2.webp"
                 alt="Калькулятор"
                 className="rounded-lg max-w-[185px] max-h-[170px]"
-              />
+               loading="lazy"/>
             </div>
           </div>
 
@@ -230,7 +230,7 @@ const OrderStepsSection = () => {
                 src="/order/3.webp"
                 alt="Договор"
                 className="rounded-lg max-w-[185px] max-h-[170px]"
-              />
+               loading="lazy"/>
             </div>
           </div>
         </div>

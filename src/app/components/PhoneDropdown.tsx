@@ -7,6 +7,7 @@ interface PhoneDropdownProps {
   PHONE_MTS: string;
   PHONE_A1: string;
   onLinkClick?: () => void;
+  onModalOpen?: () => void;
 }
 
 const PhoneDropdown = forwardRef<HTMLDivElement, PhoneDropdownProps> (({
@@ -14,6 +15,7 @@ const PhoneDropdown = forwardRef<HTMLDivElement, PhoneDropdownProps> (({
   PHONE_MTS,
   PHONE_A1,
   onLinkClick,
+  onModalOpen,
 }, ref) => {
   if (!isPhoneDropdownOpen) return null;
 
@@ -135,8 +137,8 @@ const PhoneDropdown = forwardRef<HTMLDivElement, PhoneDropdownProps> (({
 
       {/* Кнопка "Заказать звонок" */}
       <button
-        className="w-full bg-[#2c3a54] text-white text-[16px] font-bold px-2.5 py-3.5"
-        onClick={() => (window.location.href = "/order-call")}
+        className="w-full bg-[#2c3a54] cursor-pointer text-white text-[16px] font-bold px-2.5 py-3.5"
+        onClick={onModalOpen || (() => (window.location.href = "/order-call"))}
       >
         Заказать звонок
       </button>

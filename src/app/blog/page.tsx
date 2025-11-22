@@ -105,7 +105,7 @@ const BlogPage = () => {
                                             <img
                                                 src={blog.featuredImage || '/blog/default.webp'}
                                                 alt={blog.title}
-                                                className="w-full h-auto object-cover rounded-lg group-hover:opacity-80 duration-500"
+                                                className="w-full h-auto object-cover rounded-lg group-hover:opacity-80 duration-500" loading="lazy"
                                             />
                                         </div>
 

@@ -801,7 +801,7 @@ export default function FencesAdminPage() {
                       <img 
                         src={fence.image.startsWith('http') ? fence.image : `https://k-r.by${fence.image}`} 
                         alt={fence.name}
-                        className="w-16 h-16 object-cover rounded"
+                        className="w-16 h-16 object-cover rounded" loading="lazy"
                       />
                       <div>
                         <h4 className="font-semibold text-lg flex items-center gap-2">
@@ -1032,7 +1032,7 @@ export default function FencesAdminPage() {
                         <img 
                           src={editForm.image} 
                           alt="Preview" 
-                          className="h-24 w-24 object-cover rounded" 
+                          className="h-24 w-24 object-cover rounded" loading="lazy" 
                         />
                       </div>
                     )}

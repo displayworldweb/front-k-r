@@ -71,7 +71,7 @@ const GraniteTypesPage = () => {
                                 <img
                                     src={type.image}
                                     alt={type.name}
-                                    className="w-full h-auto object-cover"
+                                    className="w-full h-auto object-cover" loading="lazy"
                                 />
                                 <p className="text-[14px] text-[#6B809E]">{type.name}</p>
                             </div>
@@ -124,7 +124,7 @@ const GraniteTypesPage = () => {
                             <img
                                 src={graniteTypes[currentModalSlide].image}
                                 alt={graniteTypes[currentModalSlide].name}
-                                className="max-w-full max-h-[90vh] object-contain"
+                                className="max-w-full max-h-[90vh] object-contain" loading="lazy"
                             />
                         </div>
 

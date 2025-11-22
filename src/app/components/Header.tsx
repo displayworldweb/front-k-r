@@ -14,6 +14,7 @@ import { menuCategories } from "../mock/menuCategories";
 import { additionalMenuItems } from "../mock/menuCategories";
 import PhoneDropdown from "./PhoneDropdown";
 import { useDropdown } from "../context/DropDownContext";
+import ModalCommunication from "./Modal/ModalCommunication";
 
 const PHONE_MTS = "+375 33 322-66-52";
 const PHONE_A1 = "+375 29 622-66-45";
@@ -87,6 +88,9 @@ function StoreStatusInline() {
             <span className="flex-1 text-center text-gray-400 mx-2">……………………</span>
             <span>с 09:00 до 18:00</span>
           </div>
+          <div className="flex justify-end items-center px-4 py-2 text-gray-700">
+            <span className="text-[12px]">Обед с 12:00 до 13:00</span>
+          </div>
           <div className="flex items-center px-4 py-2 text-gray-700">
             <span>Суббота</span>
             <span className="flex-1 text-center text-gray-400 mx-2">……………………</span>
@@ -109,6 +113,7 @@ const Header = () => {
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [windowWidth, setWindowWidth] = useState(0);
   const [dropdownPosition, setDropdownPosition] = useState({ left: 0, top: 0 });
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const phoneButtonRef = useRef<HTMLButtonElement>(null);
   const burgerButtonRef = useRef<HTMLButtonElement>(null);
@@ -248,19 +253,18 @@ const Header = () => {
     if (isPhoneDropdownOpen) setPhoneDropdownOpen(false); // закрываем телефон, если открыт
   };
 
-  const handleDropdownLinkClick = () => {
-    setPhoneDropdownOpen(false);
-    closeBurgerDropdown();
+  const handleModalOpen = () => {
+    setIsModalOpen(true);
   };
 
   const [isClient, setIsClient] = useState(false);
-useEffect(() => {
-  setIsClient(true);
-}, []);
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
-if (!isClient) {
-  return null
-}
+  if (!isClient) {
+    return null
+  }
 
   if (windowWidth >= 1024) {
     return (
@@ -311,7 +315,10 @@ if (!isClient) {
                 )
               )}
             </nav>
-            <button className="bg-[#cd5554] hover:bg-transparent font-[600] hover:text-[#cd5554] border-1 border-[#cd5554] text-white px-[19px] py-[4px] rounded-full text-sm transition">
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="bg-[#cd5554] cursor-pointer hover:bg-transparent font-[600] hover:text-[#cd5554] border-1 border-[#cd5554] text-white px-[19px] py-[4px] rounded-full text-sm transition"
+            >
               Заказать звонок
             </button>
           </div>
@@ -449,9 +456,8 @@ if (!isClient) {
                             width={17}
                             height={17}
                             alt="arrow"
-                            className={`transition-transform ml-1 ${
-                              activeCategory === category.name ? "rotate-180" : ""
-                            }`}
+                            className={`transition-transform ml-1 ${activeCategory === category.name ? "rotate-180" : ""
+                              }`}
                           />
                         </Link>
                       </>
@@ -516,6 +522,13 @@ if (!isClient) {
               );
             })()}
         </div>
+
+        {/* Modal */}
+        <ModalCommunication
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onSubmit={() => setIsModalOpen(false)}
+        />
       </header>
     );
   }
@@ -588,7 +601,8 @@ if (!isClient) {
           isPhoneDropdownOpen={isPhoneDropdownOpen}
           PHONE_MTS={PHONE_MTS}
           PHONE_A1={PHONE_A1}
-          onLinkClick={handleDropdownLinkClick}
+          onLinkClick={PhoneDropdownClick}
+          onModalOpen={handleModalOpen}
         />
       </div>
 
@@ -631,6 +645,13 @@ if (!isClient) {
           <span className="text-sm font-medium">{PHONE_A1}</span>
         </a>
       </div>
+
+      {/* Modal */}
+      <ModalCommunication
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSubmit={() => setIsModalOpen(false)}
+      />
     </header>
   );
 };

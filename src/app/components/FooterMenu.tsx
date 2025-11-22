@@ -7,12 +7,14 @@ import { usePathname } from "next/navigation";
 import { useDropdown } from "../context/DropDownContext";
 import BurgerDropdown from "./BurgerDropdown";
 import FooterPhoneDropdown from "./FooterPhoneDropdown";
+import ModalCommunication from "./Modal/ModalCommunication";
 
 const PHONE_MTS = "+375 33 322-66-52";
 const PHONE_A1 = "+375 29 622-66-45";
 
 const FooterMenu = () => {
   const [isPhoneDropdownOpen, setPhoneDropdownOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const pathname = usePathname();
   const { isBurgerDropdownOpen, toggleBurgerDropdown, closeBurgerDropdown } =
     useDropdown();
@@ -20,6 +22,10 @@ const FooterMenu = () => {
   const handleDropdownLinkClick = () => {
     setPhoneDropdownOpen(false);
     closeBurgerDropdown();
+  };
+
+  const handleModalOpen = () => {
+    setIsModalOpen(true);
   };
 
   // Блокируем скролл при открытом меню
@@ -175,6 +181,7 @@ const FooterMenu = () => {
         PHONE_MTS={PHONE_MTS}
         PHONE_A1={PHONE_A1}
         onLinkClick={handleDropdownLinkClick}
+        onModalOpen={handleModalOpen}
       />
 
       {isBurgerDropdownOpen && (
@@ -183,8 +190,16 @@ const FooterMenu = () => {
           PHONE_MTS={PHONE_MTS}
           PHONE_A1={PHONE_A1}
           onLinkClick={handleDropdownLinkClick}
+          onModalOpen={handleModalOpen}
         />
       )}
+
+      {/* Modal */}
+      <ModalCommunication
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSubmit={() => setIsModalOpen(false)}
+      />
     </>
   );
 };

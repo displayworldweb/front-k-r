@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import { getMetadataForPage } from '@/lib/seo-metadata';
+import { generateOpenGraphMetadata } from '@/lib/open-graph';
 import HeroSlider from "./components/HeroSlider";
 import PopularCategories from "./components/PopularCategories";
 import StoreInfo from "./components/StoreInfo";
@@ -18,11 +19,22 @@ import FAQ from "./components/FAQ";
 
 // Генерируем метаданные для SEO
 export async function generateMetadata(): Promise<Metadata> {
-  return await getMetadataForPage(
+  const baseMetadata = await getMetadataForPage(
     'home',
     'Памятники и памятные комплексы из гранита | КР',
     'Изготовление и продажа памятников из гранита, оград и памятных комплексов'
   );
+
+  return {
+    ...baseMetadata,
+    ...generateOpenGraphMetadata(
+      'Каменная Роза - Памятники из гранита в Витебске',
+      'Производство и установка памятников, оград и аксессуаров из гранита. Качество, надежность, индивидуальный подход.',
+      'https://k-r.by/monuments.jpg',
+      'https://k-r.by',
+      'website'
+    ),
+  };
 }
 
 export default function Home() {

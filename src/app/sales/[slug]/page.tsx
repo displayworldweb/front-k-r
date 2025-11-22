@@ -179,7 +179,7 @@ export default function CampaignPage({ params }: CampaignPageProps) {
             <img
               src={imageSrc}
               alt={block.content.alt || ''}
-              className="w-full h-auto rounded-lg object-cover"
+              className="w-full h-auto rounded-lg object-cover" loading="lazy"
             />
             {block.content.caption && (
               <p className="text-sm text-gray-600 mt-2 text-center italic">
@@ -202,7 +202,7 @@ export default function CampaignPage({ params }: CampaignPageProps) {
                     key={imgIndex}
                     src={fullImageSrc}
                     alt={`Изображение ${imgIndex + 1}`}
-                    className="w-full h-64 object-cover rounded-lg"
+                    className="w-full h-64 object-cover rounded-lg" loading="lazy"
                   />
                 );
               })}

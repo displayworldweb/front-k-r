@@ -208,7 +208,7 @@ const AccessoriesPage = () => {
                                             <img
                                                 src={category.img}
                                                 alt={category.title}
-                                                className={`h-full object-cover rounded-lg ${isTablet ? 'w-[75px]' : 'w-[130px]'}`}
+                                                className={`h-full object-cover rounded-lg ${isTablet ? 'w-[75px]' : 'w-[130px]'}`} loading="lazy"
                                             />
                                         </div>
                                     </div>

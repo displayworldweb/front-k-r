@@ -31,7 +31,7 @@ export default function SidebarStickyHelp() {
 
           {/* Кнопка */}
           <button
-            className="w-full py-3 px-4 bg-[#2c3a54] text-white rounded-full font-medium hover:bg-[#1e2b3f] transition-colors"
+            className="w-full py-3 px-4 bg-[#2c3a54] cursor-pointer text-white rounded-full font-medium hover:bg-[#1e2b3f] transition-colors"
             onClick={() => setIsModalOpen(true)}
           >
             Заказать звонок

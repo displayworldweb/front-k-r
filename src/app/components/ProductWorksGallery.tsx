@@ -150,7 +150,7 @@ const ProductWorksGallery = ({
                     <img
                         src={work.image}
                         alt={work.title || `Работа ${work.id}`}
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:opacity-80"
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:opacity-80" loading="lazy"
                     />
                 </div>
                 {work.title && (
@@ -243,7 +243,7 @@ const ProductWorksGallery = ({
                                 <img
                                     src={works[currentModalSlide].image}
                                     alt={works[currentModalSlide].title}
-                                    className="max-w-full max-h-[90vh] object-contain"
+                                    className="max-w-full max-h-[90vh] object-contain" loading="lazy"
                                 />
                             </div>
 

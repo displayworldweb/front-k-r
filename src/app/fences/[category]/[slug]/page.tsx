@@ -298,7 +298,7 @@ const FenceDetailPage = () => {
                             <img
                                 src={fence.image}
                                 alt={fence.name}
-                                className="w-full h-auto object-contain rounded-lg md:pr-4"
+                                className="w-full h-auto object-contain rounded-lg md:pr-4" loading="lazy"
                             />1
                         </div>
 

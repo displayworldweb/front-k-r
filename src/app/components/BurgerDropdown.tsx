@@ -1,12 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
 import { menuCategories, additionalMenuItems } from "../mock/menuCategories";
+import ModalCommunication from "./Modal/ModalCommunication";
 
 interface BurgerDropdownProps {
   isBurgerDropdownOpen: boolean;
   PHONE_MTS: string;
   PHONE_A1: string;
   onLinkClick?: () => void;
+  onModalOpen?: () => void;
 }
 
 const BurgerDropdown: React.FC<BurgerDropdownProps> = ({
@@ -14,6 +16,7 @@ const BurgerDropdown: React.FC<BurgerDropdownProps> = ({
   PHONE_MTS,
   PHONE_A1,
   onLinkClick,
+  onModalOpen,
 }) => {
   if (!isBurgerDropdownOpen) return null;
 
@@ -178,8 +181,8 @@ const BurgerDropdown: React.FC<BurgerDropdownProps> = ({
 
         <div className="flex space-x-3 mt-2.5">
           <button
-            className="bg-[#2c3a54] text-white px-3.25 py-1.25 text-sm rounded-[42px]"
-            onClick={() => (window.location.href = "/order-call")}
+            className="bg-[#2c3a54] cursor-pointer text-white px-3.25 py-1.25 text-sm rounded-[42px]"
+            onClick={onModalOpen}
           >
             Заказать звонок
           </button>
